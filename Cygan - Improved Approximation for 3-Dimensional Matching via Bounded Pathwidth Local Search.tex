@@ -1,0 +1,213 @@
+\input cheatmac
+
+\font\tenscr=rsfs10   % The names \tenscr, \sevenscr, \fivescr can
+\font\sevenscr=rsfs7  % be any command names, but should be unique and
+\font\fivescr=rsfs5   % descriptive.
+
+% Allocate the math family...
+\newfam\scrfam        % The name \scrfam can be any command, but should
+                      % be unique and descriptive.
+% ...and assign the fonts:
+\textfont\scrfam=\tenscr
+\scriptfont\scrfam=\sevenscr
+\scriptscriptfont\scrfam=\fivescr
+
+% I don't know if this is correct or necessary:
+\skewchar\tenscr=127
+\skewchar\sevenscr=127
+\skewchar\fivescr=127
+
+% Define a command to switch to this new math family:
+\def\scr{\fam\scrfam}
+%%% end
+
+\def\hyp#1{{\cal #1}}
+
+\def\ind{{\cal I}}
+
+\def\Con{{\rm Con}}
+\def\state{{\rm state}}
+\def\OPT{{\rm OPT}}
+\def\path{{\rm path}}
+\def\univ{{\rm univ}}
+\def\pw{{\rm pw}}
+\def\F{\hyp{F}}
+\def\X{\hyp{X}}
+
+\def\author#1{\centerline{\bf #1}}
+\def\presenter#1{\centerline{\it Presented by #1}}
+
+\title{Improved approximation for 3D}
+\title{matching via bounded pathwidth}
+\title{local search}
+\author{Marek Cygan}
+\presenter{Martin Böhm}
+\centerline{{\it Approximation and Online Algorithm Seminar 2014, MFF UK}}
+
+\section{Definitions and Notation}
+
+\dfn[{\csc $k$-Set-Packing}]{
+
+{\bf Input:} A family $\F ⊆ 2^U$ of sets of size at most $k$.
+
+{\bf Goal:} Find a maximum size subfamily of $\F$ of pairwise disjoint sets.
+}
+
+\thm[Main Theorem]{For any $ε>0$ and any integer $k ≥ 3 $ there is a polynomial
+time $(k+1+ε)/3$-approximation algorithm for {\csc $k$-Set-Packing}.}
+
+\nta{ $\overline{\F_0} ≡ \F ∖ \F_0$.} 
+
+\nta{ For a vertex set $\X$,  $N(\X) ≡ $ neighbors of vertices in $\X$.}
+
+\nta{ For a vertex set $\X$, $N[\X] ≡ N(\X) ∪ \X$.}
+
+\dfn[Pathwidth]{A graph $G$ has pathwidth at most $\pw$ if
+it has a tree-decomposition of treewidth at most $\pw$ where
+the decomposition itself is a path.}
+
+\dfn[Conflict graph]{For a disjoint starting family $\F_0 ⊆ \F$
+we define a {\it conflict graph} $\Con_{\F_0}$ as a bipartite
+graph with vertex set $\F$ and edge set
+$\{ S_1S_2 | S_1 ∈ \F_0, S_2 ∈ \overline{\F_0}, S_1 ∩ S_2 ≠ ∅\}$.
+
+We will use $\Con$ if the starting family is clear from context. We lose some
+information in the conflict graph -- namely the disjointness
+information for neighbors in $\overline{\F_0}$.
+}
+
+\dfn[Improving set\dots]{For a starting family $\F_0$ we call an {\it improving set} $\X$ a set of vertices of $\overline{\F_0}$
+such that:
+\itemize\ibull
+\: All members of $\X$ are pairwise disjoint;
+\: $|N(\X)| < |\X|$, i.e. we can improve $\F_0$ using $\X$.
+\endlist 
+}
+
+\dfn[\dots of bounded pathwidth]{ An improving set $\X$ with respect to $\hyp{F_0} ⊆ \F$ has {\it pathwidth at most $\pw$} if the subgraph
+of the conflict graph induced by $N[\X]$ is of pathwidth at most $\pw$.
+}
+
+\section{Part 1 -- The FPT Algorithm}
+
+{\bf Color coding:}
+\itemize\ibull
+\: A dynamic-programming technique used to efficiently find a small structure of bounded treewidth (a path, cycle, etc.) within a larger graph.
+\: Idea: Have a coloring function assign colors to vertices. Look only for the substructure
+that is {\it colorful}.
+\: Originally probabilistic: if the probability that the structure becomes colorful is
+non-trivial, we try many coloring functions and get a polynomial, constant-error algorithm.
+\: Can be derandomized by a standard argument.
+\endlist
+
+\lem[Bounded pathwidth algorithm]{Let $\pw$, $k$ (parameter of {\csc $k$-Set-Packing}) and $r$ (size of the improving set we look for, later set to $O(\log |\F|)$) be fixed.
+There exists an algorithm that:
+\itemize\ibull
+\: given a disjoint family $\F_0 ⊆ \F$ and two coloring functions $c_{\path} : \F_0 → [r-1]$ and $c_{\univ}: U → [rk]$,
+\: in time $2^{O(rk)}|\F|^{O(\pw)}$,
+\: determines whether an improving set $\X$ of size at most $r$ and pathwidth at most $\pw$ exists, s.t. $c_{\path}$ is injective
+on $N_{\Con}(\X)$ and $c_{\univ}$ is injective on $⋃_{S ∈ \X} S$.
+\endlist
+}
+
+\prf{Create an auxiliary digraph $G_{\state}$ of size
+$O(2^{r(k+1)}|\F|^{\pw+1})$.
+Every state (vertex of $G_{\state}$) will represent a partial pathwidth decomposition.
+We will traverse this graph and look for a pathwidth decomposition that is also
+an improving set.
+
+Instead of the entire partial pathwidth decomposition, we store in every state
+a triplet $(D_{\path}, D_{\univ}, B)$, where
+\itemize\ibull
+\: $D_{\path}$ are the colors of members of $\F_0$ we have already traversed in the decomposition; 
+\: $D_{\univ}$ are the colors of the universe that we have seen so far (inside sets of $\overline{\F_0}$
+that we have traversed);
+\: $B$ is a set of size at most $\pw+1$ -- our current pathwidth decomposition bag.
+\endlist
+
+We add directed edges to $G_{\state}$ which correspond to progressing along a
+pathwidth decomposition. We then run a graph search on $G_{\state}$.
+
+The injectiveness of $D_{\path}$ ensures that we do not go back in the
+pathwidth decomposition; the injectiveness of $D_{\univ}$ ensures that the visited sets of $\overline{\F_0}$ are disjoint.
+}
+
+\clm{There exists a path in the graph $G_{\state}$ from the vertex $(∅,∅,∅)$ to the vertex
+$(D_{\path}, D_{\univ}, ∅)$ for $D_{\path} < D_{\univ}/k$ if and only if there
+exists an improving set $\X$ of size at most $r$ of pathwidth at most $\pw$, such that
+$D_{\path}$ is injective on $N(\X)$ and $D_{\univ}$ is injective on $⋃_{S∈\X} S$.
+}
+
+\section{Part 2 -- Constant Pathwidth Suffices}
+
+
+\thm[Main claim]{Let $k$ be an integer, $ε>0$. Then there exist constants $c_1(k,ε), c_2(k,ε)$ such that for any disjoint
+family $\F_0 ⊆ \F$ for which there is no improving set of size at most $c_1 \log n$ that has pathwidth at most
+$c_2$, we have $|OPT| ≤ ((k+1)/3 + ε)|\F_0|$.
+}
+
+\prf{Assume we are in a situation where there is no valid improving set.
+Set $C ≡ \OPT ∩ \F_0$, $A_0 ≡ \F_0 ∖ C$, $B_0 ≡ \OPT ∖ C$. We restrict ourselves
+to $G[A_0 ∪ B_0]$. We will create
+a sequence of $1/ε$ subgraphs $G[A_i ∪ B_i]$ which have roughly the same properties
+as $(A_0, B_0)$, that is:
+
+\itemize\ibull
+\: in $G[A_i ∪ B_i]$ there is no subset $\X ⊆ B_i$ of size at most $2(k+1)^{1/ε -i}$ such that $|N(\X)| < |\X|$.
+\: $|A_0 ∖ A_i| = |B_0 ∖ B_i|$, or equivalently $|A_0 ∖ B_0| = |A_i ∖ B_i|$.
+\endlist
+
+Split $B_i$ into sets $B_i^1$, $B_i^2$, $B_i^{≥3}$, where the superscript indicates
+the degree of the vertices.
+
+We note the following two claims:
+
+\obs{Either $|B_i^1| ≤ ε|\OPT| ≤ ε |A_i|$ or we can construct $G[A_{i+1} ∪ B_{i+1}]$.}
+
+\clm[Key claim]{$B_i^2$ always satisfies $|B_i^2| ≤ (1+ε)|A_i|$.}
+
+If the two claims hold, we note that the number of edges satisfies
+$||G[A_i ∪ B_i]|| ≥ 1|B_i^1| + 2|B_i^2| + 3|B_i^3|$, but it also satisfies
+$||G[A_i ∪ B_i]|| ≤ k|A_i|$. Summing up all inequalities together, we get
+$|B_i| ≤ ((k+1)/3 + ε)|A_i|$ and finally $|\OPT| ≤ ((k+1)/3 + ε)|\F_0|$.
+}
+
+\prf[Key claim]{Restrict the graph to only $G ≡ G[A_i ∪ B_i^2]$. For contradiction,
+assume $|B_i^2| > (1+ε)|A_i|$.
+
+The graph $G$ is a bipartite graph where every vertex of the partition
+$B_i^2$ has degree exactly two. We can look at this graph as a
+multigraph $G'$ which has the vertex set $A_i$ and edge set $B_i^2$
+(understood as pairs of $A_i$).
+
+$|B_i^2| > (1+ε)|A_i|$ implies ${||G'||\over |G'|} = 1+ε$, which implies
+$d(G') = 2+2ε$. We find an improving set of size $O(\log G') = O(\log \F)$ and
+of constant pathwidth using Overcharged short cycle lemma below.
+}
+
+\lem[Short cycle lemma]{Let $G$ be a graph of minimal degree $3$. Then $G$ contains
+a cycle of length at most $O(\log n)$.
+}
+
+\lem[Overcharged short cycle lemma]{Let $H$ be a multigraph, $|H|=n$, $δ(H) ≥ 3$. Let $w_e$ be a labeling on edges of $H$ by a subset of
+some alphabet $Σ$. Assume that for some $γ$, the following holds: $∀e ∈ E: w_e ≤ γ$ and $∀α ∈ Σ: |\{$occurences of $α$ in all labels$\}|≤γ$.
+
+Then there exists a subtree $T_0 = (V_0,E_0)$ with root $r$ and two edges $e_1$ and $e_2$ outside $T_0$ such that:
+\itemize\ibull
+\: $|V_0| ≤ 4(\log_{3/2} n + 2)$,
+\: both $T_0+e_1$ and $T_0+e_2$ contains a cycle,
+\: $T_0$ is a tree with at most 4 leaves, 
+\: If we set $β≡⌈\log_{3/2}(12γ^2)⌉$, then every pair of edges $e_a, e_b ∈ T_0$ it holds that if their labels intersect, then
+$|dist(e_a,r) - dist(e_b,r)| ≤ β$, where for an edge $e=uv$, $dist(e,r) ≡ \min(dist(u,r),dist(v,r))$.
+\endlist
+}
+
+\nta{Denote $P$ as the subtree of $T_0$ such that $P$ is connected and it contains all endpoints
+of $e_1$ and $e_2$.}
+
+\obs{$P+e_1+e_2$ has $n$ vertices, but $n+1$ edges.}
+
+\cor{Let $T_0$, $e_1, e_2$ be as in Overcharged short cycle lemma. Then the graph $P + e_1 + e_2$ has a path decomposition
+of width at most $4β + 3$.}
+
+\bye

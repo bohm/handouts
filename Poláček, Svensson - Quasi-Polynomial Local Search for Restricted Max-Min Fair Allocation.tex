@@ -1,0 +1,175 @@
+\input cheatmac
+
+\font\tenscr=rsfs10   % The names \tenscr, \sevenscr, \fivescr can
+\font\sevenscr=rsfs7  % be any command names, but should be unique and
+\font\fivescr=rsfs5   % descriptive.
+
+% Allocate the math family...
+\newfam\scrfam        % The name \scrfam can be any command, but should
+                      % be unique and descriptive.
+% ...and assign the fonts:
+\textfont\scrfam=\tenscr
+\scriptfont\scrfam=\sevenscr
+\scriptscriptfont\scrfam=\fivescr
+
+% I don't know if this is correct or necessary:
+\skewchar\tenscr=127
+\skewchar\sevenscr=127
+\skewchar\fivescr=127
+
+% Define a command to switch to this new math family:
+\def\scr{\fam\scrfam}
+%%% end
+
+\def\hyp#1{{\cal #1}}
+\def\ind{{\cal I}}
+
+\def\author#1{\centerline{\bf #1}}
+\def\presenter#1{\centerline{\it Presented by #1}}
+
+\title{Quasi-Polynomial Local Search}
+\title{for Restricted Max-Min Fair Allocation}
+\author{Lukáš Poláček, Ola Svensson}
+\presenter{Martin Böhm}
+\centerline{{\it Approximation and Online Algorithm Seminar, MFF UK}}
+
+% \section{Definitions and notation}
+
+\dfn[Max-min fair allocation]{Given the set of $\hyp{R}$ resources and
+$\hyp{P}$ players, find an allocation of resources to the players such
+that the least satisfied player is satisfied as much as possible.
+Also known as the {\it Santa Claus problem.}
+}
+
+\dfn[Restricted max-min fair allocation]{In our setting, while
+resources have different values to all players ($v_{ij}$ for the
+resource $i$-th player and $j$-th resource) there are only two
+possible values that can arise for a given player: $v_{ij} = 0$ or
+$v_{ij} = v_J$.
+}
+
+\thm[Main theorem]{For any $ε∈(0,1]$ we can find a ${1 \over 4+ε}$-approximation
+algoritthm for restricted max-min fair allocation in time $n^{O({1 \over ε} log n)}$, where
+$n = |\hyp{P}| + |\hyp{R}|$.
+}
+
+\obs{Our algorithm tries to do allocation for a given $T$ which is
+said to be the optimum solution. If $T$ is not a feasible solution, it
+fails and we can use this to apply a binary search on the optimal
+value of $T$.
+
+Therefore, for the rest of the talk, we assume $T$ is
+fixed and it is the optimum solution of the restricted max-min fair
+allocation problem. For the simplicity of the argument, we also assume
+$T = 1$ through scaling of the values on input.}
+
+\section{Configuration LP}
+
+\dfn[Configuration LP]{
+The configuration LP has exponentially many conditions, based on every
+admissible assignment of the resources to a player. More formally, it is
+the following linear program $CLP(T)$ parametrized by $T$:
+
+$$ \min 0,$$
+$$∀i ∈ \hyp{P}: ∑_{C ∈ \hyp{C}(i,T)} x_{i,C} ≥ 1, $$
+$$∀j ∈ \hyp{R}: ∑_{i,C: j ∈ C, C ∈ \hyp{C}(i,T)} x_{i,C} ≤ 1, $$
+$$ x ≥ 0. $$
+}
+
+\dfn{ The dual of the Configuration LP can be
+stated as:
+
+$$ \max ∑_{i ∈ \hyp{P}} y_i  - ∑_{j ∈ \hyp{R}} z_j,$$
+$$ ∀i ∈ \hyp{P}, ∀C ∈ C(i,T): y_i ≤ ∑_{j ∈ C}z_j, $$
+$$ y,z ≥ 0. $$
+}
+
+\section{Local search}
+
+We will solve the problem by using a local search algorithm for a special
+kind of hypergraph matching. $α>4$ will be our approximation parameter.
+
+\dfn{The ground set of our hypergraph will be $\hyp{P} ∪ \hyp{R}$.
+A hyperedge $e$ in our setting will contain a player $e_P$ along with 
+an inclusion-minimal set of resources such that $e_P$ has assigned value
+at least $1/α$.}
+
+\dfn[Thin, fat edges]{A {\it fat} edge will be an edge such that it contains only one resource (of size at
+least $1/α$. A {\it thin} edge is any non-fat edge.}
+
+\dfn[Length]{The {\it length} of a fat edge will be set as 0, of any thin edge as 1.}
+
+In our scenario, we will try to build an {\it alternating path tree}
+on our hypergraph until we hit a certain depth. Suppose that we have
+already created a partial matching $M$. The tree is contains two
+kinds of edges. The first group are the edges we have decided to try to
+add (denoted as $A$) and the other group are the edges in $M$ which block
+the addition of the edges in $A$ -- these will be denoted $B$.
+
+\dfn[Addable edge]{An edge $e$ is {\it addable} to the alternating path tree if it is disjoint from 
+any edge in $A ∪ B$ and it contains a player that is already in our tree.
+}
+
+\dfn[Blocking edge]{An edge $b$ in the matching $M$ is {\it blocking} an edge $e$ if it intersects the
+edge in a resource.
+}
+
+\dfn[Layers]{For the sake of the analysis, we decompose the edge sets $A$ and $B$ into classes based on the
+distance to the root, denoting them as $A_0$, $B_0$, $A_1$, $B_1$ etc. We also denote $A_i^t$ ($B_i^t$) to be the
+subset of edges in $A_i$ ($B_i$) which are thin, and similarly $A_i^f$ ($B_i^f$) for fat edges.}
+
+\subsection{Local search algorithm}
+
+Input: a partial matching $M$.
+
+Output: an increased matching, provided $T$ is a feasible solution.
+
+\numlist\nnorm
+\: Find an unmatched player, make it a root of the tree.
+\: While an addable edge is within distance $2 \log_{(α-1)/3}(|\hyp{P}|)+1$: 
+  \: \hskip 0.5cm Find an addable edge $e$ of minimum distance from the root.
+  \: \hskip 0.5cm Add $e$ to the tree.
+  \: \hskip 0.5cm If it has blocking edges, add them to the tree also.
+  \: \hskip 0.5cm While $e$ has no blocking edges:
+      \: \hskip 1cm Add $e$ to the matching $M$.
+      \: \hskip 1cm Remove its parent edge $b$ from the matching $M$.
+      \: \hskip 1cm Repeat the procedure for the grandparent of $e$.
+  \: \hskip 0.5cm Remove all edges that are in the same or greater distance as the last edge added
+to the matching.
+\endlist
+
+\section{Analysis}
+
+\obs{The algorithm does go through all fat edges first, selecting an edge of distance $1$ only after
+the subtree of distance $0$ has been traversed.
+}
+
+\lem[Runtime]{For a desired approximation guarantee of $1/α = 1/(4+ε)$, the algorithm
+terminates in time $n^{O({1\over ε}\log n)}$.
+}
+
+\prf{Create a signature vector:
+$$(-|A_0|, |B_0|, - |A_1|, |B_1|, … , -|A_{2k}|, |B_{2k}|, ∞).$$
+
+We prove that any operation decreases the lexicographic size of the vector. Since
+the length of the vector is bounded by the limit in the algorithm, we get the desired
+runtime bound.
+}
+
+\lem[Key lemma]{ Let $α > 4$. Assuming that $CLP(T)$ is feasible, if there is no addable
+edge within distance $2D+1$ from the root for some integer $D$, then
+$${(α-4) \over 3} ∑_{i=1}^D |B_{2i}^t| < |B_{2D+2}^t|.$$
+}
+
+\cor[Correctness]{If $α>4$ and $CLP(T)$ is feasible, there always is an addable edge within
+distance $2D+1$ for $D = \log_{(α-1)/3}(|\hyp{P}|)$. 
+}
+
+\obs{Every blocking edge can be mapped to exactly one vertex of $\hyp{P}$.}
+
+\obs{The size of each thin edge is at most $2/α$.}
+
+\obs{Any part of a $B$-edge that is not contained in any $A$-edge must
+be of size $1/α$.}
+
+\bye
