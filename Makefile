@@ -4,9 +4,9 @@ all: init santa local
 init:
 	${texinputs} pdfcsplain -ini -enc plain-utf8-cs.tex
 santa:
-	${texinputs} pdfcsplain -fmt plain-utf8-cs restricted_santa_claus.tex
+	${texinputs} pdfcsplain -fmt plain-utf8-cs "Polacek, Svensson - Quasi-Polynomial Local Search for Restricted Max-Min Fair Allocation.tex"
 local:
-	${texinputs} pdfcsplain -fmt plain-utf8-cs 3d_matching_via_localsearch.tex
+	${texinputs} pdfcsplain -fmt plain-utf8-cs "Cygan - Improved Approximation for 3-Dimensional Matching via Bounded Pathwidth Local Search.tex"
 
 clean:
 	rm -f *.log *.pdf *.fmt *.aux
