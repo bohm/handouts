@@ -1,0 +1,191 @@
+\input cheatmac
+
+\def\Pee{{\bb P}}
+\def\Zet{{\bb Z}}
+\def\Rko{{\bb R}}
+\def\Bigpi{{\rm Par}}
+\def\intcone{{\rm intcone}}
+\def\cone{{\rm cone}}
+\def\conv{{\rm conv}}
+\def\vert{{\rm vert}}
+\def\Oh{{\rm O}}
+\def\supp{{\rm supp}}
+\def\enc{{\rm enc}}
+\let\cfix=\cdot
+
+\title{Polynomiality for Bin Packing with}
+\title{a Constant Number of Item Types}
+\author{Michel X. Goemans, Thomas Rothvoß}
+\presenter{Martin Böhm}
+\centerline{{\it Combinatorics and Graph Theory PhD Seminar, 2014, MFF UK}}
+
+%TODO: \Pee, \Zet, \Rko
+
+\section{Bin packing}
+
+\dfn[{\csc Bin Packing}]{
+
+{\bf Input:} A pair of vectors $(s,a)$, where $s_1, s_2, s_3, … s_d$ are
+{\it item types}, i.e. all possible sizes of our input items ($s_i ∈ [0,1]$)
+and $a_1, a_2, …, a_d$ are {\it item multiplicities}, i.e. how many
+items of each item type we need to pack ($a_i ∈ \Zet_{≥0}$).
+
+{\bf Goal:} Find a minimum number of {\it bins} of capacity 1 such that all items
+are packed.
+}
+
+We are only considering a constant number of item types $d$.
+
+We can look at {\csc Bin Packing} also in this manner:
+
+{\bf Input:} A pair of vectors $(s,a)$ as before. From these two vectors, define
+a {\it configuration space} $\Pee ≡ \{x ∈ \Zet_{≥0}^d | s^T x ≤ 1 \}$. An element $x$ in
+the configuration space represents one valid packing of a bin.
+
+{\bf Goal:} Select a minimum number of vectors in $\Pee$ such that we
+use all items with respect to their multiplicities, i.e. the vectors
+of configuration space we use sum up to $a$:
+
+$$\min \left\{ ∑_iλ_i | ∑_{x ∈ \Pee} λ_x \cfix x = a; λ ∈ \Zet_{≥0}^{\Pee}\right\}.$$
+
+{\it Note:} Even for fixed $d$, both $\Pee$ and $λ_x$ will be exponentially large.
+
+\thm[Main result]{
+For any {\csc Bin Packing} instance $(s,a)$, an optimum integral
+solution can be computed in time $\Oh(\log Δ)^{2^{\Oh(Δ)}}$, where $Δ$ is the largest
+integer appearing in the denominator $s_i$ or in a multiplicity $a_i$.
+}
+
+\section{The polyhedral cookbook}
+
+\dfn{Given a set $X ⊆ \Rko^d $, we define a {\it convex cone} as $\cone(X) ≡ \{∑_{x ∈ X} λ_x x | λ_x ≥ 0 ∀x ∈ X \}$
+and an {\it integer cone} as $\intcone(X) = \{∑_{x ∈ X} λ_x x | λ_x ∈ \Zet_{≥0} ∀x ∈ X \}$.
+}
+
+\dfn{
+For a polytope $P = \{x ∈ \Rko^d | Ax ≤ b \}$, we define $\enc(P)$ as the number of bits
+that it takes to write down the inequalities defining $P$.
+}
+
+\dfn{For a vector $λ$ we define {\it support} $\supp(λ)$ as the non-zero indices of $λ$.}
+
+\dfn{Define a $d$-dimensional {\it parallelepiped} $Π$ with center $v_0$ as
+$$ Π = \left\{v_0 + ∑_{i=1}^k μ_i v_i : |μ_i| ≤ 1 \right\}. $$
+Usually we assume that parallelepipeds have linearly independent
+vectors $v_i$.
+}
+
+\thm[Finding conic combinations]{Given polytopes $P,Q ⊆ \Rko^d$, one can find a $y ∈ \intcone(P ∩ \Zet^d) ∩ Q$ and
+a vector $λ ∈ \Zet_{≥ 0}^{P ∩ \Zet^d}$ such that $y = ∑_{x ∈ P ∩ \Zet_d} λ_x x$ in time $\enc(P)^{2^{\Oh(d)}} \cfix \enc(Q)^{O(1)}$,
+or decide that no such $y$ exists. Moreover, $|\supp(λ)|$ is upper bounded by $2^{2d+1}$.
+}
+
+The previous theorem can be proven using the Structure Theorem, stated as follows:
+
+\thm[Structure Theorem]{ Let $P = \{x ∈ \Rko^d | Ax ≤ b \}$ be a polytope with $A ∈ \Zet^{m × d}$,
+$b ∈ \Zet^m$ such that all coefficients are absolute-bounded by $Δ$. Then there exists a set
+$X ⊆ P ∩ \Zet^d$ of size $|X| ≤ N ≡ m^d d^{\Oh(d)} (\log Δ)^d$ that can be computed in time $N^{\Oh(1)}$
+with the following property:
+
+For any vector $a ∈ \intcone(P ∩ \Zet^d)$ there exists an integral vector $λ ∈ \Zet_{≥ 0}^{P ∩ \Zet^d}$ such
+that $∑_{x ∈ P ∩ \Zet^d} λ_x \cfix x = a$ and
+\numlist\ndotted
+\: $λ_x ∈ {0,1}$
+\: $|supp(λ)| ≤ 2^{2d}$
+\: $|supp(λ) ∖ X| ≤ 2^{2d}$.
+\endlist
+}
+
+\section{The recipe}
+The key idea behind the Structure Theorem is as follows:
+
+\itemize\ibull
+\: Split the polytope into polynomially many full-di\-men\-sio\-nal cells. The cells
+are not equicardinal, their sizes are chosen strategically.
+\: For each cell, we do the following:
+\itemize\ibull
+\: We fix an arbitrary integral point of the cell.
+\: We envelop all integral points of the cell by a blowup convex hull with few vertices.
+\: Using the hull, we cover all integral points with polynomially many parallelepipeds.
+\: If too many points are selected into $λ_x$, we redistribute their weight to the vertices of the parallelepiped.
+\endlist
+\endlist
+
+\section{The pre-baked ingredients}
+
+\thm[Solving integer programs of fixed dimension]{
+Given $A∈\Zet^{m × d}$ and $b ∈ \Zet^m$ with $Δ ≡ \max(||A||_∞, ||b||_∞)$,
+one can find an $x ∈ \Zet^d$ with $Ax ≤ b$ (or deciding that none exists) in time $d^{\Oh(d)} \cfix m^{\Oh(1)}$.
+}
+
+\thm[Few vertices in an int. hull]{
+Consider any polytope $P$ with $m$ constraints and $Δ ≡ \max(||A||_∞, ||b||_∞) ≥ 2$. 
+Then $P_I = \conv(P ∩ \Zet^d)$ has at most $(m \cfix \Oh(\log Δ))^d$ extreme points. In fact
+a list of the extreme points can be computed in time $d^{\Oh(d)}(m \cfix \Oh(\log Δ))^{\Oh(d)}$.
+}
+
+\thm[Encapsulate a polytope by a blowup with few vertices]{
+For a centrally symmetric polytope $P ⊆ \Rko^d$, there are $k ≤ {d \over 2} (d+3)$ many
+extreme points $x_1, …, x_k ∈ \vert(P)$ such that $P ⊆ \conv(± \sqrt{d} \cfix x_j | j ∈ [k])$.
+}
+
+\thm[Computing a minimum volume ellipsoid]{
+Given a set of points $S$ in $\Rko^d$, we can use SDP to compute a minimum volume ellipsoid $E$
+containing the given points in time polynomial to their encoding. Moreover, using the dual
+solution of the SDP, we can determine the contact points of $E ∩ \conv(S)$.
+}
+
+\section{Cooking}
+
+\lem[1]{
+Let $P = \{x ∈ \Rko^d | Ax ≤ b \}$ be a polytope defined by $m$ inequalities with integral
+coefficients of absolute value at most $Δ$. Then there exists a set $\Bigpi$ of at most $N ≡ m^d d^{\Oh(d)} (\log Δ)^d$
+integral parallelepipeds such that
+$$P ∩ \Zet^d ⊆ ⋃_{Π ∈ \Bigpi} Π ⊆ P.$$
+}
+
+\lem[2]{
+For any polytope $P ⊆ \Rko^d$ and any integral vector $λ ∈ \Zet_{≥ 0}^{P ∩ \Zet^d}$ there exists
+a $μ ∈ \Zet_{≥0}^{P ∩ \Zet^d}$ such that $|\supp(μ)| ≤ 2^d$ and $∑_x μ_x x = ∑_x λ_x x$. Furthermore,
+$\supp(μ) ⊆ \conv(\supp(λ))$.
+}
+
+\lem[3]{
+Given an integral parallelepiped $Π$ with vertices $X$. Then for any $x^* ∈ Π ∩ \Zet^d$ and
+$λ^* ∈ \Zet_{d ≥ 0}$ there is an integral vector $μ ∈ \Zet_{≥ 0}^{Π ∩ \Zet^d}$ such that the following
+holds:
+
+\numlist\ndotted
+\: $λ^* x^* = ∑_x μ_x x$,
+\: $|\supp(μ ∖ X)| ≤ 2^d$,
+\: $μ_x ∈ \{0,1\} ∀x ∈ X$.
+\endlist
+}
+
+\prf[Finding conic combinations]{ Let $P = \{x | Ax ≤ b\}, Q = \{x| \overline{A}x ≤ \overline{b}\}$.
+
+Compute the set $X$ of size at most $N = m^d d^{\Oh(d)} (\log Δ)^d$ from the Structure
+Theorem in time $N^{\Oh(1)}$. Let $y^*$ be the (unknown) target vector.
+Using the Structure Theorem, we get $λ^*$.
+
+At the expense of a factor $N^{2^{2d}}$ guess $X' = X ∩ \supp(λ^*)$. At the expense
+of factor $2^{2d} + 1$ guess the number $k = ∑_{x ∈ X'} λ^*_x ∈ [2^{2d}]$ of extra points.
+
+Create the following ILP:
+
+$$\eqalign{
+∀i ∈ [k]: Ax_i &≤ b \cr
+∑_{x ∈ X'} λ_x x + ∑_{i=1}^k x_i &= y \cr
+\overline{A}y &≤ \overline{b} \cr
+∀x ∈ X': λ_x &∈ \Zet_{≥ 0} \cr
+∀i ∈ [k]: x_i &∈ \Zet^d \cr
+}$$
+
+The number of variables is $X' + (k+1)d ≤ 2^{\Oh(d)}$, the number
+of constraints is $km + d + \overline{m} + |X'|d = 2^{\Oh(d)}m + \overline{m}$.
+Maximal coefficient is $\max(d! Δ^d, \overline{Δ})$. 
+}
+
+{\it Bon appetit!}
+
+\bye

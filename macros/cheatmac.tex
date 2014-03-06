@@ -161,6 +161,30 @@
 % math-related definitions (compressed than usual):
 \def\slightnegindent{\parshape 2 -3pt \hsize 0in \hsize}
 
+% FONTS: script font
+\font\tenscr=rsfs10   % The names \tenscr, \sevenscr, \fivescr can
+\font\sevenscr=rsfs7  % be any command names, but should be unique and
+\font\fivescr=rsfs5   % descriptive.
+
+% Allocate the math family...
+\newfam\scrfam        % The name \scrfam can be any command, but should
+                      % be unique and descriptive.
+% ...and assign the fonts:
+\textfont\scrfam=\tenscr
+\scriptfont\scrfam=\sevenscr
+\scriptscriptfont\scrfam=\fivescr
+
+% I don't know if this is correct or necessary:
+\skewchar\tenscr=127
+\skewchar\sevenscr=127
+\skewchar\fivescr=127
+
+% Define a command to switch to this new math family:
+\def\scr{\fam\scrfam}
+
+% FONTS: blackboard bold
+
+
 % We pass colour and statement of the particular statement
 % through global macros, so we can keep variable arguments.
 
@@ -281,4 +305,8 @@
 \def\ua{\uparrow}
 \def\daeq{\downarrow=}
 \def\daneq{\downarrow\neq}
+
+% handout-related macros -- author, presenter
+\def\author#1{\centerline{\bf #1}}
+\def\presenter#1{\centerline{\it Presented by #1}}
 
