@@ -1,0 +1,328 @@
+\input macros/cheatmac
+
+\def\Pee{\mathbb{P}}
+\def\Zet{\mathbb{Z}}
+\def\Rko{\mathbb{R}}
+\def\Dis{\mathcal{D}}
+
+\def\Bigpi{{\rm Par}}
+\def\intcone{{\rm intcone}}
+\def\cone{{\rm cone}}
+\def\conv{{\rm conv}}
+\def\vert{{\rm vert}}
+\def\Las{{\textsc{Las}}}
+\def\Oh{{\rm O}}
+\def\supp{{\rm supp}}
+\def\enc{{\rm enc}}
+\newcommand{\eps}{\varepsilon}
+\let\cfix=\cdot
+
+% expectation, probability, variance
+\newcommand{\Esymb}{\mathbb{E}}
+\newcommand{\Psymb}{\mathbb{P}}
+\newcommand{\Vsymb}{Var}
+
+% better vector definition and some variations
+\renewcommand{\vec}[1]{{\bm{#1}}}
+\newcommand{\bvec}[1]{\bar{\vec{#1}}}
+\newcommand{\pvec}[1]{\vec{#1}'}
+\newcommand{\tvec}[1]{{\tilde{\vec{#1}}}}
+
+
+\DeclareMathOperator*{\E}{\Esymb}
+\DeclareMathOperator*{\Var}{\Vsymb}
+\DeclareMathOperator*{\ProbOp}{\Psymb}
+
+\renewcommand{\Pr}{\ProbOp}
+
+\newcommand{\problemmacro}[1]{\textsc{#1}\xspace}
+\newcommand{\maxtwocsp}{\problemmacro{Max 2-Csp}}
+\newcommand{\uniquegames}{\problemmacro{Unique Games}}
+
+\newcommand{\norm}[1]{\lVert#1\rVert}
+\newcommand{\Norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\bignorm}[1]{\big\lVert#1\big\rVert}
+\newcommand{\Bignorm}[1]{\Big\lVert#1\Big\rVert}
+
+\newcommand{\normo}[1]{\norm{#1}_1}
+\newcommand{\Normo}[1]{\Norm{#1}_1}
+\newcommand{\bignormo}[1]{\bignorm{#1}_1}
+\newcommand{\Bignormo}[1]{\Bignorm{#1}_1}
+
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\Set}[1]{\left\{#1\right\}}
+\newcommand{\bigset}[1]{\big\{#1\big\}}
+\newcommand{\Bigset}[1]{\Big\{#1\Big\}}
+
+% absolute value
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\Abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\bigabs}[1]{\big\lvert#1\big\rvert}
+\newcommand{\Bigabs}[1]{\Big\lvert#1\Big\rvert}
+
+% square brackets
+\newcommand{\brac}[1]{[#1]}
+\newcommand{\Brac}[1]{\left[#1\right]}
+\newcommand{\bigbrac}[1]{\big[#1\big]}
+\newcommand{\Bigbrac}[1]{\Big[#1\Big]}
+
+\newcommand{\ia}{{ia}}
+\newcommand{\jb}{{jb}}
+\newcommand{\mper}{\,.}
+% \newcommand{\Mid}{\;\middle\vert\;}
+
+\newcommand{\iprod}[1]{\langle#1\rangle}
+\newcommand{\Iprod}[1]{\left\langle#1\right\rangle}
+
+\newcommand{\paren}[1]{(#1)}
+\newcommand{\Paren}[1]{\left(#1\right)}
+\newcommand{\bigparen}[1]{\big(#1\big)}
+\newcommand{\Bigparen}[1]{\Big(#1\Big)}
+
+\newcommand{\Ins}{\mathcal{I}}
+\newcommand{\El}{\mathcal{L}}
+\newcommand{\rank}{\textrm{rank}}
+\newcommand{\psdrank}{\textrm{rk}_{\textrm{psd}}}
+\newcommand{\degsos}{\textrm{deg}_{\textrm{sos}}}
+\newcommand{\Corr}{\textsc{Corr}}
+\newcommand{\Splus}{\mathcal{S}_+}
+\newcommand{\Tr}{\textrm{Tr}}
+\newcommand{\scalar}[2]{\langle #1, #2 \rangle}
+\newcommand{\vectext}{\textrm{vec}}
+\DeclareMathOperator{\val}{val}
+\DeclareMathOperator*{\Cov}{Cov}
+
+
+\long\def\algobox#1{\smallskip
+  \noindent
+~~\hbox{\fbox{\parbox[c]{0.30\textwidth}{#1}}}
+%\smallskip
+}
+
+\begin{document}
+\begin{multicols}{3}
+
+\title{Lower bounds on the size of SDP relaxations}
+\author{James R. Lee, Prasad Raghavendra, David Steurer}
+\presenter{Martin B\"ohm}
+\centerline{{\it Combinatorics PhD Seminar, 2014/15, MFF UK}}
+
+%TODO: \Pee, \Zet, \Rko
+\section{Some notation}
+
+\begin{enumerate}
+ \item A $\mathcal{P}_{2t}(n)$ is a set of all subsets of $[n]$ of size at most $2t$.
+ \item $ℕ^n_{≤t}$ is a set of all monomials in $n$ variables of degree at most $t$. (Here $0 ∈ ℕ$.)
+ \item $||A||_F$ is the Frobenius norm, defined as $\sqrt{\Tr(A^TA)}$.
+ \item For a polynomial $p(x)$ and a monomial $α$, $[α]p$ is the coefficient of the monomial $α$.
+ \item $\vectext(p)$ is a vectorization of a polynomial $p$ -- $\vectext(p)$ is thus a vector
+ with each monomial $α$ of $p$ contributing a real number $[α]p$.
+\end{enumerate}
+\section{Semidefinite programming}
+
+\dfn{A symmetric matrix $M∈ℝ^{n × n}$ is positive semidefinite $≡ ∀z ∈ ℝ^n: z^TMz ≥ 0$.
+We write $M ≽ 0$. Equivalently, $M$ is positive semidefinite iff it
+has a square root, i.e. there exists $U$ such that $U^TU = M$. We
+write $U = \sqrt{M}$.
+}
+
+\dfn[$\Splus^k$]{
+The set (cone) of all positive semidefinite matrices in $ℝ^{k × k}$ will be denoted
+$\Splus^k$.
+}
+
+\dfn{A linear operator $•: ℝ^{n × n} × ℝ^{n × n} → ℝ$ is defined
+as $A • B = \Tr(A^TB)$.
+}
+
+\dfn{A semidefinite program is a convex optimization program of the form:
+
+$\max C • X$ subject to constraints $A_i • X = b_i$ and $X ≽ 0$. 
+
+}
+
+\dfn{For a program of the form $\max C • X, A_i • X = b_i, X ≽ 0$, we can
+define a \emph{dual program} $\min b^Ty$ subject to $∑_{i=1}^m y_i A_i - C ≽ 0$.
+
+Under mild conditions (if the primal is feasible, with finite value, and it
+has at least one positive definite solution) it holds that the values of the primal
+and dual semidefinite programs coincide.
+}
+
+\section{Extended formulations}
+
+\dfn[Linear lift]{
+Consider some polytope $P$. We say that a polytope $Q$ is a \emph{linear lift} of $P$ if
+$P$ is an image of $Q$ under some linear map. We measure the size of the lift as the number of facets.
+The polytope $Q$ is also called \emph{extension} of $P$.
+}
+
+\dfn[PSD lift]{
+We say that a polytope $P$ of dimension $n$ admits a \emph{positive semidefinite lift} of size $k$ if
+there exists an affine subspace $\El ⊆ ℝ^{k × k}$ and a projection $π: ℝ^{k × k} → ℝ^n$ such that
+$P = π(\El ∩ \Splus^k)$. 
+
+In other words, we say that $P$ has a positive semidefinite lift of
+size $k$ if we can get $P$ as some projection of a structure that is
+both inside an affine space ($A • X = b$) and inside the set of all
+psd matrices ($X ≽ 0$).
+}
+
+\dfn{
+  We define a polytope $\Corr_n ≡ \conv(x·x^T| x ∈ \{0,1\}^n)$. $\Corr_n$ played an important role
+  in the paper of Fiorini, Massar, Pokutta, Tiwary and de Wolf; bounds on extension complexity of
+  $\Corr_n$ imply bounds on the cut polytope, TSP polytope and independent set polytope, among others. 
+}
+
+\dfn[PSD rank]{
+We say that $M ∈ ℝ_+^{p × q}$ admits a \emph{rank-$r$ psd factorization}
+if there exist two lists of positive semidefinite matrices $\{A_i ∈ \Splus^r | i ∈ [p]\}$ and $\{B_j \Splus^r| j ∈ [q]\}$
+such that $M_{ij} = ∑_{z=1}^r \scalar{(A_i)_x}{(B_j)]} = \Tr(A_i B_j).$
+}
+
+\dfn{
+  We say that $M ∈ ℝ_+^{p × q}$ has psd rank $r$ if $r$ is the smallest number such that $M$ admits a rank-$r$ psd
+  factorization. We say that a polytope $P$ has psd rank $r$ if an associated slack matrix $S$ has psd rank $r$.
+}
+
+\thm[Bound on psd rank]{
+  $$\psdrank(\Corr_n) ≥ 2^{Ω(n^{2/13})}.$$
+}
+
+\dfn[From a function to a matrix]{For a function $f: \{0,1\}^m → ℝ$ and a number $n ≥ m$, we define the following
+matrix $M_n^f ∈ ℝ_+^{{n \choose m} × 2^n}$:
+
+$$M_n^f(S,x) = f(x_S) = f(x \textrm{ restricted to the positions in } S) $$
+}
+
+\clm{
+  If $f: \{0,1\}^m → ℝ_+$  is a non-negative quadratic polynomial over $\{0,1\}^m$, then for any $n ≥ m$ it holds
+  that $M_n^f$ is a submatrix of some slack matrix associated with $\Corr_n$.
+}
+
+\thm[Large PSD rank $⇔$ large lift]{
+  For every $n,k ≥ 1$ every polytope $P ⊆ ℝ^n$ and every slack matrix $S$ associated to $P$, it holds that
+  $\psdrank(S) ≤ k$ if and only if $P$ admits a positive semidefinite lift of size $k$.
+}
+
+From the previous Theorem and Claim, we know that to finish the proof
+of Theorem \textit{Bound on a psd rank}, we need a good lower bound on
+$\psdrank(M_n^f)$.
+
+\section{Lasserre hierarchy}
+
+\textbf{Notation:} Let $\mathcal{P}_t([n]) := \{ I \subseteq [n] ∣ |I| \leq t\}$
+be the set of all index sets of cardinality at most $t$
+and let $y \in \Rko^{\mathcal{P}_{2t}([n])}$ be a vector with
+entries $y_I$ for all $I\subseteq[n]$ with $|I| \leq
+2t$.
+
+\dfn[Moment matrix]{ $M_{t+1}(y) \in \Rko^{\mathcal{P}_{t+1}([n])}
+  × \mathcal{P}_{t+1}([n])}$:
+\[
+  M_{t+1}(y))_{I,J} := y_{I\cup J} \quad \forall |I|,|J| \leq t+1.
+\]
+
+
+\dfn[Moment matrix of slacks]{ For the $\ell$-th ($\ell \in [m]$) constraint
+of the LP $A^Tx \geq b$, we create $M_t^\ell(y) ∈
+\Rko^{\mathcal{P}_{t}([n]) × \mathcal{P}_{t}([n])}$:
+
+
+\[  M_t^\ell(y)_{I,J} := (\sum_{i=1}^n A_{li}y_{I \cup J \cup \{i\}}) - b_ly_{I\cup J} \]
+}
+
+\dfn[$t$-th level of the Lasserre hierarchy]{ Let $K = \{ x \in \Rko^n
+\mid Ax \geq b\}$. Then $\textsc{Las}_t(K)$ is the set of vectors $y
+\in \Rko^{\mathcal{P}_{2t}([n])}$ that satisfy 
+
+\[
+  M_{t+1}(y) \succeq 0; \hspace{1cm} M_t^\ell(y) \succeq 0 \quad \forall\ell\in[m]; \hspace{1cm} y_{\emptyset}=1.
+\]
+Furthermore, let  $\textsc{Las}_t^{\textrm{proj}} := \{ (y_{\{1\}},\ldots,y_{\{n\}}) \mid y \in \textsc{Las}_t(K) \}$ be the projection on the original variables. 
+}
+
+\textbf{Intuition:} $M_{t+1}(y) \succeq 0$ ensures \textit{consistency}
+($y$ behaves \textit{locally} as a distribution) while $M_t^\ell(y) \succeq 0$
+guarantees that $y$ satisfies the $l$-th linear constraint.
+
+We call any solution $y$ a \emph{pseudo-distribution} or a \emph{pseudo-density}
+of vertices of the polytope. In our $\{0,1\}^n$ setting, it is a pseudo-density
+on $\{0,1\}^n$.
+
+\textbf{Note:} In our case, we only deal with problems of the form $\max f(x)$ subject to  $x ∈ \{0,1\}^n$,
+and so we can simplify our Lasserre system to:
+
+\[ \max f(y_{\{1\}}, y_{\{2\}}, … y_{\{n\}}) \qquad\textrm{s.t.}\quad M_{t+1}(y) \succeq 0;\qquad  y_{\emptyset}=1. \]
+
+
+\section{Sum of Squares upper bounds}
+
+\dfn{ For a polynomial $f, f:\{0,1\}^n → ℝ_+$, a \emph{sum of squares} program of degree $d$
+  is a program of the form:
+  \[\min ρ \qquad\textrm{s. t.}\quad ∀x ∈ \{0,1\}^n:  ρ-f(x) = ∑_{i=1}^k g_i(x)^2;\]
+  \[ ∀i∈[k]: \deg(g_i) ≤ d/2. \]
+  The number $ρ$ is called the \emph{sum of squares upper bound} of degree $d$.
+}
+
+Original idea: verify that $∀x: ρ-f(x) ≥ 0$ using a sum of squares (which is always non-negative).
+
+\clm{
+  We can compute the sum of squares upper bound using a semidefinite program of size $n^{O(d)}$.
+
+  The semidefinite program is as follows: the variable matrix $X$ is indexed by a pair of monomials
+  $α, β$ of degree at most $d/2$ each. The program itself is:
+
+  \[ \min ρ \qquad\textrm{s. t. } ∀γ ∈ ℕ_{≤d}^n: ∑_{α,β| α + β = γ} X_{α,β} = [γ](ρ - f); \quad X ≽ 0.\]
+}
+
+\lem[Eye-opening lemma]{
+ A sum of squares semidefinite program of degree $d$ is dual to the $t/2$-th level of the Lasserre hierarchy.
+}
+
+\section{Sum of squares vs. PSD rank}
+
+\dfn{
+A \emph{degree} of a function $\{0,1\}^m → ℝ$ will be the degree of the unique
+multilinear polynomial agreeing with $f$ on every point of $\{0,1\}^m$.
+}
+
+\dfn[sos degree]{
+  Consider a non-negative function $f: \{0,1\}^m → ℝ_+$. We say
+  that $f$ has a \emph{sum-of-squares certificate} of degree $d$ if there exist
+  functions $g_1, …, g_k : \{0,1\}^m → ℝ$ such that $\deg(g_i) ≤ d/2$ and $f(x) = ∑_{i=1}^k g_i(x)^2$ for
+  all $x ∈ \{0,1\}^n$.
+
+  We say that $f$ has \emph{sos degree $d'$} and write $\degsos(f) = d'$ if $d'$ is the minimal degree
+  of a sum-of-squares certificate for $f$.
+}
+
+\thm[Main theorem]{
+  For every $m ≥ 1$ and $f: \{0,1\}^m → ℝ_+$, there
+  exists a constant $C>0$ such that the following holds: For $n ≥ 2m$, if $\degsos(f) = d+2$,
+  then
+$$ 1 + n^{1+d/2} ≥ \psdrank(M_n^f) ≥ C \left( \frac{n}{\log n} \right)^{d/4}. $$
+}
+
+The \textit{Main theorem} gives us a good lower bound on $f$ if $\degsos(f) = d+2$. We finalize
+the proof of Theorem \textit{Bound on psd rank} by applying the following:
+
+\thm[Grigoriev]{
+  For every odd integer $m ≥ 1$, the following function $f: \{0,1\}^m → ℝ$ has $\degsos(f)≥ m+1$:
+$$ f(x) = \left(\frac{m}{2} - ∑_{i=1}^m x_i \right)^2 - 1/4. $$
+}
+
+% \section{Proof sketch of the main theorem}
+\section{Further reading}
+
+\begin{enumerate}
+\item \textit{Bernd G\"artner and Jiří Matoušek: Approximation Algorithms and Semidefinite Programming, Springer,
+  2012}
+
+\item \textit{Monique Laurent: Sums of squares, moment matrices and optimization over polynomials. Emerging applications of algebraic geometry. Springer New York, 2009. 157-270.}
+
+\item \textit{Thomas Rothvoß: The Lasserre hierarchy in approximation algorithms. Lecture Notes for MAPSP 2013, 2013.}
+\end{enumerate}
+
+\end{multicols}
+\end{document}

@@ -1,0 +1,452 @@
+\input macros/cheatmac
+
+\def\Pee{\mathbb{P}}
+\def\Zet{\mathbb{Z}}
+\def\Rko{\mathbb{R}}
+\def\Dis{\mathcal{D}}
+
+\def\Bigpi{{\rm Par}}
+\def\intcone{{\rm intcone}}
+\def\cone{{\rm cone}}
+\def\conv{{\rm conv}}
+\def\vert{{\rm vert}}
+\def\Las{{\textsc{Las}}}
+\def\Oh{{\rm O}}
+\def\supp{{\rm supp}}
+\def\enc{{\rm enc}}
+\newcommand{\eps}{\varepsilon}
+\let\cfix=\cdot
+
+% expectation, probability, variance
+\newcommand{\Esymb}{\mathbb{E}}
+\newcommand{\Psymb}{\mathbb{P}}
+\newcommand{\Vsymb}{Var}
+
+% better vector definition and some variations
+\renewcommand{\vec}[1]{{\bm{#1}}}
+\newcommand{\bvec}[1]{\bar{\vec{#1}}}
+\newcommand{\pvec}[1]{\vec{#1}'}
+\newcommand{\tvec}[1]{{\tilde{\vec{#1}}}}
+
+
+\DeclareMathOperator*{\E}{\Esymb}
+\DeclareMathOperator*{\Var}{\Vsymb}
+\DeclareMathOperator*{\ProbOp}{\Psymb}
+
+\renewcommand{\Pr}{\ProbOp}
+
+\newcommand{\problemmacro}[1]{\textsc{#1}\xspace}
+\newcommand{\maxtwocsp}{\problemmacro{Max 2-Csp}}
+\newcommand{\uniquegames}{\problemmacro{Unique Games}}
+
+\newcommand{\norm}[1]{\lVert#1\rVert}
+\newcommand{\Norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\bignorm}[1]{\big\lVert#1\big\rVert}
+\newcommand{\Bignorm}[1]{\Big\lVert#1\Big\rVert}
+
+\newcommand{\normo}[1]{\norm{#1}_1}
+\newcommand{\Normo}[1]{\Norm{#1}_1}
+\newcommand{\bignormo}[1]{\bignorm{#1}_1}
+\newcommand{\Bignormo}[1]{\Bignorm{#1}_1}
+
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\Set}[1]{\left\{#1\right\}}
+\newcommand{\bigset}[1]{\big\{#1\big\}}
+\newcommand{\Bigset}[1]{\Big\{#1\Big\}}
+
+% absolute value
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\Abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\bigabs}[1]{\big\lvert#1\big\rvert}
+\newcommand{\Bigabs}[1]{\Big\lvert#1\Big\rvert}
+
+% square brackets
+\newcommand{\brac}[1]{[#1]}
+\newcommand{\Brac}[1]{\left[#1\right]}
+\newcommand{\bigbrac}[1]{\big[#1\big]}
+\newcommand{\Bigbrac}[1]{\Big[#1\Big]}
+
+\newcommand{\ia}{{ia}}
+\newcommand{\jb}{{jb}}
+\newcommand{\mper}{\,.}
+% \newcommand{\Mid}{\;\middle\vert\;}
+
+\newcommand{\iprod}[1]{\langle#1\rangle}
+\newcommand{\Iprod}[1]{\left\langle#1\right\rangle}
+
+\newcommand{\paren}[1]{(#1)}
+\newcommand{\Paren}[1]{\left(#1\right)}
+\newcommand{\bigparen}[1]{\big(#1\big)}
+\newcommand{\Bigparen}[1]{\Big(#1\Big)}
+
+\newcommand{\Ins}{\mathcal{I}}
+\newcommand{\rank}{\mathrm{rank}}
+\DeclareMathOperator{\val}{val}
+\DeclareMathOperator*{\Cov}{Cov}
+
+\long\def\algobox#1{\smallskip
+  \noindent
+~~\hbox{\fbox{\parbox[c]{0.30\textwidth}{#1}}}
+%\smallskip
+}
+
+\begin{document}
+\begin{multicols}{3}
+
+\title{Rounding Semidefinite Programming}
+\title{Hierarchies via Global Correlation}
+\author{Boaz Barak, Prasad Raghavendra, David Steurer}
+\presenter{Martin B\"ohm}
+\centerline{{\it Combinatorics and Graph Theory PhD Seminar, 2014, MFF UK}}
+
+%TODO: \Pee, \Zet, \Rko
+
+\section{Lasserre Hierarchy}
+
+\textbf{Notation:} Let $\mathcal{P}_t([n]) := \{ I \subseteq [n] \mid
+|I| \leq t\}$ be the set of all index sets of cardinality at most $t$
+and let $y \in \Rko^{\mathcal{P}_{2t+2}([n])}$ be a vector with
+entries $y_I$ for all $I\subseteq[n]$ with $|I| \leq
+2t+2$.
+
+\dfn[Moment matrix]{ $M_{t+1}(y) \in \Rko^{\mathcal{P}_{t+1}([n])}
+  × \mathcal{P}_{t+1}([n])}$:
+\[
+  M_{t+1}(y))_{I,J} := y_{I\cup J} \quad \forall |I|,|J| \leq t+1.
+\]
+
+
+\dfn[Moment matrix of slacks]{ For the $\ell$-th ($\ell \in [m]$) constraint
+of the LP $A^Tx \geq b$, we create $M_t^\ell(y) ∈
+\Rko^{\mathcal{P}_{t}([n]) × \mathcal{P}_{t}([n])}$:
+
+
+\[  M_t^\ell(y)_{I,J} := (\sum_{i=1}^n A_{li}y_{I \cup J \cup \{i\}}) - b_ly_{I\cup J} \]
+}
+\dfn[$t$-th level of the Lasserre hierarchy]{ Let $K = \{ x \in \Rko^n
+\mid Ax \geq b\}$. Then $\textsc{Las}_t(K)$ is the set of vectors $y
+\in \Rko^{\mathcal{P}_{2t+2}([n])}$ that satisfy 
+
+\[
+  M_{t+1}(y) \succeq 0; \hspace{1cm} M_t^\ell(y) \succeq 0 \quad \forall\ell\in[m]; \hspace{1cm} y_{\emptyset}=1.
+\]
+Furthermore, let  $\textsc{Las}_t^{\textrm{proj}} := \{ (y_{\{1\}},\ldots,y_{\{n\}}) \mid y \in \textsc{Las}_t(K) \}$ be the projection on the original variables. 
+}
+
+\textbf{Intuition:} $M_{t+1}(y) \succeq 0$ ensures \textit{consistency}
+($y$ behaves \textit{locally} as a distribution) while $M_t^\ell(y) \succeq 0$
+guarantees that $y$ satisfies the $l$-th linear constraint.
+
+\label{thm:PropertiesOfLasT}
+\thm[Lasserre properties from Martin K's lecture]{
+Let $K = \{ x \in \Rko^n \mid Ax \geq b\}$ and $y \in {\textsc{Las}}_t(K)$. Then the following holds: 
+\begin{enumerate}[(a)] \itemsep0.6em
+\item \label{item:PropertiesOfLasT-Hierarchy} $\conv(K \cap \{ 0,1\}^n) = \textsc{Las}_n^{\textrm{proj}}(K) ⊆ … ⊆ \textsc{Las}_0^{\textrm{proj}}(K) \subseteq K$.
+\item \label{item:PropertiesOfLasT-Monotone} We have $0 \leq y_I \leq y_J \leq 1$ for all $I\supseteq J$ with  $0\leq|J|\leq |I| \leq t$.
+\item \label{item:PropertiesOfLasT-Cond-for-yI0} Let $I \subseteq [n]$ with $|I| \leq t$. Then
+\[ K \cap \{ x \in \Rko^n \mid x_i =1 \; \forall i \in I\} = \emptyset \; \Longrightarrow \; y_I = 0. \]
+\item \label{item:PropertiesOfLasT-IntOnI} Let $I \subseteq [n]$ with $|I| \leq t$. Then 
+\[y \in \conv(\{z \in \textsc{Las}_{t-|I|}(K) \mid z_{\{i\}} \in \{ 0,1\} \; \forall i\in I\}).\]
+%\item Sei $k\leq t$ und $S \subseteq [n]$ eine Menge mit der Eigenschaft, dass $|I \cap S| \geq k \Rightarrow y_I=0$. 
+%Dann 
+\item \label{item:PropertiesOfLasT-DecThm} Let $S \subseteq [n]$ be a subset of variables 
+such that not many can be equal to 1 at the same time:
+\[\max\{ |I| : I \subseteq S; x \in K; x_i = 1\; \forall i \in I\} \leq k < t. \]
+Then we have
+\[y \in \conv(\{z \in \textsc{Las}_{t-k}(K) \mid z_{\{i\}} \in \{ 0,1\} \; \forall i\in S\}). \]
+\item \label{item:PropertiesOfLasT-yI1-iff-yi1-for-all-i-in-I} For any $|I| \leq t$ we have $y_I=1 \Leftrightarrow \bigwedge_{i\in I} (y_{\{i\}}=1)$.
+\item \label{item:PropertiesOfLasT-product} For $|I| \leq t$: $(\forall i\in I : y_{\{i\}} \in \{ 0,1\}) \; \Longrightarrow \; y_I = \prod_{i\in I} y_{\{i\}}$.
+\item \label{item:PropertiesOfLasT-yI1-implies-yIJ-is-yJ} Let $|I|,|J| \leq t$ and $y_{I}=1$. Then $y_{I \cup J} = y_J$.
+\end{enumerate}
+}
+
+\textbf{Vector representation:} For each event $\bigcap_{i \in I}(x_i
+= 1)$ with $|I| \leq t$ there is a vector $v_I$ representing it in a
+consistent way:
+
+\lem[Vector Representation Lemma]{Let $y \in \textsc{Las}_t(K)$. Then
+  there is a family of vectors $(\textbf{v}_I)_{|I| \leq t}$ such that
+  $\langle \textbf{v}_I, \textbf{v}_J \rangle = y_{I \cup J}$ for all
+  $|I|, |J| \leq t$. In particular $\|\textbf{v}_I\|_2^2 = y_I$ and $\|\textbf{v}_\emptyset\|_2^2 = 1$.
+}
+
+\section{From vectors to distributions}
+
+\subsection{Binary setting}
+
+Solution in $x ∈ \conv(K ∩ \{0,1\}^n) → $ a probability distribution
+over integral solutions in $K$. For $t$-round Lasserre we cannot have
+a globally feasible probability distribution, but instead one that is
+locally consistent.
+
+\lem{Let $y ∈ \Las_t(K)$. Then for any subset $S ⊆ [n]$ of size $|S| ≤
+t$ there is a distribution $\Dis^S$ over ${0,1}^S$ such that
+
+\[ Pr_{z \sim \Dis^S} \left[ ⋀_{i ∈ I} (z_i = 1) \right]  = y_I ∀ I ⊆ S. \]
+}
+
+\subsection{General 2CSP setting}
+
+All \textsc{2CSP} problems can be restated using SDPs with constraints
+hidden in the maximization clause, so we do not depend on the moment
+matrices.
+
+\dfn{ Let $V=[n]$ be a set of vertices and $[k]$ the set of possible
+values. An \textit{$m$-local distribution} is a distribution $\Dis^T$
+over the set of assignments $[k]^T$ of the vertices of some set $T ⊆
+V$ of size at most $m+2$. The choice $+2$ is for convenience.}
+
+\dfn{ A collection $\{\Dis^T| T ⊆ V, |T| ≤ m+2 \}$ of $m$-local
+distributions is \textit{consistent} if all pairs of distributions
+$\Dis^T, \Dis^{T'}$ are consistent on their intersection $T ∩ T'$. By
+this we mean that any event defined on $T ∩ T'$ has the same
+probability in $\Dis^T$ and in $\Dis^{T'}$. }
+
+{\bf Notation trick:} If we have $n$ vertices and $|T| ≤ m$, instead
+of the entire collection $\{\Dis^T| T ⊆ V, |T| ≤ m+2 \}$ we talk
+instead about a set of \textit{$m$-local random variables} $X_1, X_2,
+…, X_n$. We can think of those random variables as variables $X_i$
+coming from the distribution $\Dis^{\{i\}}$. Note that these variables
+are {\bf not} jointly distributed random variables, but for each
+subset of at most $m+2$ of them, one can find a sample space $\Dis^T$
+where the corresponding variables $X_i^T$ are jointly distributed.
+
+\textbf{More notation.}
+\begin{enumerate}
+\item $\{X_i | X_S\} ≡ $ a random variable obtained by conditioning $X_i^{S∪i}$
+on variables $\{X_j^{(S ∪ \{i\})} | j ∈ S\}$;
+\item $P[X_i = X_j | X_S] ≡ P[X_i^{S∪i∪j} = X_j^{S∪i∪j} | X_S^{S∪i∪j}].$
+\end{enumerate}
+
+\dfn[Lasserre hierarchy in the prob. setting]{
+
+An $m$-round Lasserre solution of a \textsc{2CSP} problem consists of $m$-local random
+variables $X_1, X_2, …, X_n$ and vectors $v_{S,α}$ for all $S ⊆ {V \choose m+2}$ and all
+local assignments $α ∈ [k]^S$, if the following holds $∀ S,T ⊆ V, |S∪T| ≤ m+2, ∀ α ∈ [k]^S, β ∈ [k]^T:$
+\[ \iprod{v_{S,α},v_{T,β}} = P[X_S = α, X_T = β]. \]
+}
+
+We usually want a solution for \textsc{Max 2CSP}, so we add a maximization clause, for instance
+$\max P_{(i,j,Π) ∈ \Ins}[(x_i,x_j ∈ Π)]$.
+
+\obs{A covariance matrix $E[ (X - E[X]) (X - E[X])^T]$ is always positive semidefinite
+for a random vector $X$.}
+
+\cor{For a fixed local assignment $x_S ∈ [k]^S$ (where $|S| ≤ m$) and
+fixed $a,b$, it holds that the matrix $\Paren{\Cov(X_\ia,X_\jb | X_S
+= x_S)}_{i,j\in V}$ is positive semidefinite for the $m$-th level of
+the Lasserre hierarchy.
+}
+
+\section{Main results}
+
+\dfn{ The \textit{$τ-$threshold rank} of a regular graph $G$, denoted
+$\rank_{≥ τ}(G)$, is the number of eigenvalues of the normalized
+adjacency matrix of $G$ that are larger than $τ$. We can define this
+for any \maxtwocsp problem, by taking the adjacency graph of the
+predicates.}
+
+\thm{
+There is a constant $c$ such that for
+every $\varepsilon > 0$, and every \maxtwocsp instance $\Ins$ with objective
+value $v$ and alphabet size $k$, the following holds:
+
+The objective value $\mathrm{sdpopt}(\Ins)$ of the $r$-round Lasserre
+hierarchy for $ r \geq k \cdot \rank_{\geq \tau}(\Ins) /
+\varepsilon^c$ is within $\epsilon$ of the objective value $v$ of
+$\Ins$, i.e., $ \mathrm{sdpopt}(\Ins) \leq v + \eps.$
+
+Moreover, there exists a polynomial time rounding scheme
+that finds an assignment $x$ satisfying $\val_{\Ins}(x) > v - \varepsilon$
+given optimal SDP solution as input.
+}
+
+\thm{
+There is an algorithm, based on
+rounding $r$ rounds of the Lasserre hierarchy and a constant $c$, such
+that for every $\varepsilon>0$ and input instance $\Ins$ of \uniquegames with
+objective value $v$, alphabet size $k$, satisfying $\rank_{\geq
+\tau}(\Ins) \leq \varepsilon^c r / k$, where $\tau = \varepsilon^c$, the algorithm
+outputs an assignment $x$ satisfying $\val_{\Ins}(x) > v - \varepsilon$.
+}
+
+\thm{
+There is an algorithm, based on
+rounding $r$ rounds of the Lasserre hierarchy and a constant $c$, such
+that for every $\varepsilon>0$ and input \uniquegames instance $\Ins$ with
+objective value $1-\varepsilon$ and alphabet size $k$, satisfying $r \geq c
+k\cdot \min \{ n^{c\varepsilon^{1/3}} , \rank_{\geq 1-c\varepsilon}(\Ins) \}$, the
+algorithm outputs an assignment $x$ satisfying $\val_{\Ins}(x) > 1/2$.
+}
+%
+\fsection{A sample 2CSP: MaxCut}
+
+\dfn{SDP relaxation of \textsc{MaxCut}:
+\[\textrm{maximize }    \E_{i,j \in E} \norm{v_i - v_j}^2  \ \textrm{ subject to } \norm{v}_i^2 = 1 ~\forall i \in V. \]
+}
+
+{\bf Step 1.} Use an $m$-round Lasserre to get a collection of
+$m$-local variables $X_1, X_2, …, X_n$. For an edge $ij$, its
+contribution to the SDP objective is:
+\[ \Pr_{\Dis^{ij}}[X_i \neq X_j] = \norm{v_i - v_j}^2 \mper \]
+
+{\bf Step 2.} Our goal is sampling that is close to sampling $\Dis^{ij}$. Try first independent sampling from marginals $\Dis^{i}$.
+
+\obs[Local correlation]{On an edge $(i,j)$, the local distribution $\Dis^{ij}$ is {\it far} from the independent sampling distribution $\Dis^i × \Dis^j$  only if the random variables $X_i,X_j$ are {\it correlated}.
+}
+
+\obs[Correlation helps]{
+If two variables $X_i,X_j$ are correlated, then sampling/fixing the value of $X_i$ reduces the uncertainty in the value of $X_j$.  More precisely:
+
+$$ \E_{\{X_i\}}\Var[X_j | X_i] = \Var[X_j] - \frac{1}{\Var[X_i]} \left[\Cov(X_i,X_j)\right]^2 \mper $$
+
+}
+
+The reduction in uncertainty is actually related to the global expected correlation:
+
+\[ \E_{j ∈ V} \Var[X_j] - \E_{i ∈ V} \E_{\{X_i\}} \left[ \E_{j ∈ V} \Var[X_j | X_i] \right] ≥ \E_{i,j∈V} |\Cov(X_i, X_j)|^2. \]
+
+{\bf Step 3.} Assume that average local correlation is at least $ε$, that is
+ \[\E_{ij\sim G} \iprod{\vec v_i,\vec v_j} \ge ε\mper\]
+ Use PSD of correlations, apply the following Lemma for vectors $v_i ≡ u_i^{⊗2}$:
+
+\lem[Local Correlation vs. Global Correlation on Low-Rank Graphs]{
+  Let $\vec v_1,\ldots,\vec v_n$ be vectors in the unit ball.
+  %
+  Suppose that the vectors are correlated across the edges of a regular
+  $n$-vertex graph $G$,
+  \begin{displaymath}
+    \E_{ij\sim G} \iprod{\vec v_i,\vec v_j} \ge \rho\mper
+  \end{displaymath}
+  Then, the global correlation of the vectors is lower bounded by
+  \begin{displaymath}
+    \E_{i,j\in V} \abs{\iprod{\vec v_i,\vec v_j}}\ge
+    \Omega(\rho)/\rank_{\ge \Omega(\rho)}(G)\mper
+  \end{displaymath}
+where $\rank_{\geq \rho}(G)$ is the number of eigenvalues of adjacency matrix of $G$ that are larger than $\rho$.
+}
+
+{\bf Step 4.} If the independent sampling is at least $ε-$far from
+correlated sampling over the edges, we can use the previous Lemma and
+reduce the average variance. Therefore, after $ rank_{\ge ε^2}(G) /
+ε^2 $ steps, we are done.
+
+
+
+\iffalse
+ 
+\section{2-CSPs}
+
+
+
+\lem[Independent Sampling and Pairwise Correlation]{
+  \label{lem:stat-dist-correlation}
+  %
+  For any two vertices $i,j\in V$,
+  \begin{displaymath}
+    \Normo{\set{X_i X_j}- \set{X_i}\set{X_j}}
+    = \sum_{(a,b)\in [k]^2} \bigabs{\Cov(X_\ia,X_\jb)}
+    \mper
+  \end{displaymath}
+}
+%
+
+\lem[Conditional Variance and Pairwise Correlation]{
+  \label{lem:conditional-variance-correlation}
+  %
+  For any two vertices $i,j\in V:$
+  \[ \Var X_i -\E_{\set{X_j}} \Var[X_i | X_j] ≥  \frac{1}{k} \sum_{a,b\in [k]} \E_{\set{X_\ia X_\jb}} \Cov(X_{\ia},X_{jb})^2 / \Var X_{\jb} \]
+}
+
+\lem[Pairwise Correlations and Inner Products]{
+\label{lem:general-tensoring-trick}
+  Suppose that the matrix $\Paren{\Cov(X_\ia,X_\jb)}_{i\in V,\, a\in[k]}$
+  is positive semidefinite.
+  %
+  Then, there exists vectors $\vec v_1,\ldots,\vec v_n$ in the unit ball
+  such that for all vertices $i,j\in V$,
+  \[
+    \tfrac1{k^2} \Bigparen{\sum_{(a,b)\in [k]^2} \bigabs{\Cov(X_\ia,X_\jb)}}^2
+    ≤  \iprod{\vec v_i,\vec v_j} \]
+  \[ \le \tfrac1k\sum_{(a,b)\in [k]^2} \tfrac 12(\tfrac{1}{\Var X_\ia} +
+    \tfrac{1}{\Var X_\jb})
+    \Cov(X_\ia,X_\jb)^2
+    \mper \]
+  %
+}
+
+\lem[Putting Things Together]{
+  \label{lem:one-step-conditioning}
+  %
+  Let $G$ be a regular $n$-vertex graph and $\varepsilon$ be the expected
+  statistical distance between independent and correlated sampling across
+  the edges of $G$,
+  \begin{displaymath}
+    \varepsilon = \E_{ij\sim G}~
+    \Normo{\set{X_i X_j}- \set{X_i}\set{X_j}}
+  \end{displaymath}
+  %
+  Further, suppose that the matrix $\Paren{\Cov(X_\ia,X_\jb)}_{i\in V,\, a\in[k]}$
+  is positive semidefinite.
+  %
+  Then, conditioning on a random vertex decreases the variances by
+  \begin{displaymath}
+    \E_{i,j\in V} \E_{\set{X_j}} \Var\Brac{X_i | X_j}
+    \le \E_{i\in V} \Var X_i - \Omega(\varepsilon^2/k)/\rank_{\ge \Omega(\varepsilon/k)^2}(G)\mper
+  \end{displaymath}
+}
+\algobox{Algorithm \textsc{Propagation Sampling}:
+
+  \textbf{Input:} $r$-local random variables $X_1,\ldots,X_n$ over $[k]$
+
+  \textbf{Output:} (global) distribution over assignments $x\in [k]^V$.
+  
+  \begin{enumerate}
+  \item Choose $m \in \set{1,\ldots,r}$ at random.
+  \item Sample a random set of ``seed vertices'' $S\in V^m$.
+    %
+    (Repeated vertices are allowed.)
+  \item Sample a assignment $x_S\in [k]^S$ for $S$ according to its local
+    distribution $\set{X_S}$.
+
+  \item For every other vertex $i\in V ∖ S$, sample a label $x_i\in[k]$
+    according to the local distribution for $S\cup \set{i}$ conditioned on
+    the assignment $x_S$ for $S$.
+  \end{enumerate}
+}
+
+\thm[Propagation Sampling Theorem] {  
+  Let $X_1,\ldots,X_n$ be $r$-local random variables and let
+  $X'_1,\ldots,X'_n$ be the random variables produced by
+  \textsc{Propagation Sampling} on input $X_1,\ldots,X_n$.
+  %
+  %
+  Suppose that the matrices $\paren{\Cov(X_\ia,X_\jb\mid X_S=x_S)}_{i\in V,\, a\in[k]}$
+  are positive semidefinite for every set $S⊆ V$ with $|S| \le r$
+  and local assignment $x_S\in [k]^S$.
+  %
+  Then, if $r \gg   O(k/\varepsilon^4)\cdot \rank_{\Omega(\varepsilon/k)^2}(G)$,
+  \begin{displaymath}
+    \E_{ij\sim G} \Normo{\set{X_i X_j}-\set{X'_iX'_j}}
+    \le \varepsilon
+    \mper
+  \end{displaymath}
+}
+
+
+\thm[Almost the main theorem]{
+  Let $\varepsilon>0$ and $r=O(k)\cdot \rank_{\ge \Omega(\varepsilon/k)^2}(G)/\varepsilon^4$.
+  %
+  Suppose that the $r$-round Lasserre value of the \maxtwocsp instance
+  $\Ins$ is $\sigma$.
+  %
+  Then, given an optimal $r$-round Lasserre solution,
+  \textsc{Propagation Sampling} outputs an
+  assignment with expected value at least $\sigma-\varepsilon$ for $\Ins$ .
+}
+
+\fi
+% \section{Further reading}
+
+\end{multicols}
+\end{document}

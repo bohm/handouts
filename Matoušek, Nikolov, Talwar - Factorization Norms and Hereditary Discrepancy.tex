@@ -1,0 +1,284 @@
+\input macros/cheatmac
+
+\def\Pee{\mathbb{P}}
+\def\Zet{\mathbb{Z}}
+\def\Rko{\mathbb{R}}
+\def\Complex{\mathbb{C}}
+\def\Dis{\mathcal{D}}
+
+\def\Bigpi{{\rm Par}}
+\def\intcone{{\rm intcone}}
+\def\cone{{\rm cone}}
+\def\conv{{\rm conv}}
+\def\vert{{\rm vert}}
+\def\Las{{\textsc{Las}}}
+\def\Oh{{\rm O}}
+\def\supp{{\rm supp}}
+\def\enc{{\rm enc}}
+\newcommand{\eps}{\varepsilon}
+\let\cfix=\cdot
+
+% expectation, probability, variance
+\newcommand{\Esymb}{\mathbb{E}}
+\newcommand{\Psymb}{\mathbb{P}}
+\newcommand{\Vsymb}{Var}
+
+% better vector definition and some variations
+\renewcommand{\vec}[1]{{\bm{#1}}}
+\newcommand{\bvec}[1]{\bar{\vec{#1}}}
+\newcommand{\pvec}[1]{\vec{#1}'}
+\newcommand{\tvec}[1]{{\tilde{\vec{#1}}}}
+
+
+\DeclareMathOperator*{\E}{\Esymb}
+\DeclareMathOperator*{\Var}{\Vsymb}
+\DeclareMathOperator*{\ProbOp}{\Psymb}
+
+\renewcommand{\Pr}{\ProbOp}
+
+\newcommand{\problemmacro}[1]{\textsc{#1}\xspace}
+\newcommand{\maxtwocsp}{\problemmacro{Max 2-Csp}}
+\newcommand{\uniquegames}{\problemmacro{Unique Games}}
+
+\newcommand{\norm}[1]{\lVert#1\rVert}
+\newcommand{\Norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\bignorm}[1]{\big\lVert#1\big\rVert}
+\newcommand{\Bignorm}[1]{\Big\lVert#1\Big\rVert}
+
+\newcommand{\normo}[1]{\norm{#1}_1}
+\newcommand{\Normo}[1]{\Norm{#1}_1}
+\newcommand{\bignormo}[1]{\bignorm{#1}_1}
+\newcommand{\Bignormo}[1]{\Bignorm{#1}_1}
+
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\Set}[1]{\left\{#1\right\}}
+\newcommand{\bigset}[1]{\big\{#1\big\}}
+\newcommand{\Bigset}[1]{\Big\{#1\Big\}}
+
+% absolute value
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\Abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\bigabs}[1]{\big\lvert#1\big\rvert}
+\newcommand{\Bigabs}[1]{\Big\lvert#1\Big\rvert}
+
+% square brackets
+\newcommand{\brac}[1]{[#1]}
+\newcommand{\Brac}[1]{\left[#1\right]}
+\newcommand{\bigbrac}[1]{\big[#1\big]}
+\newcommand{\Bigbrac}[1]{\Big[#1\Big]}
+
+\newcommand{\ia}{{ia}}
+\newcommand{\jb}{{jb}}
+\newcommand{\mper}{\,.}
+% \newcommand{\Mid}{\;\middle\vert\;}
+
+\newcommand{\iprod}[1]{\langle#1\rangle}
+\newcommand{\Iprod}[1]{\left\langle#1\right\rangle}
+
+\newcommand{\paren}[1]{(#1)}
+\newcommand{\Paren}[1]{\left(#1\right)}
+\newcommand{\bigparen}[1]{\big(#1\big)}
+\newcommand{\Bigparen}[1]{\Big(#1\Big)}
+
+\newcommand{\Ins}{\mathcal{I}}
+\newcommand{\El}{\mathcal{L}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\defeq}{\coloneqq}
+\newcommand{\rank}{\textrm{rank}}
+\newcommand{\psdrank}{\textrm{rk}_{\textrm{psd}}}
+\newcommand{\degsos}{\textrm{deg}_{\textrm{sos}}}
+\newcommand{\detlb}{\textrm{detlb}}
+\newcommand{\disc}{\textrm{disc}}
+\newcommand{\herdisc}{\textrm{herdisc}}
+\newcommand{\Corr}{\textsc{Corr}}
+\newcommand{\Splus}{\mathcal{S}_+}
+\newcommand{\Tr}{\textrm{Tr}}
+\newcommand{\scalar}[2]{\langle #1, #2 \rangle}
+\newcommand{\vectext}{\textrm{vec}}
+\DeclareMathOperator{\val}{val}
+\DeclareMathOperator*{\Cov}{Cov}
+
+
+\long\def\algobox#1{\smallskip
+  \noindent
+~~\hbox{\fbox{\parbox[c]{0.30\textwidth}{#1}}}
+%\smallskip
+}
+
+\begin{document}
+\begin{multicols}{3}
+
+\title{Factorization Norms}
+\title{and Hereditary Discrepancy}
+\author{Jiří Matoušek, Aleksandar Nikolov, Kunal Talwar}
+\presenter{Martin B\"ohm}
+\centerline{{\it Spring School 2015}}
+
+%TODO: \Pee, \Zet, \Rko
+\section{Discrepancy}
+
+\dfn[Discrepancy]{We work in a universe $U = [n]$, and we are given a list of sets $\F$, where each $f ∈ \F$
+is a subset of $U$. Our goal is to color the universe by two colors so that all sets in $\F$ are as balanced
+as possible.
+
+Formally, given a coloring $x∈\{-1,1\}^n$, we have $\disc(\F,x) \defeq \max_{F ∈ \F} |∑_{i ∈ F} x_i|$ and
+our minimization goal $\disc(\F) = \min_{x ∈ \{-1,1\}^n} \disc(\F,x)$.
+}
+
+\noindent\textbf{Problem:} Assuming $P≠NP$ and assuming that $m =
+O(n)$, we cannot distinguish between $\F$ with discrepancy $0$ and
+$\F$ with discrepancy $\sqrt{n}$.
+
+\dfn[Hereditary discrepancy]{ $\herdisc(\F) = \max_{J ⊆ U} \disc(\F|_{J})$. }
+
+\dfn[Discrepancy for matrices]{ Given a matrix $A ∈ ℝ^{m × n}$, we define
+$\disc(A) = \min_{x ∈ \{-1,1\}^n} \norm{Ax}_∞$. We also define 
+$\herdisc(A) = \max_{J ⊆ [n]} \disc(A_J)$. 
+}
+
+\section{Previous work}
+
+\dfn[Detlb]{ A \emph{determinant lower bound} for a matrix $A ∈ ℝ^{m × n}$ is
+
+\[ \detlb(A) = \max_k \max_{B ∈ ℝ^{k × k},B ⊆ A} |\det B|^{1/k}.\]
+}
+
+\thm{ $\herdisc(A) ≥ (1/2) · \detlb(A)$.}
+
+\thm{ $\herdisc(A) ≤ O(\log (mn) \sqrt{\log n}) \detlb(A)$.}
+
+\noindent\textbf{Problem 1:} The function $\detlb$ is not a norm.
+
+\noindent\textbf{Problem 2:} Nobody knows how to compute $\detlb$.
+
+
+\section{Norms}
+
+\dfn[Norm]{Given a vector space $V$ say over $\Complex$, a \emph{norm} is a function $n: V → ℝ$
+such that the following holds:
+
+\begin{enumerate}
+\item $n(av) = an(v)$ for a vector $v$ and a scalar $a$,
+\item $n(u + v) ≤ n(u) + n(v)$ for a pair of vectors $u,v$,
+\item if $n(u) = 0$ then $u$ is a zero vector.
+\end{enumerate}
+}
+
+ Some useful norms:
+
+\begin{enumerate}
+\item $ \norm{u}_p = (∑_{i} |u_i|^p)^{1/p}$ -- an $l_p$ norm.
+\item $ \norm{A}_{p → q} = \max_{\norm{x}_q = 1} \norm{Ax}_p$ -- $l_p → l_q$ operator norm.
+\item $ \norm{A}_* = ∑_{i=1}^m σ_i$ -- the \emph{nuclear norm}, where $σ_i$ is a \emph{singular value} of $A$.
+\end{enumerate}
+
+\dfn[SV decomposition]{ Let $M ∈ ℝ^{m × n}$. Then there exists a
+decomposition $M = UΣV^T$, where $U,V$ are orthogonal matrices and $Σ$ is a
+diagonal matrix with non-negative real entries named \emph{singular values}.
+}
+
+\section{New results}
+
+\dfn[Gamma-2]{ We define the $γ_2$ function from $A ∈ ℝ^{m × n}$ to $ℝ$ as follows
+\[γ_2(A) = \min_{A = BC} \norm{B}_{2 → ∞} \norm{C}_{1 → 2}. \]
+}
+
+\thm[Known.]{ $γ_2(A)$ is a norm.}
+
+\thm[Known.]{ $γ_2(A)$ can be computed using a semidefinite program of size polynomial to $A$.}
+
+\thm[Main theorem 1]{ $\herdisc(A) ≥ γ_2(A) / c \log m$ }
+
+\thm[Main theorem 2]{ $\herdisc(A) ≤ γ_2(A) · c \sqrt{\log m}$ }
+
+\noindent\textbf{Note:} Both inequalities are asymptotically tight.
+
+\noindent\textbf{Other results}: Applications of the previous bounds
+in data structure lower bounds, new bounds on combinatorial
+discrepancy of axis-parallel rectangles in $ℝ^d$, easier proofs of
+previously-known bounds, and more.
+
+\section{Some properties of $γ_2$}
+
+\obs{$\norm{B}_{2 → ∞}$ is equal to $\max_{r \text{ row of } B}\{ \norm{r}_2 \}$.}
+
+\obs{$\norm{C}_{1 → 2}$ is equal to $\max_{c \text{ column of } C}\{ \norm{c}_2 \}$.}
+
+\thm{
+\[γ_2(A) = \min_{A = BC} \{ \max_{r \text{ row of } B}\{ \norm{r}_2 \} · \max_{c \text{ column of } C}\{ \norm{c}_2 \} \}. \]
+}
+
+\obs{$γ_2(A_{I,J}) ≤ γ_2(A)$.}
+
+\obs{$γ_2(A^T) = γ_2(A)$.}
+
+\thm[Non-trivial]{ $γ_2(A + B) ≤ γ(A) + γ(B)$.
+}
+
+\section{Graphical interpretation}
+
+\dfn[Ellipsoid]{
+A zero-centered ellipsoid is defined as $\{x ∈ ℝ^n | x^TMx ≤ 1\}$ for a
+positive definite matrix $M$ (with a positive square root $M^{1/2}$).
+
+Alternately, a zero centered ellipsoid is a continuous image of a
+ball, i.e. $\{Bx ; \norm{x}_2 ≤ r \}$ for a radius $r$ and a matrix $B$.
+
+}
+
+
+\dfn{For a zero-centered ellipsoid $E$, we define $\norm{E}_∞$ to be the the
+maximum $\norm{u}_{∞}$ over all points $u ∈ E$.}
+
+\thm{ $γ_2(A) = \min \{ \norm{E}_∞ \text{ for } E \text{ ellipsoid},
+E \text{\text{ contains columns of } A}.\}$
+}
+\section{A semidefinite program}
+
+\begin{align*}
+γ_2(A) = \min t &\\
+∀i∈\{1,2,…,m+n\}: X_{ii} &≤ t\\
+∀i∈\{1,…,m\},j∈\{1,…,n\} X_{i,m+j} &= a_{ij} \\
+∀i∈\{1,…,m\},j∈\{1,…,n\} X_{n+i,j} &= a_{ji} \\
+X &≽ 0
+\end{align*}
+
+\obs{
+The variable $t$ becomes tight in at least two rows, one corresponding to $B$
+and one to $C$.}
+
+From the dual we can get the following characterization:
+
+\thm[Known.]{ $γ_2(A) = \max\{ \norm{P^{1/2}A Q^{1/2}}_*$ for $P,Q$ diagonal, nonnegative, with
+$Tr(P) = Tr(Q) = 1 \}$.
+}
+
+\section{Finally, a theorem with proof}
+
+\thm{
+For any $m × n$ matrix $A$ of rank $r$,
+
+\[ \detlb(A) ≤ γ_2(A) ≤ O(\log r) \detlb A. \]
+}
+
+In the proof we use a variant of Binet Cauchy formula:
+
+\thm[Binet-Cauchy]{
+Let $A ∈ ℝ^{m × n}$ be a matrix, and $B ∈ ℝ^{m × n}$
+be a matrix. Then we have
+
+\[ \det(AB) = ∑_{S ∈ {[n] \choose m}} \det(A_{[m],S}) \det(B_{S,[m]}). \]
+}
+
+\cor{
+For some choice of columns $J$, $\det(A_J)^2 ≥ \frac{1}{{n \choose k}} \det(AA^T)$. }
+
+\thm[Weighted Binet-Cauchy]{
+Let $A$ be a $k × n$ matrix, and let $W$ be a nonnegative diagonal
+unit-trace $n×n$ matrix. Then there exists a $k$-element set $J ⊆ [n]$ such that
+
+\[ |det A_J|^{1/k} ≥ \sqrt{k/e} · |\det(AWA^T)|^{1/2k}. \]
+}
+
+\end{multicols}
+\end{document}

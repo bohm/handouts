@@ -1,0 +1,232 @@
+\input cheatmac-plain
+\mubyte \notin ^^e2^^88^^89\endmubyte% not an element of
+\mubyte \cdot ^^c2^^b7\endmubyte% middle dot
+\def\Pee{{\bb P}}
+\def\Zet{{\bb Z}}
+\def\Rko{{\bb R}}
+\def\Nko{{\bb N}}
+\def\Bigpi{{\rm Par}}
+\def\intcone{{\rm intcone}}
+\def\cone{{\rm cone}}
+\def\conv{{\rm conv}}
+\def\vert{{\rm vert}}
+\def\Oh{{\rm O}}
+\def\poly{{\rm poly}}
+\def\supp{{\rm supp}}
+\def\enc{{\rm enc}}
+\def\val{{\rm val}}
+\def\odd{{\rm odd}}
+\def\even{{\rm even}}
+\def\tens{⊗}
+\def\then{⇒}
+\def\GAPCSP{$ρ$-$GAP$ $qCSP$}
+\let\cfix=\cdot
+
+\title{PCP Theorem And Its Applications}
+\presenter{Tom\'{a}\v{s} Masa\v{r}\'{i}k, Du\v{s}an Knop, Martin Böhm, Vojta T\accent'27uma}
+\centerline{{\it Spring School 2014}}
+
+%TODO: \Pee, \Zet, \Rko
+
+\section{PCP Theorem}
+
+\dfn[$α$-approximation]{An algorithm $A$ is an $α$-approximation algorithm
+for a maximization problem $P$ if the maximization value $v(A) ≥ α OPT(P)$,
+where $OPT(P)$ is the optimal solution.
+}
+
+{\bf Motivation:} It is easy to recognize a valid $α$-approximation,
+but how can we recognize that no $α$-approximation algorithm exists for a given $α<1$?
+
+\dfn[PCP-machine]{A Turing machine $T$ is a PCP-machine if it has
+access to four tapes: a tape with the {\it input} and a {\it work
+tape} as usual, a random-access tape with a {\it proof} of possibly
+exponential size, and a {\it random tape} containing $r$ random bits.
+}
+
+\dfn[PCP complexity class]{A language $L ∈ PCP(p, q)$ if there exists a PCP-machine $T$
+such that on input $x$, $T$ can access $p$ random bits and can also access
+$q$ bits of the proof. This machine must then satisfy the following:
+
+\itemize\ibull
+\: If $x ∈ L$, then there is a proof $y$ that makes $T$ accept with probability $1$.
+\: If $x ∉ L$, then for every proof $y$, $T$ accepts with probability $<1/2$.
+\endlist
+}
+
+\thm[PCP Theorem]{$NP = PCP(\Oh(\log n), \Oh(1))$.}
+
+\thm[Hastad]{$NP = PCP(\Oh(\log n), 3)$.}
+
+\thm[Weaker PCP]{For a fixed $c$, $NP = PCP(n^c, 1)$.}
+
+\section{Proof of Weaker PCP}
+
+\dfn{For two vectors $x,y ∈ \{0,1\}^n$, we define $x ∘ y = ∑_{i=1}^n x_i y_i \mod 2$. This corresponds to the number of $1$-bits $x$ and $y$ have in common.}
+
+\lem[Random substring principle]{If $u ≠ v$ then for a half of the possible
+choices of $x ∈ \{0,1\}^n$, $u ∘ x ≠ v ∘ x$.
+}
+
+% \dfn[Closeness]{We say that $f,g: \{0,1\}^n → \{0,1\}$ are $ρ$-close
+% if $Pr_x[f(x) = g(x)] ≥ ρ$.
+% }
+
+% \lem[Linearity testing]{Let $f: \{0,1\}^n → \{0,1\}$ be such that for
+% some $ρ > 1/2$:
+% $$Pr_{x,y}[f(x+y) = f(x) + f(y)] ≥ ρ. $$
+% Then $f$ is $ρ$-close to some linear function.
+% }
+
+\lem[Linearity testing]{After $\Oh(1/δ)$ independently random linearity checks,
+we can correctly decide with probability at least $1/2$ whether or not $f$ is a
+function $(1-δ)$-close to a linear function, that is: $Pr_{x,y}[f(x+y) = f(x) + f(y)] ≥ 1-δ$.
+}
+
+\dfn[{\csc QUADEQ}]{ {\csc QUADEQ} is an $NP$-complete language of 
+systems of quadratic equations over $\Zet_2$ that are satisfiable. In other
+words, we get a system of equations and ask for a solution.}
+
+\dfn[Tensor product]{For two $n$-dimensional vectors $a,b$, we have $a
+\tens b = (a_1 b_1, a_1 b_2, a_1 b_3, …, a_n b_n)$.  In other words,
+we do a matrix product $a · b^T$ and read the matrix of size $n × n$
+as a big vector from left to right.  }
+
+\obs{{\csc QUADEQ} is the following problem: given $A$ matrix of size
+$m × n^2$ and an $m$-dimensional vector $b$, find an $n^2$-dimensional
+vector $U$ such that $AU = b$ and $U$ is the tensor product $u \tens u$
+for some $n$-dimensional vector $u$.
+}
+
+\goodbreak
+
+\section{Relation of PCP and CSP}
+
+\thm[Hardness of approximation view]{There exists $ρ<1$ such that
+for every $L ∈ NP$ there is a polynomial-time function $f$ mapping strings to (representations of) $3CNF$ formulas such that:
+
+\itemize\ibull
+\: $x ∈ L \then \val(f(x)) = 1;$
+\: $x ∉ L \then \val(f(x)) < ρ.$
+\endlist
+}
+
+\dfn[CSP]{If $q ∈ \Nko$ ({\it arity}), then a $qCSP$ instance $φ$ is a
+collection of functions $φ_1, …, φ_m$ ({\it constraints}) from
+$\{0,1\}^n$ to $\{0,1\}$ such that each function $φ_i$ depends on at
+most $q$ of its input bits.
+
+We say that an {\it assignment} $u ∈ \{0,1\}^n$ {\it satisfies} a
+constraint $φ_i$ if $φ_i(u) = 1$. Let $\val(φ)$ denote the relative
+maximum of satisfied constraints for any assignment $u$. If $\val(φ) =
+1$, we say $φ$ is {\it satisfiable}.
+}
+
+\dfn[Gap-CSP]{For ever $q ∈ \Nko, ρ <1$, define \GAPCSP\ to be the 
+problem of determining the following:
+
+For a given $qCSP$ instance $φ$ whether:
+
+\numlist\ndotted
+\: $\val(φ) = 1$,
+\: $\val(φ) < ρ$.
+\endlist
+}
+
+\dfn{We say that \GAPCSP\ is $NP$-hard for every language $L ∈ NP$ if there
+is a polynomial-time function $f$ mapping strings to $qCSP$ instances satisfying:
+
+\numlist\ndotted
+\: $x ∈ L \then \val(f(x)) = 1$,
+\: $x ∉ L \then \val(f(x)) < ρ$.
+\endlist
+}
+
+\thm[GAP Hardness]{There exist constants $q ∈ \Nko, ρ ∈ (0,1)$ such that \GAPCSP\ is $NP$-hard.
+}
+
+\lem{PCP Theorem implies $GAP$ Hardness.}
+
+\lem{Hardness of Approximation View is equivalent to $GAP$ Hardness.}
+
+\section{Exercise Session 1}
+
+{\bf Exercise 1.} Prove that the theorem $GAP$ Hardness implies the PCP Theorem.
+
+{\bf Exercise 2.} Prove that any language $L$ that has a $PCP$-verifier using $r$ random
+bits and $q$ {\it adaptive} queries also has a non-adaptive verifier using $r$ random bits
+and $2^q$ queries.
+
+{\bf Exercise 3.} Prove that:
+\itemize\ibull
+\: $PCP(0,0) = PCP(0, \Oh(\log n)) = P$.
+\: $PCP(0,\Oh(\poly(n))) = NP$.
+\: $PCP(\Oh(\poly(n)),0)) = co-RP$.
+\: $PCP(\Oh(\log n), \Oh(1)) = PCP(\Oh(\log n), \Oh(\poly(n)))$.
+\endlist
+
+{\bf Exercise 4.} Prove that $PCP(\Oh(\poly(n)), \Oh(1)) ⊆ NP$.
+
+\section{Reductions using PCP}
+
+\dfn{Let $P$ be a maximization problem. A {\it gap-introducing reduction}
+from some $NP$-hard problem $H$ to $P$ is a reduction that comes with two parameters, $f$ and $α$.
+Given an instance $i$ of the problem $H$, we want to output an instance $p ∈ P$ such that:
+\itemize\ibull
+\: if $i ∈ H$: $OPT(p) ≥ f(p)$;
+\: if $i ∉ H$: $OPT(p) < α(|p|) f(p)$.
+\endlist
+}
+
+\dfn{Let $R,P$ be maximization problems. In a {\it gap-preserving reduction} from $R$ (with associated $f_1$, $α$) to $P$ (with associated $f_2, β$), we want for every instance $r ∈ R$ output $p ∈ P$ such that:
+\itemize\ibull
+\: if $OPT(r) ≥ f_1(r)$, then $OPT(p) ≥ f_2(p)$.
+\: if $OPT(r) < α(|r|) f_1(r)$ then $OPT(p) < β(|p|)f_2(p)$.
+\endlist
+
+
+}
+
+\thm[Stronger Hastad]{$NP ⊆ PCP_{1-ε,1/2+ε}(\Oh(\log n), 3)$, and
+the verifier can only use functions $\odd$ and $\even$ on the three
+bits.}
+
+\thm[CSP view of Stronger Hastad]{There exists no $α>1/2$ approximation
+algorithm for the odd/even CSP unless P=NP.}
+
+\dfn{{\csc Max 3-Lin} is a maximization problem where the goal is to satisfy
+as many linear equations as possible. {\csc Gap 3-Lin} is the gap version of
+{\csc Max 3-Lin}.
+}
+
+\obs{ {\csc Gap-3-Lin} with parameters $1-ε,1/2 + ε$ is hard to approximate
+due to Stronger Hastad, even for equations modulo 2.}
+
+\thm[{\csc E3SAT} $13/14$]{There exists no $α>13/14$-approximation algorithm
+for {\csc E3SAT} unless P=NP.}
+
+\thm[{\csc E3SAT} $7/8$]{There exists no $α>13/14$-approximation algorithm
+for {\csc E3SAT} unless P=NP.}
+
+\thm[{\csc Vertex Cover} $7/6$]{For all constants $ε>0$, {\csc Vertex Cover}
+is NP-hard to approximate within a factor of $7/6 - ε$.
+}
+
+
+\section{Exercise Session 2}
+
+{\bf Exercise 1.} Show an $1/2$-approximation algorithm for the odd/even CSP problem.
+
+{\bf Exercise 2.} Let {\csc Max 3-Maj} be the optimization problem
+where the input is a set of constraints over $3$ boolean literals
+each, where each constraint is of type ``the majority of these three
+variables have value $1$''. Show that there is no $2/3 +
+ε$-approximation for {\csc Max 3-Maj} unless P=NP.
+
+{\bf Exercise 3.} Let {\csc Max 3-SAT($k$)} be a {\csc Max 3-Sat}
+problem where each variable occurs at most $k$ times. Give a
+gap-preserving reduction from {\csc Max 3-Sat($29$)} to {\csc Max
+3-Sat($5$)}, with appropriate parameters, to show hardness for
+MAX-3SAT(5).
+
+\bye

@@ -1,0 +1,219 @@
+\input cheatmac
+
+\font\tenscr=rsfs10   % The names \tenscr, \sevenscr, \fivescr can
+\font\sevenscr=rsfs7  % be any command names, but should be unique and
+\font\fivescr=rsfs5   % descriptive.
+
+% Allocate the math family...
+\newfam\scrfam        % The name \scrfam can be any command, but should
+                      % be unique and descriptive.
+% ...and assign the fonts:
+\textfont\scrfam=\tenscr
+\scriptfont\scrfam=\sevenscr
+\scriptscriptfont\scrfam=\fivescr
+
+% I don't know if this is correct or necessary:
+\skewchar\tenscr=127
+\skewchar\sevenscr=127
+\skewchar\fivescr=127
+
+% Define a command to switch to this new math family:
+\def\scr{\fam\scrfam}
+%%% end
+
+\def\hyp#1{{\cal #1}}
+\def\ind{{\cal I}}
+
+\def\author#1{\centerline{\bf #1}}
+\def\presenter#1{\centerline{\it Presented by #1}}
+
+\title{Independent sets in hypergraphs}
+\author{József Balogh, Robert Morris, Wojciech Samotij}
+\presenter{Martin Böhm}
+\centerline{{\it Postgrad. Combinatorial Seminar, MFF UK}}
+
+\section{Definitions and notation}
+
+\dfn[Usual notation.]{$\hyp{H}, \hyp{G}$ hypergraphs. $|\hyp{H}|$
+number of vertices, $||\hyp{H}||$ edges. $\ind(\hyp{H})$ is the family
+of all independent sets.
+}
+
+\dfn{We say a uniform $\hyp{H}$ is {\it $(\hyp{F},ε)-dense)$} if
+$∀A ∈ \hyp{F}: ||\hyp{H}[A]|| ≥ ε||\hyp{H}||$.
+}
+
+\dfn{We define the max-degree of $l$-tuples as
+$$Δ_l(\hyp{H}) = \max \{ \deg_{\hyp{H}}(T) : T ⊆ V(\hyp{H}), |T| = l\}.$$
+
+}
+
+\dfn{Let $H$ be a $t$-uniform hypergraph with at least $t+1$ vertices.
+We define the $t$-density of $H$, denoted by $m_t(H)$, by
+
+$$ m_t(H) = \max({||H|| - 1 \over |H| - t} | H' ⊆ H, |H'| ≥ t+1). $$
+}
+
+\dfn{We say that $H$ is {\it $t$-balanced} if $m_t(H') ≤ m_t(H)$ for all
+$H' ⊆ H$.}
+
+\section{Main theorem}
+\thm{$∀k ∈ N$ and all positive $c,c', ε$ there exists a positive constant
+$C$ such that the following holds:
+
+Let $\hyp{H}$ be a $k$-uniform hypergraph and let $\hyp{F} ⊆ 2^{V(\hyp{H})}$
+be an increasing family such that $∀ A ∈ \hyp{F}: |A| ≥ ε|\hyp{H}|$. 
+Assume also that $\hyp{H}$ is $(\hyp{F}, ε)$-dense and $p ∈ (0,1)$ is
+set such that $p^{k-1}||\hyp{H}|| ≥ c'|\hyp{H}|$ and $∀l ∈ [k-1]:$
+$$ Δ_l(\hyp{H}) ≤ c\cdot\min(p^{l-k}, p^{l-1}{||\hyp{H}|| \over |\hyp{H}|}).$$ 
+
+Then there exists a family $\hyp{S} ⊆ {V(\hyp{H}) \choose ≤Cp|\hyp{H}|}$
+and functions $f: \hyp{S} → \overline{\hyp{F}}$ and $g: \ind(\hyp{H}) → S$
+such that for every $I ∈ \ind(\hyp{H}):$
+$$ g(I) ⊆ I, I ∖ g(I) ⊆ f(g(I)). $$ 
+
+}
+
+``Roughly speaking, if $\hyp{H}$ satisfies certain technical conditions,
+then each independent set $I$ in $\hyp{H}$ can be labeled with a
+certain small subset $g(I)$ in such a way thaht all sets labeled with
+$S ∈ \hyp{S}$ are essentially contained in a single set $f(S)$ that
+contains very few edges of $\hyp{H}$.''
+
+\section{Applications}
+
+\subsection{Szemerédi's theorem for sparse sets}
+
+\lem[Robust version of Szemerédi's theorem]{
+
+$δ>0, k ∈ [n] ∃ ε > 0, ∃n_0 ∀n ≥ n_0:$
+Every subset of $[n]$ with at least $δn$ elements contains at least $εn^2 k$-term
+APs.
+}
+
+\thm[Szemerédi's theorem for sparse sets]{ For every positive $β$ and $k$ integer, 
+there exist constants $C$ and $n_0$ such that the following holds:
+
+For all $n ≥ n_0$ if $m ≥ Cn/n^{-(k-1)}$, then there are at most ${βn
+\choose m}$ $m$-subsets of $[n]$ that contain no $k$-term AP.
+}
+
+\subsection{K\L{}R conjecture}
+
+\dfn{Given a $p ∈ [0,1]$, a bipartite graph between $V_1, V_2$ is
+{\it $(ε,p)$-regular} if for every $W_1 ⊆ V_1$, $W_2 ⊆ V_2$, $|W_i| ≥ ε|V_i|$,
+the density $d(W_1, W_2)$ satisfies
+
+$$|d(W_1, W_2) - d(V_1, V_2)| ≤ εp. $$
+}
+
+\dfn{The collection $\hyp{G}(H,n,m,p,ε)$ is a collection of all graphs $G$
+constructed thus:
+
+$V(G) \equiv$ partitions of vertices $V_1 ∪ V_2 ∪ V_{|H|}$ of $n$ vertices.
+We add an $(ε,p)$ regular pair with $m$ edges for each edge of $H$.
+}
+
+\dfn{A {\it canonical copy} of $H ≡$ a copy of $H$ in a member of
+$\hyp{G}(H,n,m,p,ε)$ such that for each $i ∈ V(G)$,
+$f(i) ∈ V_i(H)$.
+}
+
+\thm[The embedding lemma]{For every graph $H$ and every positive $d$,
+there exists $ε>0$ and an integer $n_0$ such that $∀ n,m, n≥n_0, m≥dn^2$,
+every $G ∈ \hyp{G}(H,n,m,1,ε)$ contains a canonical copy of $H$.
+}
+
+The problem with embedding lemma: $1$ is not $p$. Can it be salvaged?
+Not entirely, but maybe only a franction of regularity-type graphs
+do not satisfy it:
+
+\dfn{$\hyp{G}^*(H,n,m,p,ε) ≡$ a collection of graphs in $\hyp{G}(H,n,m,p,ε)$
+which do not contain any canonical copy of $H$.
+}
+   
+\opn[The K\L{}R Conjecture]{Let $H$ be a fixed graph. Then, for any
+positive $β$, there exist positive $C, n_0, ε$ such that $∀n,m, n≥n_0, m ≥ {Cn^2 \over n^{1/m_2(H)}}$:
+
+$$ | \hyp{G}^*(H,n,m,m/n^2,ε)| ≤ β^m {n^2 \choose m}^{||H||}. $$
+}
+
+K\L{}R proven for small complete graphs, cycles. One of the main results is:
+
+\thm[K\L{}R for 2-balanced graphs]{For $H$ being 2-balanced, K\L{}R conjecture holds.
+}
+
+
+\subsection{Proving K\L{}R for 2-balanced graphs}
+
+\dfn{$\hyp{G}(H,n_1,n_2, …, n_{|H|}) \equiv$ similar to $\hyp{G}(H,n,m,p,ε)$,
+only edges are complete bipartite graphs and sizes of partitions are variable.
+}
+
+
+\lem[Variant of the embedding lemma]{ Let $H$ be a graph, $δ: (0,1] → (0,1)$
+function. There exist positive constants $α_0, ξ, N$ such that for every
+collection of integers $n_1, n_2, …, n_{|H|}$, and every graph
+$G ∈ \hyp{G}(H;n_1, n_2, …, n_{|H|})$, one of the following holds:
+
+\itemize\ibull
+\: $G$ contains at least $ξn_1n_2⋯n_{|H|}$ canonical copies of $H$,
+\: There exist a positive constant $α$ with $α ≥ α_0$, an edge $\{i,j\} ∈ E(H)$
+and sets $A_i, A_j$ which are of size at least $αn_i, αn_j$ but:
+$$d_G(A_i, A_j) < δ(α).$$
+\endlist
+}
+
+\lem[Counting canonical copies with a non-regular pair]{
+For each $β ∈ (0,1)$ ,set
+$$δ(x) = {1 \over 4e} \left({β \over 2}\right)^{2/x^2}.$$
+
+Then, for every positive $α_0, β$, there exists a positive constant
+$ε$ such that the following holds. Let $G' ⊆ K_{n,n}$ be such that 
+there exist subsets $A_1$, $A_2$ with $\min(|A_1|, |A_2|) ≥ αn$ and
+$ d_G(A_1, A_2) < δ(α)$ for some $α ∈ [α_0, 1]$.
+
+Then for every $m$ with $0 ≤ m ≤ n^2$, there are at most
+$β^m {n^2 \choose m}$ subgraphs of $G'$ that belong to
+$\hyp{G}(K_2, n,m,m/n^2, ε)$.
+}
+
+\cor[Hypergraph of copies satisfies the Scythe]{ Let $n,t$ be integers
+with $t≥2$ and $H$ be a $t$-balanced, $t$-uniform hypergraph.
+Set $k = ||H||$ and let $\hyp{H}$ be the $k$-uniform hypergraph of
+copies of $H$ in $K_n^t$.
+
+Then there exist positive constants $c,c'$ such that, letting
+$$p={1 \over n^{1/m_t(H)}},$$
+the following holds:
+
+\itemize\ibull
+\: $p^{k-1}||H|| ≥ c'|H|$,
+\: For every $l ∈ [k-1]$:
+$$Δ_l(\hyp{H}) ≤ c\cdot\min(p^{l-k}, { p^{l-1}||\hyp{H}|| \over |\hyp{H}|}).$$
+\endlist
+
+}
+
+\section{The Scythe}
+
+Given a $(i+1)$-uniform hypergraph $\hyp{H}_{i+1}$ and an independent
+set $I ∈ \ind(\hyp{H}_{i+1})$ set $\hyp{A}_{i+1}^{(0)} = \hyp{H}_{i+1}$ and let
+$\hyp{H}_i^{(0)}$ be the empty hypergraph on the vertex set $V(\hyp{H})$.
+For $j=0 … b-1$, do the following:
+
+\itemize\ibull
+\: If $I ∩ V(\hyp{A}_{i+1}^{(j)}) = ∅$, set $\hyp{H}_i = \hyp{H}_i^{(0)}$,
+$\hyp{A}_i = ∅$, $B_i = \{u_0, …, u_{j-1}\}$ and stop.
+\: Let $u_j$ be the first vertex of $I$ in the max-degree order on $V(\hyp{A}_{i+1}^{(j)}$.
+\: Let $\hyp{H}_i^{j+1}$ be the hypergraph on the vertex set $V(\hyp{H})$ defined by:
+$$ .$$
+\: Let $\hyp{A}_{i+1}^{j+1}$ be the hypergraph on the vertex set $V(\hyp{A}_{i+1}^{(j)}) ∖ u_{1 … j}$
+defined by:
+$$ .$$
+\endlist
+
+Finally, set $\hyp{H}_i = \hyp{H}_i^{(b)}$, $\hyp{A}_i = V(\hyp{A}_{i+1}^{(b)})$ and
+$B_i = u_{1 … b-1}$.
+
+\bye
