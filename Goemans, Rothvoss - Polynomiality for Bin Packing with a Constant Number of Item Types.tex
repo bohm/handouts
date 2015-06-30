@@ -52,7 +52,7 @@ $$\min \left\{ ∑_iλ_i | ∑_{x ∈ \Pee} λ_x \cfix x = a; λ ∈ \Zet_{≥0}
 
 \thm[Main result]{
 For any {\csc Bin Packing} instance $(s,a)$, an optimum integral
-solution can be computed in time $\Oh(\log Δ)^{2^{\Oh(Δ)}}$, where $Δ$ is the largest
+solution can be computed in time $\Oh(\log Δ)^{2^{\Oh(d)}}$, where $Δ$ is the largest
 integer appearing in the denominator $s_i$ or in a multiplicity $a_i$.
 }
 
@@ -90,8 +90,8 @@ with the following property:
 For any vector $a ∈ \intcone(P ∩ \Zet^d)$ there exists an integral vector $λ ∈ \Zet_{≥ 0}^{P ∩ \Zet^d}$ such
 that $∑_{x ∈ P ∩ \Zet^d} λ_x \cfix x = a$ and
 \numlist\ndotted
-\: $λ_x ∈ {0,1}$
-\: $|supp(λ)| ≤ 2^{2d}$
+\: $λ_x ∈ \{0,1\}$ for all $x$ outside $X$, that is $x ∈ (P ∩ \Zet^d) ∖ X$.
+\: $|supp(λ) ∩ X| ≤ 2^{2d}$
 \: $|supp(λ) ∖ X| ≤ 2^{2d}$.
 \endlist
 }
@@ -158,7 +158,7 @@ holds:
 \numlist\ndotted
 \: $λ^* x^* = ∑_x μ_x x$,
 \: $|\supp(μ ∖ X)| ≤ 2^d$,
-\: $μ_x ∈ \{0,1\} ∀x ∈ X$.
+\: $μ_x ∈ \{0,1\} ∀x \notin X$.
 \endlist
 }
 
@@ -169,7 +169,7 @@ Theorem in time $N^{\Oh(1)}$. Let $y^*$ be the (unknown) target vector.
 Using the Structure Theorem, we get $λ^*$.
 
 At the expense of a factor $N^{2^{2d}}$ guess $X' = X ∩ \supp(λ^*)$. At the expense
-of factor $2^{2d} + 1$ guess the number $k = ∑_{x ∈ X'} λ^*_x ∈ [2^{2d}]$ of extra points.
+of factor $2^{2d} + 1$ guess the number $k = ∑_{x \notin X'} λ^*_x ∈ [2^{2d}]$ of extra points.
 
 Create the following ILP:
 
