@@ -1,10 +1,9 @@
-\input cheatmac-plain
-\mubyte \notin ^^e2^^88^^89\endmubyte% not an element of
-\mubyte \cdot ^^c2^^b7\endmubyte% middle dot
-\def\Pee{{\bb P}}
-\def\Zet{{\bb Z}}
-\def\Rko{{\bb R}}
-\def\Nko{{\bb N}}
+\input macros/cheatmac
+
+\def\Pee{\mathbb{P}}
+\def\Zet{\mathbb{Z}}
+\def\Rko{\mathbb{R}}
+\def\Nko{\mathbb{N}}
 \def\Bigpi{{\rm Par}}
 \def\intcone{{\rm intcone}}
 \def\cone{{\rm cone}}
@@ -22,8 +21,10 @@
 \def\GAPCSP{$ρ$-$GAP$ $qCSP$}
 \let\cfix=\cdot
 
+\begin{document}
+\begin{multicols}{3}
 \title{PCP Theorem And Its Applications}
-\presenter{Tom\'{a}\v{s} Masa\v{r}\'{i}k, Du\v{s}an Knop, Martin Böhm, Vojta T\accent'27uma}
+\presenter{Tomáš Masařík, Dušan Knop, Martin Böhm, Vojta Tůma}
 \centerline{{\it Spring School 2014}}
 
 %TODO: \Pee, \Zet, \Rko
@@ -48,10 +49,10 @@ exponential size, and a {\it random tape} containing $r$ random bits.
 such that on input $x$, $T$ can access $p$ random bits and can also access
 $q$ bits of the proof. This machine must then satisfy the following:
 
-\itemize\ibull
-\: If $x ∈ L$, then there is a proof $y$ that makes $T$ accept with probability $1$.
-\: If $x ∉ L$, then for every proof $y$, $T$ accepts with probability $<1/2$.
-\endlist
+\begin{itemize}
+\item If $x ∈ L$, then there is a proof $y$ that makes $T$ accept with probability $1$.
+\item If $x ∉ L$, then for every proof $y$, $T$ accepts with probability $<1/2$.
+\end{itemize}
 }
 
 \thm[PCP Theorem]{$NP = PCP(\Oh(\log n), \Oh(1))$.}
@@ -83,7 +84,7 @@ we can correctly decide with probability at least $1/2$ whether or not $f$ is a
 function $(1-δ)$-close to a linear function, that is: $Pr_{x,y}[f(x+y) = f(x) + f(y)] ≥ 1-δ$.
 }
 
-\dfn[{\csc QUADEQ}]{ {\csc QUADEQ} is an $NP$-complete language of 
+\dfn[\textsc{QUADEQ}]{ \textsc{QUADEQ} is an $NP$-complete language of 
 systems of quadratic equations over $\Zet_2$ that are satisfiable. In other
 words, we get a system of equations and ask for a solution.}
 
@@ -92,7 +93,7 @@ words, we get a system of equations and ask for a solution.}
 we do a matrix product $a · b^T$ and read the matrix of size $n × n$
 as a big vector from left to right.  }
 
-\obs{{\csc QUADEQ} is the following problem: given $A$ matrix of size
+\obs{\textsc{QUADEQ} is the following problem: given $A$ matrix of size
 $m × n^2$ and an $m$-dimensional vector $b$, find an $n^2$-dimensional
 vector $U$ such that $AU = b$ and $U$ is the tensor product $u \tens u$
 for some $n$-dimensional vector $u$.
@@ -105,10 +106,10 @@ for some $n$-dimensional vector $u$.
 \thm[Hardness of approximation view]{There exists $ρ<1$ such that
 for every $L ∈ NP$ there is a polynomial-time function $f$ mapping strings to (representations of) $3CNF$ formulas such that:
 
-\itemize\ibull
-\: $x ∈ L \then \val(f(x)) = 1;$
-\: $x ∉ L \then \val(f(x)) < ρ.$
-\endlist
+\begin{itemize}
+\item $x ∈ L \then \val(f(x)) = 1;$
+\item $x ∉ L \then \val(f(x)) < ρ.$
+\end{itemize}
 }
 
 \dfn[CSP]{If $q ∈ \Nko$ ({\it arity}), then a $qCSP$ instance $φ$ is a
@@ -127,19 +128,19 @@ problem of determining the following:
 
 For a given $qCSP$ instance $φ$ whether:
 
-\numlist\ndotted
-\: $\val(φ) = 1$,
-\: $\val(φ) < ρ$.
-\endlist
+\begin{enumerate}
+\item $\val(φ) = 1$,
+\item $\val(φ) < ρ$.
+\end{enumerate}
 }
 
 \dfn{We say that \GAPCSP\ is $NP$-hard for every language $L ∈ NP$ if there
 is a polynomial-time function $f$ mapping strings to $qCSP$ instances satisfying:
 
-\numlist\ndotted
-\: $x ∈ L \then \val(f(x)) = 1$,
-\: $x ∉ L \then \val(f(x)) < ρ$.
-\endlist
+\begin{enumerate}
+\item $x ∈ L \then \val(f(x)) = 1$,
+\item $x ∉ L \then \val(f(x)) < ρ$.
+\end{enumerate}
 }
 
 \thm[GAP Hardness]{There exist constants $q ∈ \Nko, ρ ∈ (0,1)$ such that \GAPCSP\ is $NP$-hard.
@@ -158,12 +159,12 @@ bits and $q$ {\it adaptive} queries also has a non-adaptive verifier using $r$ r
 and $2^q$ queries.
 
 {\bf Exercise 3.} Prove that:
-\itemize\ibull
-\: $PCP(0,0) = PCP(0, \Oh(\log n)) = P$.
-\: $PCP(0,\Oh(\poly(n))) = NP$.
-\: $PCP(\Oh(\poly(n)),0)) = co-RP$.
-\: $PCP(\Oh(\log n), \Oh(1)) = PCP(\Oh(\log n), \Oh(\poly(n)))$.
-\endlist
+\begin{itemize}
+\item $PCP(0,0) = PCP(0, \Oh(\log n)) = P$.
+\item $PCP(0,\Oh(\poly(n))) = NP$.
+\item $PCP(\Oh(\poly(n)),0)) = co-RP$.
+\item $PCP(\Oh(\log n), \Oh(1)) = PCP(\Oh(\log n), \Oh(\poly(n)))$.
+\end{itemize}
 
 {\bf Exercise 4.} Prove that $PCP(\Oh(\poly(n)), \Oh(1)) ⊆ NP$.
 
@@ -172,17 +173,17 @@ and $2^q$ queries.
 \dfn{Let $P$ be a maximization problem. A {\it gap-introducing reduction}
 from some $NP$-hard problem $H$ to $P$ is a reduction that comes with two parameters, $f$ and $α$.
 Given an instance $i$ of the problem $H$, we want to output an instance $p ∈ P$ such that:
-\itemize\ibull
-\: if $i ∈ H$: $OPT(p) ≥ f(p)$;
-\: if $i ∉ H$: $OPT(p) < α(|p|) f(p)$.
-\endlist
+\begin{itemize}
+\item if $i ∈ H$: $OPT(p) ≥ f(p)$;
+\item if $i ∉ H$: $OPT(p) < α(|p|) f(p)$.
+\end{itemize}
 }
 
 \dfn{Let $R,P$ be maximization problems. In a {\it gap-preserving reduction} from $R$ (with associated $f_1$, $α$) to $P$ (with associated $f_2, β$), we want for every instance $r ∈ R$ output $p ∈ P$ such that:
-\itemize\ibull
-\: if $OPT(r) ≥ f_1(r)$, then $OPT(p) ≥ f_2(p)$.
-\: if $OPT(r) < α(|r|) f_1(r)$ then $OPT(p) < β(|p|)f_2(p)$.
-\endlist
+\begin{itemize}
+\item if $OPT(r) ≥ f_1(r)$, then $OPT(p) ≥ f_2(p)$.
+\item if $OPT(r) < α(|r|) f_1(r)$ then $OPT(p) < β(|p|)f_2(p)$.
+\end{itemize}
 
 
 }
@@ -194,21 +195,21 @@ bits.}
 \thm[CSP view of Stronger Hastad]{There exists no $α>1/2$ approximation
 algorithm for the odd/even CSP unless P=NP.}
 
-\dfn{{\csc Max 3-Lin} is a maximization problem where the goal is to satisfy
-as many linear equations as possible. {\csc Gap 3-Lin} is the gap version of
-{\csc Max 3-Lin}.
+\dfn{\textsc{Max 3-Lin} is a maximization problem where the goal is to satisfy
+as many linear equations as possible. \textsc{Gap 3-Lin} is the gap version of
+\textsc{Max 3-Lin}.
 }
 
-\obs{ {\csc Gap-3-Lin} with parameters $1-ε,1/2 + ε$ is hard to approximate
+\obs{ \textsc{Gap-3-Lin} with parameters $1-ε,1/2 + ε$ is hard to approximate
 due to Stronger Hastad, even for equations modulo 2.}
 
-\thm[{\csc E3SAT} $13/14$]{There exists no $α>13/14$-approximation algorithm
-for {\csc E3SAT} unless P=NP.}
+\thm[\textsc{E3SAT} $13/14$]{There exists no $α>13/14$-approximation algorithm
+for \textsc{E3SAT} unless P=NP.}
 
-\thm[{\csc E3SAT} $7/8$]{There exists no $α>13/14$-approximation algorithm
-for {\csc E3SAT} unless P=NP.}
+\thm[\textsc{E3SAT} $7/8$]{There exists no $α>13/14$-approximation algorithm
+for \textsc{E3SAT} unless P=NP.}
 
-\thm[{\csc Vertex Cover} $7/6$]{For all constants $ε>0$, {\csc Vertex Cover}
+\thm[\textsc{Vertex Cover} $7/6$]{For all constants $ε>0$, \textsc{Vertex Cover}
 is NP-hard to approximate within a factor of $7/6 - ε$.
 }
 
@@ -217,16 +218,17 @@ is NP-hard to approximate within a factor of $7/6 - ε$.
 
 {\bf Exercise 1.} Show an $1/2$-approximation algorithm for the odd/even CSP problem.
 
-{\bf Exercise 2.} Let {\csc Max 3-Maj} be the optimization problem
+{\bf Exercise 2.} Let \textsc{Max 3-Maj} be the optimization problem
 where the input is a set of constraints over $3$ boolean literals
 each, where each constraint is of type ``the majority of these three
 variables have value $1$''. Show that there is no $2/3 +
-ε$-approximation for {\csc Max 3-Maj} unless P=NP.
+ε$-approximation for \textsc{Max 3-Maj} unless P=NP.
 
-{\bf Exercise 3.} Let {\csc Max 3-SAT($k$)} be a {\csc Max 3-Sat}
+{\bf Exercise 3.} Let \textsc{Max 3-SAT($k$)} be a \textsc{Max 3-Sat}
 problem where each variable occurs at most $k$ times. Give a
-gap-preserving reduction from {\csc Max 3-Sat($29$)} to {\csc Max
+gap-preserving reduction from \textsc{Max 3-Sat($29$)} to \textsc{Max
 3-Sat($5$)}, with appropriate parameters, to show hardness for
 MAX-3SAT(5).
 
-\bye
+\end{multicols}
+\end{document}

@@ -17,7 +17,7 @@ sdp_correlation:
 polytope:
 	${texinputs} pdfcsplain -fmt plain-utf8-cs "Goemans, Rothvoss - Polynomiality for Bin Packing with a Constant Number of Item Types.tex"
 spring:
-	${texinputs} pdfcsplain -fmt plain-utf8-cs "Spring School - PCP Theorem And Its Applications.tex"
+	${texinputs} pdflatex "Spring School - PCP Theorem And Its Applications.tex"
 
 clean:
 	rm -f *.log *.pdf *.fmt *.aux
