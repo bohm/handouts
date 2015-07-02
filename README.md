@@ -3,8 +3,7 @@
 
 This is a collection of TeX-based handouts and compact lecture notes
 from papers that I have read and presented.  The collection is closely
-related to my (https://github.com/bohm/cheats/)[cheat sheet
-collection]; however, the usefulness of the handouts may be limited to
+related to my [cheat sheet collection](https://github.com/bohm/cheats/); however, the usefulness of the handouts may be limited to
 those who attended the same lecture or wish to study a specific paper.
 
 
