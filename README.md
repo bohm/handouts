@@ -32,4 +32,4 @@ university page, and will be linked below.
 #### Spring School of Combinatorics
 
 - Spring School 2014: [PCP Theorem and Its Applications](http://iuuk.mff.cuni.cz/~bohm/handouts/Spring%20School%20-%20PCP%20Theorem%20And%20Its%20Applications.pdf)
-- Spring School 2015: [Matoušek, Nikolov, Talwar - Factorizatin Norms and Hereditary Discrepancy](http://iuuk.mff.cuni.cz/~bohm/handouts/Matou%c5%a1ek,%20Nikolov,%20Talwar%20-%20Factorization%20Norms%20and%20Hereditary%20Discrepancy.pdf)
+- Spring School 2015: [Matoušek, Nikolov, Talwar - Factorization Norms and Hereditary Discrepancy](http://iuuk.mff.cuni.cz/~bohm/handouts/Matou%c5%a1ek,%20Nikolov,%20Talwar%20-%20Factorization%20Norms%20and%20Hereditary%20Discrepancy.pdf)
