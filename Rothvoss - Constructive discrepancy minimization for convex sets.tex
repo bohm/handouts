@@ -1,0 +1,304 @@
+\input macros/cheatmac
+%\usepackage{auto-pst-pdf}
+%\usepackage{pst-...}
+
+\def\Pee{\mathbb{P}}
+\def\Zet{\mathbb{Z}}
+\def\Rko{\mathbb{R}}
+\def\Complex{\mathbb{C}}
+\def\Dis{\mathcal{D}}
+
+\def\Bigpi{{\rm Par}}
+\def\intcone{{\rm intcone}}
+\def\cone{{\rm cone}}
+\def\conv{{\rm conv}}
+\def\vert{{\rm vert}}
+\def\Las{{\textsc{Las}}}
+\def\Oh{{\rm O}}
+\def\supp{{\rm supp}}
+\def\enc{{\rm enc}}
+\newcommand{\eps}{\varepsilon}
+\let\cfix=\cdot
+
+% expectation, probability, variance
+\newcommand{\Esymb}{\mathbb{E}}
+\newcommand{\Psymb}{\mathbb{P}}
+\newcommand{\Vsymb}{Var}
+
+% better vector definition and some variations
+\renewcommand{\vec}[1]{{\bm{#1}}}
+\newcommand{\bvec}[1]{\bar{\vec{#1}}}
+\newcommand{\pvec}[1]{\vec{#1}'}
+\newcommand{\tvec}[1]{{\tilde{\vec{#1}}}}
+
+
+
+\DeclareMathOperator*{\E}{\Esymb}
+\DeclareMathOperator*{\Var}{\Vsymb}
+\DeclareMathOperator*{\ProbOp}{\Psymb}
+
+\renewcommand{\Pr}{\ProbOp}
+
+\newcommand{\problemmacro}[1]{\textsc{#1}\xspace}
+\newcommand{\maxtwocsp}{\problemmacro{Max 2-Csp}}
+\newcommand{\uniquegames}{\problemmacro{Unique Games}}
+
+\newcommand{\norm}[1]{\lVert#1\rVert}
+\newcommand{\Norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\bignorm}[1]{\big\lVert#1\big\rVert}
+\newcommand{\Bignorm}[1]{\Big\lVert#1\Big\rVert}
+
+\newcommand{\normo}[1]{\norm{#1}_1}
+\newcommand{\Normo}[1]{\Norm{#1}_1}
+\newcommand{\bignormo}[1]{\bignorm{#1}_1}
+\newcommand{\Bignormo}[1]{\Bignorm{#1}_1}
+
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\Set}[1]{\left\{#1\right\}}
+\newcommand{\bigset}[1]{\big\{#1\big\}}
+\newcommand{\Bigset}[1]{\Big\{#1\Big\}}
+
+% absolute value
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\Abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\bigabs}[1]{\big\lvert#1\big\rvert}
+\newcommand{\Bigabs}[1]{\Big\lvert#1\Big\rvert}
+
+% square brackets
+\newcommand{\brac}[1]{[#1]}
+\newcommand{\Brac}[1]{\left[#1\right]}
+\newcommand{\bigbrac}[1]{\big[#1\big]}
+\newcommand{\Bigbrac}[1]{\Big[#1\Big]}
+
+\newcommand{\ia}{{ia}}
+\newcommand{\jb}{{jb}}
+\newcommand{\mper}{\,.}
+% \newcommand{\Mid}{\;\middle\vert\;}
+
+\newcommand{\iprod}[1]{\langle#1\rangle}
+\newcommand{\Iprod}[1]{\left\langle#1\right\rangle}
+
+\newcommand{\paren}[1]{(#1)}
+\newcommand{\Paren}[1]{\left(#1\right)}
+\newcommand{\bigparen}[1]{\big(#1\big)}
+\newcommand{\Bigparen}[1]{\Big(#1\Big)}
+
+\newcommand{\Ins}{\mathcal{I}}
+\newcommand{\El}{\mathcal{L}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\defeq}{\coloneqq}
+\newcommand{\rank}{\textrm{rank}}
+\newcommand{\psdrank}{\textrm{rk}_{\textrm{psd}}}
+\newcommand{\degsos}{\textrm{deg}_{\textrm{sos}}}
+\newcommand{\detlb}{\textrm{detlb}}
+\newcommand{\disc}{\textrm{disc}}
+\newcommand{\herdisc}{\textrm{herdisc}}
+\newcommand{\Corr}{\textsc{Corr}}
+\newcommand{\Splus}{\mathcal{S}_+}
+\newcommand{\Tr}{\textrm{Tr}}
+\newcommand{\scalar}[2]{\langle #1, #2 \rangle}
+\newcommand{\vectext}{\textrm{vec}}
+\DeclareMathOperator{\val}{val}
+\DeclareMathOperator*{\Cov}{Cov}
+
+
+\long\def\algobox#1{\smallskip
+  \noindent
+~~\hbox{\fbox{\parbox[c]{0.30\textwidth}{#1}}}
+%\smallskip
+}
+
+% Rothvoss
+
+\providecommand{\setR}{\mathbb{R}}
+
+\begin{document}
+\begin{multicols}{3}
+
+\title{Constructive Discrepancy Minimization}
+\title{for Convex Sets}
+\author{Thomas Rothvoss}
+\presenter{Martin B\"ohm}
+\centerline{\textit{Combinatorial PhD Seminar, Fall 2015/2016}}
+
+%TODO: \Pee, \Zet, \Rko
+\section{Discrepancy}
+
+\dfn[Discrepancy]{We work in a universe $U = [n]$, and we are given a list of sets $\F$, where each $f ∈ \F$
+is a subset of $U$. Our goal is to color the universe by two colors so that all sets in $\F$ are as balanced
+as possible.
+
+Formally, given a coloring $x∈\{-1,1\}^n$, we have $\disc(\F,x) \defeq \max_{F ∈ \F} |∑_{i ∈ F} x_i|$ and
+our minimization goal $\disc(\F) = \min_{x ∈ \{-1,1\}^n} \disc(\F,x)$.
+}
+
+\noindent\textbf{Problem:} Assuming $P≠NP$ and assuming that $m =
+O(n)$, we cannot distinguish between $\F$ with discrepancy $0$ and
+$\F$ with discrepancy $\sqrt{n}$.
+
+\dfn[Hereditary discrepancy]{ $\herdisc(\F) = \max_{J ⊆ U} \disc(\F|_{J})$. }
+\section{Related work}
+
+\thm[Spencer, 1985]{Given a set system with $n$ elements and $n$ sets, there
+exists a coloring of discrepancy $O(\sqrt{n})$.
+}
+
+\thm[Bansal, 2010]{
+\begin{enumerate}
+\item Using an SDP and a random walk guided by it, one can find the coloring from Spencer's theorem in polynomial time.
+\item There is a randomized polytime algorithm which for a set system $\F$ with $\herdisc(\F) \leq H$ computes a coloring with discrepancy $O(H \log (mn))$.
+\end{enumerate}
+}
+
+\thm[Lovett, Meka, 2012]{
+\begin{enumerate}
+\item Using just a random walk, one can find the coloring from Spencer's theorem in polynomial time. 
+\item Given a symmetric bounded convex polytope thta is ``large enough'', one can find in polynomial time a point $y$ that has at least half of the coordinates in $\{-1,1\}$.
+\end{enumerate}
+}
+
+\thm[Matousek, Nikolov, Talwar 2015]{An $O(\log |\F|)$-approximation for $herdisc(\F)$ using
+an SDP program computing a special norm.
+}
+
+\noindent\textbf{Afterwards/independently:}
+
+\thm[Eldan, Singh, 2014]{
+\begin{itemize}
+\item The following algorithm is equivalent to the algorithm in the main theorem:
+\begin{enumerate}
+\item[(1)] Take a uniform random direction $c$.
+\item[(2)] Optimize the program $\max c^Tx; x \in K \cap [-1,1]^n$.
+\end{enumerate}
+\item The condition of symmetry on $K$ in the main theorem can be dropped.
+\end{itemize}
+}
+
+
+
+\section{Main theorem}
+
+\thm[Main theorem]{
+There is a randomized polynomial time algorithm, which for any
+symmetric convex set $K \subseteq \setR^n$ with Gaussian measure at
+least $e^{-n/500}$ finds a point $y \in K \cap [-1,1]^n$ with $y_i \in
+\{ - 1,1\}$ for at least $\frac{n}{9000}$ many coordinates. Here it
+suffices if a polynomial time separation oracle for the set $K$
+exists.
+}
+
+\begin{center}
+{\bf Algorithm: }
+\begin{enumerate}
+\item[(1)] take a random Gaussian vector $x^* \sim N^n(0,1)$
+\item[(2)] compute the point \\ $y^* = \textrm{argmin}\{ \| x^* - y\|_2 \mid y \in K \cap [-1,1]^n\}$
+\item[(3)] return $y^*$
+\end{enumerate}
+\end{center}
+
+\centerline{\includegraphics[scale=0.6]{rothvoss14-picture.png}}
+
+\section{Tools}
+\dfn[symmetry of convex sets]{$x \in K \iff -x \in K$
+}
+
+\dfn[unit coefficients]{$y_i$ unit coefficient $\iff y_i \in \{-1,1\}.$
+}
+
+\dfn[$n$-dimensional Gaussian distribution]{
+$\gamma_n \equiv$ measure with density$\frac{1}{(2\pi)^{n/2}} e^{-\|x\|_2^2/2}$ for $x \in \setR^n.$ 
+$\gamma_n(K) = \Pr_{x \sim N^n(0,1)}[x \in K]$ whenever $K$ is a measurable set. 
+}
+
+\dfn[strip]{$S_\lambda$ strip with \emph{width} $2\lambda$ $\equiv S_\lambda = \{x \in \setR^n \mid |\langle v,x\rangle| \leq \lambda \}$.
+}
+
+\dfn[binary entropy function]{$H(\varepsilon) = \varepsilon \log_2 1/\varepsilon + (1-\varepsilon) \log_2 1/(1-\varepsilon)$. Fact: for $0 < \varepsilon \leq 1/2$, ${n choose \varepsilon n} \le H(\varepsilon) \leq e^{1.5 \varepsilon \log_2 1/\varepsilon}$.
+}
+
+\thm[Isoperimetric ineq.]{
+Let $K \subseteq \setR^n$ be a measurable set and $H$ be a halfspace so that $\gamma_n(K) = \gamma_n(H)$.
+Then for any $\delta \geq 0$, $\gamma_n(K_{\delta}) \geq \gamma_n(H_{\delta})$.
+}
+
+\lem[Measure concentration for distance]{Let $\alpha > 0$. Then for any measurable set $K$ with $\gamma_n(K) \geq e^{-\alpha n}$ one
+has $\gamma_n(K_{3\sqrt{\alpha n}}) \geq 1 - e^{-\alpha n}$.
+}
+
+\lem[Sidak, Khatri]{
+Let $K \subseteq \setR^n$ be a symmetric convex body and $S \subseteq \setR^n$ be a strip. 
+Then $\gamma_n(K \cap S) \geq \gamma_n(K) \cdot \gamma_n(S)$.
+}
+
+\lem[Some calculations]{
+\begin{enumerate}
+\item $\gamma_n(S_1) \geq e^{-1/2}$.
+\item $\gamma_n(S_\lambda) \geq 1 - e^{-\lambda^2 / 2}$.
+\item $2 \gamma_1([2,\infty)) \geq 1/25$.
+\end{enumerate}
+}
+
+\section{Main proof}
+\thm[Main theorem again]{
+Let $0 < \varepsilon \leq \frac{1}{9000}$ be a constant and $\delta :=
+\frac{3}{2} \varepsilon \log_2(\frac{1}{\varepsilon})$. Suppose that
+$K \subseteq \setR^n$ is a symmetric, convex body with $\gamma_n(K)
+\geq e^{-\delta n}$. Choose a random Gaussian $x^* \sim N^n(0,1)$ and
+let $y^*$ be the point in $K \cap [-1,1]^n$ that minimizes $\|x^* -
+y^*\|_2$. Then with probability $1-e^{-\Omega(n)}$, $y^*$ has at least
+$\varepsilon n$ many coordinates $i$ with $y_i^* \in \{ -1,1\}$.
+}
+
+\medskip\hrule\smallskip
+Assume less than $\varepsilon n$ unit coefficients in $y^*$.
+Two main conflicting facts:
+
+\begin{enumerate}
+\item $x^*$ is far away from $[-1,1]^n$ -- $d(x^*, [-1,1]^n) \geq \frac{\sqrt{n}}{5}$.
+\item Due to measure concentration:
+\[ d( x^*, K \cap \{x \mid \left|x_i\right| \leq 1 \text{ for every unit } i \text{ in } y^{*}\} ) < \frac{\sqrt{n}}{5} \]
+\end{enumerate}
+
+However, both distances are equal!
+
+\section{Four steps to Spencer}
+
+\thm[Step 1 -- subspace]{
+Fix $0 < \varepsilon \leq \frac{1}{60000}$ and $\delta := \frac{3}{2} \varepsilon \log_2(\frac{1}{\varepsilon})$. 
+Let $K \subseteq \setR^n$ be a symmetric, convex body 
+with $K \subseteq H$ and $\gamma_H(K) \geq e^{-\delta n}$
+where $H = \{ x \in \setR^n \mid \left<v_i,x\right>=0 \; \forall i\in [m] \}$
+is a subspace defined by $m \leq 2\delta n$ equations.
+Choose a random Gaussian $x^* \sim N^n(0,1)$ and let $y^*$ be the point in $K \cap [-1,1]^n$ that
+minimizes $\|x^* - y^*\|_2$.
+Then with probability $1-e^{-\Omega(n)}$, $y^*$ has at least $\varepsilon n$
+many coordinates $i$ with $y_i^* \in \{ -1,1\}$.
+}
+
+\thm[Step 2 -- translation]{
+Let $\varepsilon \leq \frac{1}{60000}$ and $\delta := \frac{3}{2}\varepsilon \log_2(\frac{1}{\varepsilon})$.
+
+Given a subspace $H \subseteq \setR^n$ of dimension at least $(1-\delta)n$, 
+a symmetric convex set $K \subseteq H$ with $\gamma_H(K) \geq e^{-\delta n}$ 
+and a point $c \in {\left]-1,1\right[}^n$. There exists a polynomial time algorithm 
+to find a point $y \in (c + K) \cap [-1,1]^n$ so that at least 
+$\frac{\varepsilon}{2} n$ many indices $i$ have $y_i \in \{ -1,1\}$.
+}
+
+\thm[Step 3 -- blowup]{
+Suppose that $K \subseteq \setR^n$ is a symmetric convex body so that for all
+axis-parallel subspaces $U \subseteq \setR^n$ %  $H := \{ x \mid x_i=0 \forall i \in J\}$ with $J \subseteq [n]$
+one has that $\gamma_U(K) \geq e^{-\dim(U)/500}$. Then there is a polynomial time algorithm
+to compute a $y \in \{ \pm 1\}^n \cap O(\log n) \cdot K$.
+}
+
+\cor[Step 4 -- constant blowup]{
+Suppose that $K \subseteq \setR^n$ is a symmetric convex body so that
+for all axis parallel subspaces $U \subseteq \setR^n$ one has
+$\gamma_U((\frac{\textrm{dim}(U)}{n})^{\varepsilon} K) \geq e^{-\dim(U)/500}$ for some constant $\varepsilon > 0$. 
+Then one can compute a vector $y \in \{ \pm 1\}^n \cap (c_{\varepsilon} K)$ in polynomial time.
+}
+
+\centerline{\includegraphics[scale=0.35]{rothvoss14-simplecalc.png}}
+\end{multicols}
+\end{document}

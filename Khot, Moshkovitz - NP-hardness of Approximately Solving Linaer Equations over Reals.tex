@@ -1,0 +1,358 @@
+\input macros/cheatmac
+%\usepackage{auto-pst-pdf}
+%\usepackage{pst-...}
+
+\def\Pee{\mathbb{P}}
+\def\Zet{\mathbb{Z}}
+\def\Rko{\mathbb{R}}
+\def\Complex{\mathbb{C}}
+\def\Dis{\mathcal{D}}
+
+\def\Bigpi{{\rm Par}}
+\def\intcone{{\rm intcone}}
+\def\cone{{\rm cone}}
+\def\conv{{\rm conv}}
+\def\vert{{\rm vert}}
+\def\Las{{\textsc{Las}}}
+\def\Oh{{\rm O}}
+\def\supp{{\rm supp}}
+\def\enc{{\rm enc}}
+\newcommand{\eps}{\varepsilon}
+\let\cfix=\cdot
+
+% expectation, probability, variance
+\newcommand{\Esymb}{\mathbb{E}}
+\newcommand{\Psymb}{\mathbb{P}}
+\newcommand{\Vsymb}{Var}
+
+% better vector definition and some variations
+\renewcommand{\vec}[1]{{\bm{#1}}}
+\newcommand{\bvec}[1]{\bar{\vec{#1}}}
+\newcommand{\pvec}[1]{\vec{#1}'}
+\newcommand{\tvec}[1]{{\tilde{\vec{#1}}}}
+
+
+
+\DeclareMathOperator*{\E}{\Esymb}
+\DeclareMathOperator*{\Var}{\Vsymb}
+\DeclareMathOperator*{\ProbOp}{\Psymb}
+
+\renewcommand{\Pr}{\ProbOp}
+
+\newcommand{\problemmacro}[1]{\textsc{#1}\xspace}
+\newcommand{\maxtwocsp}{\problemmacro{Max 2-Csp}}
+\newcommand{\uniquegames}{\problemmacro{Unique Games}}
+
+\newcommand{\norm}[1]{\lVert#1\rVert}
+\newcommand{\Norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\bignorm}[1]{\big\lVert#1\big\rVert}
+\newcommand{\Bignorm}[1]{\Big\lVert#1\Big\rVert}
+
+\newcommand{\normo}[1]{\norm{#1}_1}
+\newcommand{\Normo}[1]{\Norm{#1}_1}
+\newcommand{\bignormo}[1]{\bignorm{#1}_1}
+\newcommand{\Bignormo}[1]{\Bignorm{#1}_1}
+
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\Set}[1]{\left\{#1\right\}}
+\newcommand{\bigset}[1]{\big\{#1\big\}}
+\newcommand{\Bigset}[1]{\Big\{#1\Big\}}
+
+% absolute value
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\Abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\bigabs}[1]{\big\lvert#1\big\rvert}
+\newcommand{\Bigabs}[1]{\Big\lvert#1\Big\rvert}
+
+% square brackets
+\newcommand{\brac}[1]{[#1]}
+\newcommand{\Brac}[1]{\left[#1\right]}
+\newcommand{\bigbrac}[1]{\big[#1\big]}
+\newcommand{\Bigbrac}[1]{\Big[#1\Big]}
+
+\newcommand{\ia}{{ia}}
+\newcommand{\jb}{{jb}}
+\newcommand{\mper}{\,.}
+% \newcommand{\Mid}{\;\middle\vert\;}
+
+\newcommand{\iprod}[1]{\langle#1\rangle}
+\newcommand{\Iprod}[1]{\left\langle#1\right\rangle}
+
+\newcommand{\paren}[1]{(#1)}
+\newcommand{\Paren}[1]{\left(#1\right)}
+\newcommand{\bigparen}[1]{\big(#1\big)}
+\newcommand{\Bigparen}[1]{\Big(#1\Big)}
+
+\newcommand{\Ins}{\mathcal{I}}
+\newcommand{\El}{\mathcal{L}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\defeq}{\coloneqq}
+\newcommand{\rank}{\textrm{rank}}
+\newcommand{\psdrank}{\textrm{rk}_{\textrm{psd}}}
+\newcommand{\degsos}{\textrm{deg}_{\textrm{sos}}}
+\newcommand{\detlb}{\textrm{detlb}}
+\newcommand{\disc}{\textrm{disc}}
+\newcommand{\herdisc}{\textrm{herdisc}}
+\newcommand{\Corr}{\textsc{Corr}}
+\newcommand{\Splus}{\mathcal{S}_+}
+\newcommand{\Tr}{\textrm{Tr}}
+\newcommand{\scalar}[2]{\langle #1, #2 \rangle}
+\newcommand{\vectext}{\textrm{vec}}
+\newcommand{\xtilde}{\tilde{x}}
+\newcommand{\robustlin}{\textsc{Robust3Lin($ℝ$)}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\Gauss}{\mathcal{N}}
+\newcommand{\fhat}{\hat{f}}
+\DeclareMathOperator{\val}{val}
+\DeclareMathOperator*{\Cov}{Cov}
+\def\Nko{ℕ}
+
+% from PCP handout
+
+\def\then{⇒}
+\def\GAPCSP{$ρ$-$GAP$ $qCSP$}
+\def\enc{{\rm enc}}
+\def\val{{\rm val}}
+\def\Oh{{O}}
+
+\long\def\algobox#1{\smallskip
+  \noindent
+~~\hbox{\fbox{\parbox[c]{0.30\textwidth}{#1}}}
+%\smallskip
+}
+
+\begin{document}
+\begin{multicols}{3}
+
+\title{NP-Hardness of Approximately Solving}
+\title{Linear Equations over Reals}
+\author{Subhash Khot, Dana Moshkovitz}
+\presenter{Martin B\"ohm}
+\centerline{\textit{Combinatorial PhD Seminar, Spring 2015/2016}}
+
+\section{Main result}
+
+\dfn[\robustlin instance]{ Let $b_0 ≥ 1$ be a parameter. A \robustlin instance
+is given by a set of real variables $X$ and a distribution $\calE$ over equations
+on the variables. Each equation is of the form $r_1 x_1 + r_2 x_2 + r_3 x_3 = 0$,
+with $|r_i| ∈ [1/b_0, b_0]$.
+}
+
+\dfn[Assignment]{An \emph{assignment} is a function $A\colon X ↦ ℝ$.
+An equation is \emph{$β$-approximately satisfied} by an assignment
+$A$ if its left-hand side value lies within $[-β,β]$.  }
+
+\dfn[Assignment norm]{ Let $(X,\calE)$ be a \robustlin instance, and $A$
+an assignment. Its squared norm at equation $eq$ is
+
+\[ ||A_{eq}||^2_2 ≡ E_{x ∈ X_{eq}} [A(x)^2], \]
+
+and the \emph{squared norm} of $A$ is
+
+\[ ||A||^2_2 ≡ E_{eq \sim E} [||A_{eq}||_2^2]. \]
+}
+
+\dfn[Assignment value]{Our goal in the \robustlin problem will be to
+maximize the \emph{value} of an assignment, which is the squared norm
+of the equations which are $β$-approximately satisfied. Formally and
+using the Iverson notation, we maximize the function
+
+\[ \val_{(X,\calE)}^β(A) ≡ E_{eq \sim E} \bigl[ [|eq| ≤ β] · ||A_{eq}||_2^2 \bigr] . \]
+}
+
+\dfn[\robustlin problem]{ Let $b_0 ≥ 1, b ≥ 1,$ and $0 < β < 1$ be parameters.
+Given a \robustlin instance where the coefficients lie in $[1/b_0, b_0]$,
+the goal is to find an assignment $A\colon X ↦ [-b,b]$ of norm $||A||_2^2 = 1$
+that maximizes $\val_{(X,\calE)}(A)$.
+}
+
+\thm[Main theorem]{ There exist universal constants $b_0 = 2$ and $c,s > 0$ such
+that for any $γ, δ > 0$ and any $b ≥ 1$, given an instance of \robustlin with $b_0$ as a parameter,
+it is NP-hard to distinguish between the following two cases:
+
+\begin{itemize}
+\item \emph{Completeness.} There is an assignment $A\colon X ↦ [-L,L]$ with $L = O(\sqrt{\log(1/δ)})$
+and $||A||_2^2 = 1$, such that $val_{(X,\calE)}^γ(A) ≥ 1 - δ$;
+
+\item \emph{Soundness.} For any assignment $A\colon X ↦ [-b,b]$ with $||A||_2^2 = 1$, it holds
+that $val_{(X,\calE)}^{c\sqrt{δ}}(A) ≤ 1-s$;
+\end{itemize}
+}
+
+\section{Definitions and notation}
+
+\dfn{Let $\Gauss^n$ denote the $n$-dimensional Gaussian distribution
+with $n$ independent $E[x_i] = 0$ and $Var[x_i] = 1$ coordinates.
+
+By $L^2(ℝ^n, \Gauss^n)$ we denote the space of all functions $f\colon
+ℝ^n ↦ ℝ$ with $E_{x ∼ \Gauss^n}[f(x)^2]$ bounded. This is an inner
+product space with the inner product $E_{x ∼ \Gauss^n}[f(x)g(x)]$.
+}
+
+\dfn{For any function $f ∈ L^2(ℝ^n, \Gauss^n)$, by $f^{=1}$ we mean
+its linear part, i.e. $f^{=1}(x) = ∑_{i=1}^n a_i x_i$. We can compute
+this linear part for instance from the Fourier transform of $f$.
+
+The non-linear part of the function will be usually denoted as $e(x)$.
+}
+
+\noindent\textbf{Fourier analysis.}
+
+For a natural number $j$, the $j$th \emph{Hermite polynomial}
+$H_j \colon ℝ ↦ ℝ$ is
+
+\[ H_j(x) = \frac{1}{\sqrt{j!}} · (-1)^j e^{x^2/2} \frac{d}{dx^j} e^{-x^2/2}.\]
+
+They satisfy $\iprod{Hj, Hj}  = 1$ and $\iprod{Hi, H_j}  = 0$. We define the Hermite
+multinomial as $H_S(x_1, x_2, … x_n) = ∏_{i=1}^n H_{j_i}(x_i)$.
+
+
+Every function $f ∈ L^2(ℝ^n, \Gauss^n)$ can be written as
+
+\[ f(x) = ∑_{S ∈ ℕ^n} \fhat(S) H_S(x), \]
+
+where $S$ is a multi-index (an $n$-tuple of natural numbers) and
+$\fhat(S) ∈ ℝ$ are Fourier coefficients of $f$.
+
+\section{PCP basics}
+
+\dfn[PCP complexity class]{A language $L ∈ PCP(p, q)$ if there exists a PCP-machine $T$
+such that on input $x$, $T$ can access $p$ random bits and can also access
+$q$ bits of the proof. This machine must then satisfy the following:
+
+\begin{itemize}
+\item If $x ∈ L$, then there is a proof $y$ that makes $T$ accept with probability $1$.
+\item If $x ∉ L$, then for every proof $y$, $T$ accepts with probability $<1/2$.
+\end{itemize}
+}
+
+\thm[PCP Theorem]{$NP = PCP(\Oh(\log n), \Oh(1))$.}
+
+\thm[Hastad]{$NP = PCP(\Oh(\log n), 3)$.}
+
+\noindent\textbf{Hardness of approximation view.}
+
+\dfn[Gap-CSP]{For ever $q ∈ \Nko, ρ <1$, define \GAPCSP\ to be the 
+problem of determining the following:
+
+For a given $qCSP$ instance $φ$ whether:
+
+\begin{enumerate}
+\item $\val(φ) = 1$,
+\item $\val(φ) < ρ$.
+\end{enumerate}
+}
+
+\dfn{We say that \GAPCSP\ is $NP$-hard for every language $L ∈ NP$ if there
+is a polynomial-time function $f$ mapping strings to $qCSP$ instances satisfying:
+
+\begin{enumerate}
+\item $x ∈ L \then \val(f(x)) = 1$,
+\item $x ∉ L \then \val(f(x)) < ρ$.
+\end{enumerate}
+}
+
+\thm[GAP Hardness]{There exist constants $q ∈ \Nko, ρ ∈ (0,1)$ such that \GAPCSP\ is $NP$-hard.
+}
+
+\dfn{Let $R,P$ be maximization problems. In a {\it gap-preserving reduction} from $R$ (with associated $f_1$, $α$) to $P$ (with associated $f_2, β$), we want for every instance $r ∈ R$ output $p ∈ P$ such that:
+\begin{itemize}
+\item if $OPT(r) ≥ f_1(r)$, then $OPT(p) ≥ f_2(p)$.
+\item if $OPT(r) < α(|r|) f_1(r)$ then $OPT(p) < β(|p|)f_2(p)$.
+\end{itemize}
+}
+
+\dfn{\textsc{Max 3-Lin} is a maximization problem where the goal is to satisfy
+as many linear equations as possible. \textsc{Gap 3-Lin} is the gap version of
+\textsc{Max 3-Lin}.
+}
+
+\obs{ \textsc{Gap-3-Lin} with parameters $1-ε,1/2 + ε$ is hard to approximate
+due to Stronger Hastad, even for equations modulo 2.}
+
+\section{Big picture}
+
+\section{Linearity test}
+
+\noindent\textbf{Linearity test.}
+We are given oracle access to a function
+$f ∈ L^2(ℝ^n, \Gauss^n)$, which is odd. Pick $x,y ∼ \Gauss^n$ and
+test
+
+\[ f(x) + f(y) \sqrt{2} · f\bigl( -1 · \frac{x+y}{\sqrt{2}}\bigr) = 0. \]
+
+\lem[Linearity testing]{ Let $f ∈ L^2(ℝ^n, \Gauss^n), f$ odd.
+Then 
+
+\[ ||f - f^{=1}||_2^2 ≤ E_{x,y ∼ \Gauss^n} \bigl[ | f(x) + f(y) - \sqrt{2} · f\bigl( -1 · \frac{x+y}{\sqrt{2}}\bigr) |^2 \bigr] .\] 
+
+}
+\section{Dictator test}
+
+% \medskip
+% \hrule
+
+\noindent\textbf{Dictator test.} We are given oracle access to a function
+$f ∈ L^2(ℝ^n, \Gauss^n)$, which is odd. With equal probability
+(1/3), perform one of the three tests:
+
+\begin{enumerate}
+
+\item \textbf{Linearity test on $f$.}
+
+\item \textbf{Coordinatewise perturbation test.}
+Pick $x,y ∼ \Gauss^n$. Create $\xtilde ∼ \Gauss^n$ as follows:
+initially set $\xtilde = x$ and then, 
+with (very small) independent probability $δ$, replace $\xtilde_i$ with $y_i$.
+
+Then, test $f(x) - f(\xtilde) = 0$.
+
+\item \textbf{Random perturbation test.}
+
+Pick $y,z ∼ \Gauss^n$. Let $x = \frac{y+z}{\sqrt{2}}$ and $w =
+\frac{y-z}{\sqrt{2}}$. Set $\xtilde ≡ (1-δ)x + \sqrt{2δ-δ^2} w$. We
+can think of $\xtilde$ being equal to $λ_1 y + λ_2 z$ for some $λ_1,
+λ_2$ very close to $1/\sqrt{2}$.
+
+Test with equal probability:
+
+\[ f(x) - \frac{f(y)}{\sqrt{2}} - \frac{f(z)}{\sqrt{2}} = 0, \]
+\[ f(x) -  λ_1 y - λ_2 z= 0. \]
+
+\end{enumerate}
+\medskip
+\hrule
+
+\lem{The probability that a dictator test equation chosen at random is $c\sqrt{\delta}$-approximately
+satisfied is at least $1 - 7s^{1/3}$.}
+
+\lem[$e$ is noise stable for random permutation]{ Assuming the contradiction above, let $x, \xtilde$
+be picked as in the random perturbation test. Then, with probability at least $1 - O(s^{1/3})$:
+
+\[|e(x) - e(\xtilde)| ≤ O(s^{1/3}) \sqrt{\delta}. \]
+}
+
+\lem[$e$ is noise sensitive coordinate-wise]{ Assuming the contradiction above, let $x, \xtilde \sim \Gauss^n$
+be picked as in the coordinatewise perturbation test. Then, with probability at least $Ω(1)$, we have
+
+\[|e(x) - e(\xtilde)| ≥ Ω(\sqrt{Γ \delta}). \]
+}
+
+\lem{Assume the contradiction above and let $R$ be the distribution
+over pairs in the random perturbation test, and let $C$ be the
+distribution over pairs in the coordinatewise perturbation test. Then
+there is a function $e'$ such that:
+
+\begin{enumerate}
+\item $E_{(x,\xtilde) \sim R}[|e'(x) - e'(\xtilde)|^2] ≤ O(s^{1/3}/ \sqrt{Γ})$.
+\item $E_{(x,\xtilde) \sim C}[|e'(x) - e'(\xtilde)|^2] ≥ Ω(1)$.
+\end{enumerate}
+
+}
+
+\clm{ For any function $h ∈ L^2(ℝ^n, \Gauss^n)$, 
+\[E_{(x,\xtilde) \sim R}[|e'(x) - e'(\xtilde)|^2] ≥ E_{(x,\xtilde) \sim C}[|e'(x) - e'(\xtilde)|^2].\]
+}
+
+\end{multicols}
+\end{document}

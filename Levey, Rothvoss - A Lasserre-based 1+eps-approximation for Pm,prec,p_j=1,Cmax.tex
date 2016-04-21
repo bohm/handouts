@@ -1,0 +1,391 @@
+\input macros/cheatmac
+
+\usepackage{bm} % bold math
+
+% left align
+\usepackage{environ}
+\makeatletter
+\NewEnviron{Lalign}{\tagsleft@true\begin{alignat*}{1}\BODY\end{alignat*}}
+\makeatother
+
+% small spacing in align
+% \abovedisplayskip=0pt plus 3pt
+% \abovedisplayshortskip=0pt plus 3pt
+% \belowdisplayskip=0pt plus 3pt 
+% \belowdisplayshortskip=0pt plus 3pt
+
+\def\Pee{\mathbb{P}}
+\def\Zet{\mathbb{Z}}
+\def\Rko{\mathbb{R}}
+\def\Complex{\mathbb{C}}
+\def\Dis{\mathcal{D}}
+
+\def\Bigpi{{\rm Par}}
+\def\intcone{{\rm intcone}}
+\def\cone{{\rm cone}}
+\def\conv{{\rm conv}}
+\def\vert{{\rm vert}}
+\def\Las{{\textsc{Las}}}
+\def\Oh{{\rm O}}
+\def\supp{{\rm supp}}
+\def\enc{{\rm enc}}
+
+\newcommand{\eps}{\varepsilon}
+\let\cfix=\cdot
+
+% expectation, probability, variance
+\newcommand{\Esymb}{\mathbb{E}}
+\newcommand{\Psymb}{\mathbb{P}}
+\newcommand{\Vsymb}{Var}
+
+% better vector definition and some variations
+\renewcommand{\vec}[1]{{\bm{#1}}}
+\newcommand{\bvec}[1]{\bar{\vec{#1}}}
+\newcommand{\pvec}[1]{\vec{#1}'}
+\newcommand{\tvec}[1]{{\tilde{\vec{#1}}}}
+\newcommand{\calI}{\mathcal{I}}
+
+\DeclareMathOperator*{\E}{\Esymb}
+\DeclareMathOperator*{\Var}{\Vsymb}
+\DeclareMathOperator*{\ProbOp}{\Psymb}
+
+\renewcommand{\Pr}{\ProbOp}
+
+\newcommand{\problemmacro}[1]{\textsc{#1}\xspace}
+\newcommand{\maxtwocsp}{\problemmacro{Max 2-Csp}}
+\newcommand{\uniquegames}{\problemmacro{Unique Games}}
+
+\newcommand{\norm}[1]{\lVert#1\rVert}
+\newcommand{\Norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\bignorm}[1]{\big\lVert#1\big\rVert}
+\newcommand{\Bignorm}[1]{\Big\lVert#1\Big\rVert}
+
+\newcommand{\normo}[1]{\norm{#1}_1}
+\newcommand{\Normo}[1]{\Norm{#1}_1}
+\newcommand{\bignormo}[1]{\bignorm{#1}_1}
+\newcommand{\Bignormo}[1]{\Bignorm{#1}_1}
+
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\Set}[1]{\left\{#1\right\}}
+\newcommand{\bigset}[1]{\big\{#1\big\}}
+\newcommand{\Bigset}[1]{\Big\{#1\Big\}}
+
+% absolute value
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\Abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\bigabs}[1]{\big\lvert#1\big\rvert}
+\newcommand{\Bigabs}[1]{\Big\lvert#1\Big\rvert}
+
+% square brackets
+\newcommand{\brac}[1]{[#1]}
+\newcommand{\Brac}[1]{\left[#1\right]}
+\newcommand{\bigbrac}[1]{\big[#1\big]}
+\newcommand{\Bigbrac}[1]{\Big[#1\Big]}
+
+\newcommand{\ia}{{ia}}
+\newcommand{\jb}{{jb}}
+\newcommand{\mper}{\,.}
+% \newcommand{\Mid}{\;\middle\vert\;}
+
+\newcommand{\iprod}[1]{\langle#1\rangle}
+\newcommand{\Iprod}[1]{\left\langle#1\right\rangle}
+
+\newcommand{\paren}[1]{(#1)}
+\newcommand{\Paren}[1]{\left(#1\right)}
+\newcommand{\bigparen}[1]{\big(#1\big)}
+\newcommand{\Bigparen}[1]{\Big(#1\Big)}
+
+\newcommand{\Ins}{\mathcal{I}}
+\newcommand{\El}{\mathcal{L}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\defeq}{\coloneqq}
+\newcommand{\rank}{\textrm{rank}}
+\newcommand{\psdrank}{\textrm{rk}_{\textrm{psd}}}
+\newcommand{\degsos}{\textrm{deg}_{\textrm{sos}}}
+\newcommand{\detlb}{\textrm{detlb}}
+\newcommand{\disc}{\textrm{disc}}
+\newcommand{\herdisc}{\textrm{herdisc}}
+\newcommand{\Corr}{\textsc{Corr}}
+\newcommand{\Splus}{\mathcal{S}_+}
+\newcommand{\Tr}{\textrm{Tr}}
+\newcommand{\scalar}[2]{\langle #1, #2 \rangle}
+\newcommand{\vectext}{\textrm{vec}}
+\DeclareMathOperator{\val}{val}
+\DeclareMathOperator*{\Cov}{Cov}
+
+\newcommand{\Jtop}{J_{\text{top}}}
+\newcommand{\Jmid}{J_{\text{middle}}}
+\newcommand{\Jbot}{J_{\text{bottom}}}
+
+
+\long\def\algobox#1{\smallskip
+  \noindent
+~~\hbox{\fbox{\parbox[c]{0.30\textwidth}{#1}}}
+%\smallskip
+}
+
+\begin{document}
+\begin{multicols}{3}
+
+\title{A Lasserre-based (1+ε)-approximation for}
+\title{$Pm ∣ p_j=1,\textrm{prec} ∣ C_{\max}$}
+\author{Elaine Levy, Thomas Rothvoß}
+\presenter{Martin B\"ohm}
+\centerline{\textit{Approximation and Online Seminar, Prague, Fall 2015/2016}}
+
+%TODO: \Pee, \Zet, \Rko
+\section{Previous work}
+
+\textbf{General precedence constraints}: $2-\frac1m$ by Graham.
+
+\textbf{Unit jobs}: [Svensson 2010]: No $(2-ε)$-approximation if a
+variant of a UGC holds. List Scheduling actually a
+$2-\frac2m$-approximation, even $2-\frac{7}{3m+1}$.
+
+\textbf{Unit jobs, constant no. of machines}: Big question (Garey,
+Johnson): \textbf{NP-hard?}
+\begin{Lalign}
+\sum_{t=1}^T x_{jt} &= 1 \quad \forall j \in J    \tag*{{\Large \textbf{LP}}}  \\
+\sum_{j \in J} x_{jt} &\leq m \quad \forall t \in [T]  \\ 
+\sum_{t' \leq t} x_{it'} &\geq \sum_{t' \leq t+1} x_{jt'} \quad \forall i \prec j \; \forall t \in [T]  \\
+x_{j,I} &= \sum_{t \in I} x_{j,t} \quad \forall j \in J \; \forall \textrm{ intervals }I \textrm{ of } T  \\
+0 \leq x_{jt} &\leq 1 \quad \forall j \in J \; \forall t \in [T] 
+\end{Lalign}
+\vskip -1em
+\section{Lasserre hierarchy}
+Let $\mathcal{P}_t([n]) := \{ I \subseteq [n] \mid
+|I| \leq t\}$ be the set of all index sets of cardinality at most $t$
+and let $y \in \Rko^{\mathcal{P}_{2t+2}([n])}$ be a vector with
+entries $y_I$ for all $I\subseteq[n]$ with $|I| \leq
+2t+2$.
+
+\dfn[Moment matrix]{ $M_{t+1}(y) \in \Rko^{\mathcal{P}_{t+1}([n])}
+  × \mathcal{P}_{t+1}([n])}$:
+\[
+  M_{t+1}(y))_{I,J} := y_{I\cup J} \quad \forall |I|,|J| \leq t+1.
+\]
+
+
+\dfn[Moment matrix of slacks]{ For the $\ell$-th ($\ell \in [m]$) constraint
+of the LP $A^Tx \geq b$, we create $M_t^\ell(y) ∈
+\Rko^{\mathcal{P}_{t}([n]) × \mathcal{P}_{t}([n])}$:
+\[  M_t^\ell(y)_{I,J} := (\sum_{i=1}^n A_{li}y_{I \cup J \cup \{i\}}) - b_ly_{I\cup J} \]
+}
+
+\dfn[$t$-th level of the Lasserre hierarchy]{ Let $K = \{ x \in \Rko^n
+\mid Ax \geq b\}$. Then $\textsc{Las}_t(K)$ is the set of vectors $y
+\in \Rko^{\mathcal{P}_{2t+2}([n])}$ that satisfy 
+\[  M_{t+1}(y) \succeq 0; \hspace{1cm} M_t^\ell(y) \succeq 0 \quad \forall\ell\in[m]; \hspace{1cm} y_{\emptyset}=1. \]
+Furthermore, let  $\textsc{Las}_t^{\textrm{proj}} := \{ (y_{\{1\}},\ldots,y_{\{n\}}) \mid y \in \textsc{Las}_t(K) \}$ be the projection on the original variables. 
+}
+
+\textbf{Intuition:} $M_{t+1}(y) \succeq 0$ ensures \textit{consistency}
+($y$ behaves \textit{locally} as a distribution) while $M_t^\ell(y) \succeq 0$
+guarantees that $y$ satisfies the $l$-th linear constraint.
+
+% \label{thm:PropertiesOfLasT}
+% \thm[Generic Lasserre properties]{
+% Let $K = \{ x \in \Rko^n \mid Ax \geq b\}$ and $y \in {\textsc{Las}}_t(K)$. Then the following holds: 
+% \begin{enumerate}[(a)] \itemsep0.6em
+% \item \label{item:PropertiesOfLasT-Hierarchy} $\conv(K \cap \{ 0,1\}^n) = \textsc{Las}_n^{\textrm{proj}}(K) ⊆ … ⊆ \textsc{Las}_0^{\textrm{proj}}(K) \subseteq K$.
+% \item \label{item:PropertiesOfLasT-Monotone} We have $0 \leq y_I \leq y_J \leq 1$ for all $I\supseteq J$ with  $0\leq|J|\leq |I| \leq t$.
+% \item \label{item:PropertiesOfLasT-Cond-for-yI0} Let $I \subseteq [n]$ with $|I| \leq t$. Then
+% \[ K \cap \{ x \in \Rko^n \mid x_i =1 \; \forall i \in I\} = \emptyset \; \Longrightarrow \; y_I = 0. \]
+% \item \label{item:PropertiesOfLasT-IntOnI} Let $I \subseteq [n]$ with $|I| \leq t$. Then 
+% \[y \in \conv(\{z \in \textsc{Las}_{t-|I|}(K) \mid z_{\{i\}} \in \{ 0,1\} \; \forall i\in I\}).\]
+% %\item Sei $k\leq t$ und $S \subseteq [n]$ eine Menge mit der Eigenschaft, dass $|I \cap S| \geq k \Rightarrow y_I=0$. 
+% %Dann 
+% \item \label{item:PropertiesOfLasT-DecThm} Let $S \subseteq [n]$ be a subset of variables 
+% such that not many can be equal to 1 at the same time:
+% \[\max\{ |I| : I \subseteq S; x \in K; x_i = 1\; \forall i \in I\} \leq k < t. \]
+% Then we have
+% \[y \in \conv(\{z \in \textsc{Las}_{t-k}(K) \mid z_{\{i\}} \in \{ 0,1\} \; \forall i\in S\}). \]
+% \item \label{item:PropertiesOfLasT-yI1-iff-yi1-for-all-i-in-I} For any $|I| \leq t$ we have $y_I=1 \Leftrightarrow \bigwedge_{i\in I} (y_{\{i\}}=1)$.
+% \item \label{item:PropertiesOfLasT-product} For $|I| \leq t$: $(\forall i\in I : y_{\{i\}} \in \{ 0,1\}) \; \Longrightarrow \; y_I = \prod_{i\in I} y_{\{i\}}$.
+% \item \label{item:PropertiesOfLasT-yI1-implies-yIJ-is-yJ} Let $|I|,|J| \leq t$ and $y_{I}=1$. Then $y_{I \cup J} = y_J$.
+% \end{enumerate}
+% }
+% \smallskip\hrule\medskip
+
+We \emph{condition} on some variable $y_{j,I}$ being $1$ (see notation below). Number of conditionings $≈$ our hierarchy level.
+
+\lem[properties of the lift for $K(T)$]{
+Let $y \in \textsc{Las}_r(K(T))$. Then the 
+following holds: 
+\begin{enumerate}
+%\item[a)] If $\textrm{supp}(j,y)$ come before $\textrm{supp}(j',y)$, then it is impossible that $j' \prec j$.
+%\item[b)] If $y_{j,\{t_0,\ldots,t_1\}}=1$ then $y_{j',t}=0$ for all $j' \succ j$ and $t < t_0$. %for all jobs $j'$ with $j \prec j'$
+\item[a)] If $\textrm{supp}(j,y) \subseteq \{1,\ldots,t_0\}$ and $\textrm{supp}(j',y) \subseteq \{t_0,\ldots,T\}$ then it is impossible that $j' \prec j$.  
+\item[b)] Suppose that $y'$ is derived from $y$ by any sequence of  $k \leq r$ conditionings. 
+Then $y' \in \textsc{Las}_{r-k}(K(T))$ and $\textrm{supp}(j,y') \subseteq \textrm{supp}(j,y)$ for all jobs $j \in J$.
+\end{enumerate}
+}
+\section{Notation, parameters}
+
+\textbf{Laminar family $\calI$ of intervals:} If $T = 2^z$ for some $z$, then
+we define $I_0 ≡ \{1,…,T\}$ and the initial \emph{layer} $\calI_0 ≡
+\{I\}$, and proceed to split $I$ into two intervals $I_{a} = [1,T/2]$
+and $I_{b} ≡ [T/2+1,T]$. We set $\calI_1 ≡ \{I_a, I_b\}$ and proceed
+recursively until the intervals are singletons.
+
+$\bm{y_{j,I}\colon}$ Coordinate of the Lasserre solution $y$ corresponding to job $j$ and interval $I$. \textbf{Note:}
+all such variables are present already in the base LP. We also use only $I ∈ \calI$.
+
+\section{Main result}
+
+\thm[Main theorem]{ % \label{thm:MainTechnicalTheorem}
+For any Lasserre solution $y \in {\textsc{Las}}_r (K(T))$ with 
+$r :=(\log n) ^{O((m^2/\varepsilon^2) \cdot \log\log n)}$,
+%$r := \Theta\left((\log n)^{(3\log\log n+2)}\cdot \log\log n \cdot \frac{m^2}{\varepsilon}\right)$,
+one can find a schedule $σ\colon J \to ℕ$ of the jobs in 
+time $n^{O(r)}$ so that $\max_{j \in J} \sigma(j) \leq (1 + \varepsilon) \cdot T$.
+}
+
+\lem[Recursive algorithm]{ % \label{lem:MainRecursiveAlgorithm}
+Fix $\varepsilon>0$. Let $I^* \in \mathcal{I}$ of length $T^*$.
+Let $y^* \in \textsc{Las}_{r^*}(K(T))$ be a Lasserre solution with 
+\[
+  r^* \geq \log_2(T^*) \cdot 2mk^2 \cdot 2^{k^2} / \delta.
+\]
+Let
+ $J^* \subseteq \{ j \in J : y_{j,I^*}^* = 1\}$ be some jobs fully assigned to $I^*$. 
+Then one can find a feasible assignment $\sigma : J^* \setminus J_{\textrm{discarded}}^* \to I^*$ 
+that discards only
+\[ |J_{\textrm{discarded}}^*| \leq \frac{\varepsilon}{2} \cdot \frac{\log_2 (|I^*|)}{\log_2(T)} \cdot |I^*| + \frac{\varepsilon}{2m} \cdot |J^*| \]
+}\vskip -2.8em
+\section{4 Steps}
+
+\textbf{Step 1:} Modify $y^* → y^{**}$ with the property: $∀I ∈
+\calI^*_0 ∪ \calI^*_1 ∪ … ∪ \calI^*_{k^2-1}$ the jobs owned by $I$
+have small $Δ(J,y^{**}) ≤ δ|I|$. Implies: chains in $J^{**}$ have at
+most $k^2 δ |T^*|$ jobs.  No. of conditionings: $\frac{2mk^2
+2^{k^2}}{δ}$.
+
+\textbf{Step 2:} Choose a good $l^*$ and define
+\begin{itemize}
+\item $\Jtop ≡ $ jobs owned in levels $0, …, l^* -k -1$,
+\item $\Jmid ≡ $ jobs in $l^* - k, … l^*$,
+\item $\Jbot ≡ $ jobs in $l^*+1, … , \log(T^*)$.
+\end{itemize}
+
+Discard $\Jmid$.
+
+\textbf{Step 3:} Apply the recursive algorithm for each interval $I ∈
+\calI_l^*$, i.e.  in the layer $l^*$. This schedules some
+bottom jobs and some discards.
+
+\textbf{Step 4:} Schedule top jobs using a smart combinatorial algorithm.
+
+\fsection{Step 4: Scheduling the top}
+
+\textbf{Step 4a:} using a matching argument, we argue that if we ignore
+dependence among $\Jtop$ (but we keep $\Jbot \leftrightarrow \Jbot$ and $\Jtop \leftrightarrow \Jbot$, there is a schedule placing almost all of $\Jtop$:
+
+\lem{A valid schedule $\sigma : J_{\textrm{bottom}}' \to I^*$ of bottom jobs can be extended to a schedule $\sigma : J_{\textrm{bottom}}' \cup J_{\textrm{top}}' \to I^*$ 
+with $J_{\textrm{top}}' \subseteq J_{\textrm{top}}$
+satisfying (i) $|\sigma^{-1}(t)| \leq m$ for $t \in I^*$; (ii)  $r_j \leq \sigma_j \leq d_j$ for all $j \in J_{\textrm{top}}'$ and (iii) one discards at most $|J_{\textrm{top}} \setminus J_{\textrm{top}}'| \leq 4m \cdot 2^{-k} \cdot T^*$ many top jobs.
+}
+
+\textbf{Step 4b:} Prove that EDF can schedule almost all the jobs
+except for $2^{l^*}mC$, where $C$ is a maximum chain length bound. As
+a theorem:
+
+\thm{
+Let $J$ be a set of jobs with releases $r_j$, deadlines $d_j$, consistent
+precedence constraints and max. chain length $C$.
+Suppose that $\{1,\ldots,T\}$ is partitioned into
+equally sized intervals $I_1,\ldots,I_p$
+and all release times/deadlines correspond to beginnings/endings of
+those intervals. Let
+$\textrm{cap}\colon [T] \to \{ 0,\ldots,m\}$
+be a capacity function and assume that there exists a 
+schedule assigning each job to slots between its release time and deadline that respects
+capacities but does not necessarily respect precedence constraints within $J$.
+
+Then one can in pol. time find a schedule $\sigma : J \setminus J_{\textrm{discarded}} \to [T]$ that respects
+capacities, release times, deadlines and precedence
+constraints and discards  $|J_{\textrm{discarded}}| \leq pmC$ many jobs.
+}
+\begin{center}
+{\sc Earliest Deadline First} \vspace{1mm} \hrule
+\end{center}
+
+{\bf Input:} Jobs $J$ with deadlines, release times, precedence constraints; \\capacity function $\textrm{cap} : [T] \to \{ 0,\ldots,m\}$ \\
+{\bf Output:} Schedule $\sigma : J \to [T] \cup \{ \texttt{DISCARDED}\}$  
+\begin{enumerate*}
+\item[(1)] Set $\sigma(j) := \texttt{UNASSIGNED}$ for all $j \in J$ and
+$J_{\textrm{discarded}} := \emptyset$
+\item[(2)] Sort the jobs $J = \{ 1,\ldots,n\}$ so that $d_1 \leq d_2
+\leq \ldots \leq d_n$
+\item[(3)] \textbf{for} $t=1$ \textbf{to} $T$:
+   \begin{enumerate*}
+   \item[(4)] $\textrm{cap}(t)$ many times \textbf{do}:
+   \begin{enumerate*}
+     \item[(5)] Select the lowest index $j$ of a possible job that has not been scheduled or discarded
+and that has all jobs in $\delta^-(j)$ already processed (or discarded).
+     \item[(6)] Set $\sigma(j) := t$ (if there was any such job)
+   \end{enumerate*}
+   \item[(7)] \textbf{for each}  $j \in J$ with $d_j=t$ and $\sigma(j) =
+\texttt{UNASSIGNED}$: add $j$ to $J_{\textrm{discarded}}$
+and set $\sigma(j) := \texttt{DISCARDED}$
+   \end{enumerate*}
+\end{enumerate*}
+
+
+\lem{
+Let $I=\{t',\ldots,t''\} \subseteq I_i$ be part of one of the subintervals. % with no release time in $\{t'+1,\ldots,t''\}$.
+Suppose that there is a non-busy time $t^* \in I$
+and a job $j$ with $I \subseteq \{r_j,\ldots,d_j\}$ and $\sigma(j) \in \{
+\texttt{DISCARDED} \} \cup \{ t''+1,\ldots,T\}$. Then there is a job
+$j^* \in \sigma^{-1}(t^*)$
+with $j^* \prec j$.
+}
+
+
+\lem{
+Let $I = \{ t',\ldots,t''\} \subseteq I_i$ be part of one of the subintervals. % with no release time in $\{t'+1,\ldots,t''\}$.
+Suppose that there is at least one job $j$ with $I \subseteq \{r_j,\ldots,d_j\}$ and $\sigma(j) \in \{
+\texttt{DISCARDED}\} \cup \{ t''+1,\ldots,T\}$.
+Then the number of non-busy times in $I$ is bounded by $C$.
+}
+
+\section{Step 1: reducing dependence}
+
+\lem{ % \label{lem:BreakingChains}
+Let $y^* \in \textsc{Las}_{r^*}(K(T))$. % and let $\delta>0$ be any parameter.
+Then one can find an induced solution $y^{**} \in \textsc{Las}_{r^{**}}(K(T))$
+%with $r^{**} := r^* -\frac{c(\varepsilon,m)}{\Delta} \cdot \log_2^4(T)\cdot \log \log(T)$
+with $r^{**} := r^* -2mk^2 \cdot 2^{k^2} / \delta$
+so that $\Delta(J(I,y^{**})) \leq \delta \cdot |I|$ for all
+intervals $I \in \calI_0^* \cup \ldots \cup \calI_{k^2-1}^*$.
+}
+
+\lem{ % \label{lem:BoundedChains}
+After finding $y^{**}$, the longest chain within
+jobs assigned to
+intervals $I \in \calI_0^* \cup \ldots \cup \calI_{k^2-1}^*$
+has length at most $k^2 \delta T^*$.
+}
+\begin{center}
+{\sc Breaking long chains} \vspace{1mm} \hrule  \vspace{1mm}
+\end{center}
+{\bf Input:} Scheduling instance with jobs $J^*$, a precedence order, a Lasserre solution $y^* \in \textsc{Las}_{r^*}(K(T))$, an interval $I^*$ \\
+{\bf Output:} A Lasserre solution $y^{**}$ with maximum chain length $k^2\delta T^*$ in $\bigcup_{\ell=0}^{k^2-1} J(\ell,y^{**})$
+\begin{enumerate*}
+\item[(1)] Make a copy $y^{**} := y^*$
+%\item[(2)] FOR $\ell = 0,1,\ldots,k^2-1$ DO 
+%  \begin{enumerate*} 
+ %   \item[(3)] FOR EACH $I \in \calI_{\ell}^*$  DO 
+   % \begin{enumerate*}
+   \item[(2)] \textbf{while} $\exists I \in \bigcup_{\ell=0}^{k^2-1} \calI_{\ell}^*$ \textbf{with}
+$\Delta(J(I,y^{**})) > \delta |I|$ \textbf{do} %with $J(I) := \{ j \in J \setminus \bigcup_{\ell'<\ell, I' \in \calI_{\ell'}} J(I') \}$ DO
+      \begin{enumerate*}
+      \item[(3)] Choose a job $j \in J(I,y^{**})$ with $|\delta_{J(I,y^{**})}(j) \cup \{j\}| \geq \delta |I|$. 
+      \item[(4)] \textbf{if} $|\delta_{J(I,y^{**})}^+(j) \cup \{ j\}| \geq \frac{\delta}{2} \cdot |I|$, condition in $y^{**}$ on $x_{j,I_2}=1$ \\
+\textbf{else} condition on $x_{j,I_1}=1$. 
+      \end{enumerate*} 
+  %  \end{enumerate*}
+\end{enumerate*}
+
+\end{multicols}
+\end{document}
