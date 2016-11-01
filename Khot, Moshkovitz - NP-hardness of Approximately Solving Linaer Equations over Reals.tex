@@ -204,7 +204,7 @@ $H_j \colon ℝ ↦ ℝ$ is
 \[ H_j(x) = \frac{1}{\sqrt{j!}} · (-1)^j e^{x^2/2} \frac{d}{dx^j} e^{-x^2/2}.\]
 
 They satisfy $\iprod{Hj, Hj}  = 1$ and $\iprod{Hi, H_j}  = 0$. We define the Hermite
-multinomial as $H_S(x_1, x_2, … x_n) = ∏_{i=1}^n H_{j_i}(x_i)$.
+multinomial as $H_{j_1, j_2, …, j_n}(x_1, x_2, … x_n) = ∏_{i=1}^n H_{j_i}(x_i)$.
 
 
 Every function $f ∈ L^2(ℝ^n, \Gauss^n)$ can be written as
@@ -228,7 +228,7 @@ $q$ bits of the proof. This machine must then satisfy the following:
 
 \thm[PCP Theorem]{$NP = PCP(\Oh(\log n), \Oh(1))$.}
 
-\thm[Hastad]{$NP = PCP(\Oh(\log n), 3)$.}
+\thm[H\r{a}stad]{$NP = PCP(\Oh(\log n), 3)$.}
 
 \noindent\textbf{Hardness of approximation view.}
 
@@ -270,7 +270,7 @@ as many linear equations as possible. \textsc{Gap 3-Lin} is the gap version of
 \obs{ \textsc{Gap-3-Lin} with parameters $1-ε,1/2 + ε$ is hard to approximate
 due to Stronger Hastad, even for equations modulo 2.}
 
-\section{Big picture}
+% \section{Big picture}
 
 \section{Linearity test}
 
@@ -317,7 +317,7 @@ can think of $\xtilde$ being equal to $λ_1 y + λ_2 z$ for some $λ_1,
 Test with equal probability:
 
 \[ f(x) - \frac{f(y)}{\sqrt{2}} - \frac{f(z)}{\sqrt{2}} = 0, \]
-\[ f(x) -  λ_1 y - λ_2 z= 0. \]
+\[ f(\xtilde) -  λ_1 f(y) - λ_2 f(z)= 0. \]
 
 \end{enumerate}
 \medskip
@@ -351,7 +351,7 @@ there is a function $e'$ such that:
 }
 
 \clm{ For any function $h ∈ L^2(ℝ^n, \Gauss^n)$, 
-\[E_{(x,\xtilde) \sim R}[|e'(x) - e'(\xtilde)|^2] ≥ E_{(x,\xtilde) \sim C}[|e'(x) - e'(\xtilde)|^2].\]
+\[E_{(x,\xtilde) \sim R}[|h(x) - h(\xtilde)|^2] ≥ E_{(x,\xtilde) \sim C}[|h(x) - h(\xtilde)|^2].\]
 }
 
 \end{multicols}

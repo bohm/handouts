@@ -1,0 +1,329 @@
+\input macros/cheatmac
+
+\usepackage{bm} % bold math
+
+% left align
+\usepackage{environ}
+\makeatletter
+\NewEnviron{Lalign}{\tagsleft@true\begin{alignat*}{1}\BODY\end{alignat*}}
+\makeatother
+
+% small spacing in align
+% \abovedisplayskip=0pt plus 3pt
+% \abovedisplayshortskip=0pt plus 3pt
+% \belowdisplayskip=0pt plus 3pt 
+% \belowdisplayshortskip=0pt plus 3pt
+
+\def\Pee{\mathbb{P}}
+\def\Zet{\mathbb{Z}}
+\def\Rko{\mathbb{R}}
+\def\Complex{\mathbb{C}}
+\def\Dis{\mathcal{D}}
+
+\def\Bigpi{{\rm Par}}
+\def\intcone{{\rm intcone}}
+\def\cone{{\rm cone}}
+\def\conv{{\rm conv}}
+\def\vert{{\rm vert}}
+\def\Las{{\textsc{Las}}}
+\def\Oh{{\rm O}}
+\def\supp{{\rm supp}}
+\def\enc{{\rm enc}}
+
+\newcommand{\eps}{\varepsilon}
+\let\cfix=\cdot
+
+% expectation, probability, variance
+\newcommand{\Esymb}{\mathbb{E}}
+\newcommand{\Psymb}{\mathbb{P}}
+\newcommand{\Vsymb}{Var}
+
+% better vector definition and some variations
+\renewcommand{\vec}[1]{{\bm{#1}}}
+\newcommand{\bvec}[1]{\bar{\vec{#1}}}
+\newcommand{\pvec}[1]{\vec{#1}'}
+\newcommand{\tvec}[1]{{\tilde{\vec{#1}}}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\B}{\mathcal{B}}
+\DeclareMathOperator*{\E}{\Esymb}
+\DeclareMathOperator*{\Var}{\Vsymb}
+\DeclareMathOperator*{\ProbOp}{\Psymb}
+
+\renewcommand{\Pr}{\ProbOp}
+
+\newcommand{\problemmacro}[1]{\textsc{#1}\xspace}
+\newcommand{\maxtwocsp}{\problemmacro{Max 2-Csp}}
+\newcommand{\uniquegames}{\problemmacro{Unique Games}}
+
+\newcommand{\norm}[1]{\lVert#1\rVert}
+\newcommand{\Norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\bignorm}[1]{\big\lVert#1\big\rVert}
+\newcommand{\Bignorm}[1]{\Big\lVert#1\Big\rVert}
+
+\newcommand{\normo}[1]{\norm{#1}_1}
+\newcommand{\Normo}[1]{\Norm{#1}_1}
+\newcommand{\bignormo}[1]{\bignorm{#1}_1}
+\newcommand{\Bignormo}[1]{\Bignorm{#1}_1}
+
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\Set}[1]{\left\{#1\right\}}
+\newcommand{\bigset}[1]{\big\{#1\big\}}
+\newcommand{\Bigset}[1]{\Big\{#1\Big\}}
+
+% absolute value
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\Abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\bigabs}[1]{\big\lvert#1\big\rvert}
+\newcommand{\Bigabs}[1]{\Big\lvert#1\Big\rvert}
+
+% square brackets
+\newcommand{\brac}[1]{[#1]}
+\newcommand{\Brac}[1]{\left[#1\right]}
+\newcommand{\bigbrac}[1]{\big[#1\big]}
+\newcommand{\Bigbrac}[1]{\Big[#1\Big]}
+
+\newcommand{\ia}{{ia}}
+\newcommand{\jb}{{jb}}
+\newcommand{\mper}{\,.}
+% \newcommand{\Mid}{\;\middle\vert\;}
+
+\newcommand{\iprod}[1]{\langle#1\rangle}
+\newcommand{\Iprod}[1]{\left\langle#1\right\rangle}
+
+\newcommand{\paren}[1]{(#1)}
+\newcommand{\Paren}[1]{\left(#1\right)}
+\newcommand{\bigparen}[1]{\big(#1\big)}
+\newcommand{\Bigparen}[1]{\Big(#1\Big)}
+
+\newcommand{\Ins}{\mathcal{I}}
+\newcommand{\El}{\mathcal{L}}
+\newcommand{\Scal}{\mathcal{S}}
+\newcommand{\defeq}{\coloneqq}
+\newcommand{\rank}{\textrm{rank}}
+\newcommand{\psdrank}{\textrm{rk}_{\textrm{psd}}}
+\newcommand{\degsos}{\textrm{deg}_{\textrm{sos}}}
+\newcommand{\detlb}{\textrm{detlb}}
+\newcommand{\disc}{\textrm{disc}}
+\newcommand{\herdisc}{\textrm{herdisc}}
+\newcommand{\Corr}{\textsc{Corr}}
+\newcommand{\Splus}{\mathcal{S}_+}
+\newcommand{\Tr}{\textrm{Tr}}
+\newcommand{\scalar}[2]{\langle #1, #2 \rangle}
+\newcommand{\vectext}{\textrm{vec}}
+\DeclareMathOperator{\val}{val}
+\DeclareMathOperator*{\Cov}{Cov}
+
+\newcommand{\Jtop}{J_{\text{top}}}
+\newcommand{\Jmid}{J_{\text{middle}}}
+\newcommand{\Jbot}{J_{\text{bottom}}}
+
+
+\long\def\algobox#1{\smallskip
+  \noindent
+~~\hbox{\fbox{\parbox[c]{0.30\textwidth}{#1}}}
+%\smallskip
+}
+
+\begin{document}
+\begin{multicols}{3}
+
+\title{An Algorithm for Komlós Conjecture}
+\title{Matching Banaszczyk's Bound}
+\author{Nikhil Bansal, Daniel Dadush, Shashwat Garg}
+\presenter{Martin B\"ohm}
+\centerline{\textit{Approximation and Online Seminar, Prague, Fall 2016/2017}}
+
+\section{Discrepancy}
+
+\dfn[Discrepancy]{We work in a universe $U = [n]$, and we are given a list of sets $\Scal$, where each $f ∈ \Scal$
+is a subset of $U$. Our goal is to color the universe by two colors so that all sets in $\Scal$ are as balanced
+as possible.
+
+Formally, given a coloring $x∈\{-1,1\}^n$, we have $\disc(\Scal,x) \defeq \max_{F ∈ \Scal} |∑_{i ∈ F} x_i|$ and
+our minimization goal $\disc(\Scal) = \min_{x ∈ \{-1,1\}^n} \disc(\Scal,x)$.
+}
+
+\dfn[Beck-Fiala setting]{ In the \emph{Beck-Fiala setting}, we have an additional constraint
+that the number of occurences of every element $i ∈ U$ is limited by $t$, i.e. $|\{F ∈ \Scal \bar i ∈ F\}| ≤ t$.
+}
+
+\thm[Beck-Fiala]{For any family $\Scal$ in the Beck-Fiala setting, it holds that $\disc(\Scal) ≤ 2t-1$.
+Proven via an iterative rounding algorithm.
+}
+
+\opn[Beck-Fiala]{In the Beck-Fiala setting, it could hold that $\disc(\Scal) ≤ \sqrt{t}$.
+}
+
+\thm[Banaszczyk]{$\disc(\Scal) ≤ \sqrt{t · \Oh(\log n)}$. Proven non-constructively using convex geometrical
+arguments. Rumored to be very difficult to get into.
+}
+
+\thm[B-D-G]{$\disc(\Scal) ≤ \sqrt{t · \Oh(\log n)}$ constructively using an SDP iterative rounding.
+}
+
+\section{Notation}
+$x_k\in [-1,1]^n ≡ $ coloring at the {\em end} of time step $k$. 
+
+\begin{itemize}
+\item Frozen variables $≡$ set to at least $(1-1/n)$ in abs. value.
+\item Active $≡$ others.
+\item $A_k ≡$ active vars at the start of the time step.
+\end{itemize}
+
+\begin{itemize}
+\item $S ∈ \Scal$ \emph{big} at time $k$ $≡$ $≥ at$ variables alive at that time.
+\item $\B_k ≡ $ big sets; $\mathcal{L}_k ≡$ little (non-big) sets.
+\end{itemize}
+\section{The Algorithm}
+Constants: $a = 6$, $γ ≡ 1/(n^2 \log n)$, $T ≡ (12/γ^2) \log n$.
+\begin{enumerate}
+\item Initialize $x_0(i) =0$ for all $i\in [n]$ and $A_1=\{1,2,...,n\}$. 
+%Let $\gamma$ be parameters to be defined later.
+\item  For each time step $k=1,2,\ldots, T$ repeat the following:
+\begin{enumerate}
+%\item Remove all sets $S_j$ with $|S_j\cap A(k-1)|\le 25\sqrt{t\,log\,n}$.
+\item \label{apx:step1}
+ Find a solution to the following SDP:
+\begin{eqnarray}
+	\textrm{Maximize }\sum_{i\in A_k} \|u_i\|_2^2 \nonumber\\
+	\textrm{s.t.} \qquad%\nonumber\\
+	\label{sdp1}  \|\sum_{i \in S\cap A_k} u_i\|_2^2 & = &  \ 0 \qquad  \textrm{for each }  S \in \mathcal{B}_k \nonumber\\
+%	\label{sdp2} \|\sum_{i \in A_k} x_{k-1}(i)u_i\|_2^2 & = &  \ 0 \\
+	\|\sum_{i \in S\cap A_k} u_i\|_2^2 & \leq &  \ 2\sum_{i\in S\cap A_k}\| u_i\|_2^2 \qquad   \textrm{for }  S \in \mathcal{L}_k \label{sdp3}  \nonumber\\
+	\| \sum_{i\in S\cap A_k}x_{k-1}(i) u_i\|_2^2  & \leq & \ 2\sum_{i\in S\cap A_k}\| u_i\|_2^2 \qquad   \textrm{for }  S \in \mathcal{L}_k \qquad \label{sdp4} \nonumber \\
+   	\|u_i\|_2^2 & \le &  1  \qquad \forall i \in A_k \nonumber 
+\end{eqnarray}
+\item 
+\label{apx:round}
+Let $r_k \in ℝ^n$ be a uniformly random $\pm 1$ vector.
+For each $i \in A_k$, update $x_k(i)=x_{k-1}(i)+\gamma\langle r_k, u_i\rangle$. 
+For  each $i \not\in A_k$, set $x_k(i)=x_{k-1}(i)$.
+
+\item
+\label{apx:rnd}
+ Initialize $A_{k+1}=A_{k}$.
+
+For each $i$, if $|x_k(i)|\geq 1-1/n$, update $A_{k+1} = A_{k+1} \setminus \{i\}$.
+\end{enumerate}
+\item 
+\label{stp3}
+Generate the final coloring as follows.
+For the frozen elements $i\notin A_{T+1}$, set $x_T(i)=1$ if $x_T(i)\geq 1-1/n$ and $x_T(i)=-1$ otherwise.
+For the alive elements $i \in A_{T+1}$, % randomly round $x_T(i)$ to $1$  with probability $(1+x_T(i))/2$ and $-1$ otherwise.
+set them arbitrarily to $\pm 1$. 
+\end{enumerate}
+
+\section{SDP}
+\begin{eqnarray*}
+	\textrm{Primal (matrix form): Maximize } I\bullet X && \quad \textrm{subject to}  \\
+	v_{S}v_{S}^T\bullet X & = &  \ 0 \qquad \textrm{for each }  S \in \mathcal{B}_k \\
+	(v_{S}v_{S}^T-2I_{S})\bullet X & \leq &  \ 0 \qquad \textrm{for each }  S \in \mathcal{L}_k \\
+	(x_{S}x_{S}^T-2I_{S})\bullet X & \leq &  \ 0 \qquad  \textrm{for each }  S \in \mathcal{L}_k \\
+	(e_ie_i^T)\bullet X & \leq &  \ 1 \qquad \forall i \in A_k \nonumber \\
+   	X & \succeq & \ 0
+\end{eqnarray*}
+\begin{eqnarray*}
+	\textrm{Dual: Minimize } \sum_{i\in A_k} b_i \quad \textrm{subject to} \\
+	\sum_{i\in A_k}  b_i e_ie_i^T  +   \sum_{S \in \mathcal{B}_k}\alpha_{S} v_{S}v_{S}^T \quad + & \\
+\qquad + \sum_{S \in \mathcal{L}_k}\left(\beta_{S} (v_{S}v_{S}^T-2I_{S})+\beta_{S}^x(x_{S}x_{S}^T-2I_{S})\right)  &\succeq   \ I \\
+	 ∀ i ∈ A_k\colon \qquad b_i  &\geq   \ 0 \\
+   	 ∀ S ∈ \B_k\colon  \qquad \alpha_{S}  &\in    \ \mathbb{R} \\
+	 ∀ S ∈ \mathcal{L}_k\colon \qquad  \beta_{S},\beta_{S}^x  &\geq   \ 0
+\end{eqnarray*}
+
+
+\section{Nontrivial steps: Bounding the dual}
+
+\lem[Matrix lemma]{
+Given an $h\times n$ matrix $M$ with columns $z_1,z_2,\dots,z_n$. If $\|z_i\|_2\le 1$ for all $i\in[n]$, then there exists a subspace $W$ of $\mathbb{R}^n$ satisfying:
+\begin{enumerate}[i)]
+\item $dim(W)\ge \frac{n}{2} $, and
+\item $\forall y\in W$, $\|My\|_2^2 \le 2\|y\|_2^2$
+\end{enumerate}
+}
+
+\thm[Applying the matrix lemma]{
+Let $\mathcal{V}$ be any finite collection of vectors  $v_1,\ldots,v_{h}$ in $\mathbb{R}^n$, and 
+for each $v \in \mathcal{V}$, there is some non-negative multiplier $\beta_v \geq 0$.
+Consider the operator  \[ B = \sum_{v \in \mathcal{V}}  \beta_v \left(  vv^T   - 2 \sum_{i=1}^n \langle v,e_i \rangle^2 e_ie_i^T \right)\]
+where $e_i$ are the standard basis of $\mathbb{R}^n$.
+Then there exists a subspace $W$ of dimension at least $n/2$ such that  $\langle y,By \rangle \leq 0$ for every $y \in W$, or equivalently $y^TBy \leq 0$  for every $y \in W$.
+}
+
+\lem[Good subspace lemma]{
+Let
+
+\[ B_k=\sum_{S \in \mathcal{L}_k} \left(\beta_{S} (v_{S}v_{S}^T-2I_{S})+\beta_{S}^x(x_{S}x_{S}^T-2I_{S})\right).\]
+
+Then, there exists a subspace $W \subseteq \mathbb{R}^{|A_k|}$ of dimension at least $|A_k|/2$ such that for all $y\in W$, $y^TB_ky\le 0$.
+}
+
+\thm{At time step $k$, the dual program has value $≥ |A_k|/3$.}
+
+\prf[Sketch]{Let $W_1 ≡$ subspace orthogonal to $C = \text{span}\{v_S \bar S ∈ \B_k\}$.
+
+$W_0 ≡ $ the subspace promised by the good subspace lemma. $W ≡ W_1 ∩
+W_0$. Consider $P_W$ projection to $W$. The $\alpha$ term disappears
+under this projection. Finally, we have:
+
+\begin{align*}
+\sum_{i\in A_k}b_i  & = \textrm{Tr}\left[\sum_{i\in A_k} b_ie_ie_i^T \right] \ge \textrm{Tr}\left[P_W\left(\sum_{i\in A_k} b_ie_ie_i^T \right)\right] \\
+&  \ge  \textrm{Tr}[P_W]=\textrm{dim}(W) \ge |A_k|/3  \\
+\end{align*}
+
+}
+
+\section{Local vs. global energy using martingales}
+\dfn[Signed discrepancy]{
+Let $D_S(k)$ denote the signed discrepancy of set $S\in\mathcal{S}$ at end of time step $k$ i.e.~$D_S(k)\equiv\sum_{i\in S}x_k(i)$.
+}
+
+\dfn{We say that 
+$S$ becomes {\em active} at time $k$ if $k$ is the first time step when $|S\cap A_k|\le at$.
+}
+
+\thm[Main discrepancy bound]{
+Fix a set $S\in\mathcal{S}$.
+% and $\lambda\ge 0$ satisfying $\lambda\gamma n^{3/2}<1$. 
+Then, for any $\lambda \geq 0 $, the discrepancy of $S$ at time step $T$ satisfies 
+\[ \Pr \left[ |D_S(T)| \geq \lambda\sqrt{t} \right] \leq 8 \exp(-\lambda^2/(100a)).\]
+}
+
+\dfn[Martingale]{
+Let $X_1,X_2,\ldots,X_n$ be a sequence of independent random variables on some probability space, and let 
+$Y_k$ be a function of $X_1,\ldots,X_k$. The sequence 
+$Y_0,Y_1,Y_2,\ldots,Y_n$ is called a martingale with respect to the sequence $X_1,\ldots,X_n$ if for all $k \in [n]$, 
+$\E[|Y_k|]$ is finite and $\E[Y_k| X_1,X_2,...,X_{k-1}]= Y_{k-1}$. We will use $\E_{k-1}[Z]$ to denote $\E[Z | X_1,X_2,...,X_{k-1}]$ where $Z$ is any random variable.
+}
+
+\thm[Freedman's inequality]{
+Let $Y_0,\ldots,Y_n$ be a martingale with respect to $X_1,\ldots,X_n$ such that 
+$|Y_k - Y_{k-1}| \leq M$ for all $k$, and let 
+\begin{align*}
+W_k &= \sum_{j=1}^k \E_{j-1}[(Y_j - Y_{j-1})^2] = \sum_{j=1}^k\textrm{Var}[Y_j|X_{1},\ldots,X_{j-1}].
+\end{align*}
+Then for all $\lambda \geq 0$  and $\sigma^2 \geq 0$, we have 
+\begin{align*}
+ \Pr[|Y_n - Y_0| \geq \lambda \textrm{ and } W_n \leq \sigma^2] 
+ \le 2 \exp\left(-\frac{\lambda^2}{2 (\sigma^2 + M \lambda/3)} \right).  
+\end{align*}
+}
+
+\obs[$D_S(k)$ is a martingale]{
+After $S$ becomes active, $D_S(k)$ behaves like a martingale with variance of increment at time step $k$  bounded by
+\[ \E_{k-1}[ (D_S(k)-D_S(k-1))^2]  \leq  2 \gamma^2 \sum_{i\in S\cap A_k} \|u_i^k \|_2^2 . \]
+}
+
+\dfn[Energy contribution]{ The energy change at time $k$ is a random variable given by
+\[ \Delta_kE_S = \gamma^2\sum_{i\in S} \langle r_k,u_i^k\rangle^2+2\gamma\langle r_k,\sum_{i\in S}x_{k-1}(i)u_i^k\rangle \]
+
+The first term will be the \emph{quadratic energy change} and the
+second will be the \emph{linear energy change}, i.e., 
+
+\[\Delta_kQ_S ≡ \gamma^2\sum_{i\in S} \langle r_k,u_i^k\rangle^2\]
+\[ \Delta_kL_S ≡ 2\gamma\langle r_k,\sum_{i\in S}x_{k-1}(i)u_i^k\rangle\]
+
+}
+
+\end{multicols}
+\end{document}
