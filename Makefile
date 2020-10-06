@@ -23,6 +23,8 @@ spring:
 	${texinputs} pdflatex "Spring School - PCP Theorem And Its Applications.tex"
 khotmosh:
 	${texinputs} pdflatex "Khot, Moshkovitz - NP-hardness of Approximately Solving Linaer Equations over Reals.tex"
+threehalves:
+	${texinputs} pdflatex "threehalves.tex"
 
 clean:
 	rm -f *.log *.pdf *.fmt *.aux

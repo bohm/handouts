@@ -1,0 +1,538 @@
+\input macros/cheatmac
+
+\usepackage{bm} % bold math
+
+% left align
+\usepackage{environ}
+\makeatletter
+\NewEnviron{Lalign}{\tagsleft@true\begin{alignat*}{1}\BODY\end{alignat*}}
+\makeatother
+
+\usepackage[rgb]{xcolor}
+\colorlet{utgreen}{green!50!black}
+\colorlet{utred}{red!50!black}
+
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+% \usepackage{microtype}
+\usepackage{accents}
+\usepackage{varwidth}
+\usepackage{tikz}
+\usetikzlibrary{arrows,arrows.meta,math,patterns,decorations, shapes}
+\usetikzlibrary{calc, fit, shapes,intersections}
+\usetikzlibrary{decorations,decorations.pathreplacing,decorations.pathmorphing,patterns}
+\usetikzlibrary{positioning}
+\tikzstyle{vertex} = [fill=black,circle,scale=0.5]
+\pgfdeclarelayer{bg}    % declare background layer
+\pgfsetlayers{bg,main}  % set the order of the layers (main is the standard layer)
+
+
+% small spacing in align
+% \abovedisplayskip=0pt plus 3pt
+% \abovedisplayshortskip=0pt plus 3pt
+% \belowdisplayskip=0pt plus 3pt 
+% \belowdisplayshortskip=0pt plus 3pt
+
+\newcommand{\netflow}[2]{\nabla #1_{#2}}
+
+\newcommand{\Qtwo}{\mathbb{Q}_2}
+\DeclareMathOperator{\bits}{bits}
+\newcommand{\encl}[1]{\| #1\|}
+\DeclareMathOperator{\binenc}{bin}
+\newcommand{\encb}[1]{\binenc(#1)}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{ℝ}
+\newcommand{\Vm}{V \setminus \{t\}}
+\newcommand{\VN}{V^-}
+\newcommand{\VP}{V^+}
+\newcommand{\VZ}{V^0}
+\newcommand{\globpot}{\Xi}
+\newcommand{\plenty}[1]{3n(d_{#1}+1)}
+
+%\newcommand{\Sc}{.}
+%\newcommand{\Ss}{.}
+\newcommand{\Sc}{S}
+\newcommand{\Ss}{\bar{S}}
+\newcommand{\Bars}{\bar{S}}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\newcommand{\instance}{\mathcal{I}}
+
+\newcommand{\kosher}{anchored}
+\newcommand{\solid}{solid}
+
+%\newcommand{\anchors}{anchors}
+%\newcommand{\anchor}{anchor}
+
+
+%\newcommand{\ole}{\overleftarrow}
+\newcommand{\ole}[1]{\accentset{\leftarrow}{#1}}
+%\newcommand{\obe}[1]{\overleftrightarrow{#1}}
+\newcommand{\obe}[1]{\accentset{\leftrightarrow}{#1}}
+
+\def\Nscr{\mathcal{N}}
+\def\Bscr{\mathcal{B}}
+\def\Cscr{\mathcal{C}}
+\def\Pscr{\mathcal{P}}
+\def\Lscr{\mathcal{L}}
+\def\Qscr{\mathcal{Q}}
+\def\Fscr{\mathcal{F}}
+\def\Uscr{\mathcal{U}}
+\def\Wscr{\mathcal{W}}
+\def\lscr{\ell}
+
+\def\calB{\mathcal{B}}
+\def\calL{\mathcal{L}}
+
+\def\cupp{\stackrel{.}{\cup}}
+\newcommand{\sfrac}[2]{{\textstyle\frac{#1}{#2}}}
+
+\def\Bigpi{{\rm Par}}
+\def\intcone{{\rm intcone}}
+\def\cone{{\rm cone}}
+\def\conv{{\rm conv}}
+\def\vert{{\rm vert}}
+\def\Las{{\textsc{Las}}}
+\def\Oh{{\rm O}}
+\def\supp{{\rm supp}}
+\def\enc{{\rm enc}}
+
+\DeclareMathOperator{\Ex}{Ex}
+\DeclareMathOperator{\Deficit}{Def}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\low}{\mathrm{low}}
+\newcommand{\lb}{\mathrm{lb}}
+\newcommand{\defeq}{\coloneqq}
+
+\newcommand{\varX}{{\textcolor{OliveGreen}X}}
+\newcommand{\varF}{{\textcolor{RedOrange}F}}
+\newcommand{\varK}{{\textcolor{blue!70}K}}
+
+\newcommand{\mc}[1]{\ensuremath{\mathcal{#1}}\xspace}
+\newcommand{\dist}[1]{\ensuremath{\mathrm{d}(#1)}\xspace}
+\newcommand{\dis}{\ensuremath{\mathrm{d}}\xspace}
+\newcommand{\lab}{\ensuremath{\mathrm{\ell}}\xspace}
+\newcommand{\lap}{LAP\xspace}
+\newcommand{\laps}{LAPs\xspace}
+\newcommand{\opt}{\ensuremath{\mathrm{OPT}}\xspace}
+\newcommand{\clo}{\ensuremath{\mathrm{closest}}\xspace}
+\newcommand{\anch}{\ensuremath{\alpha}\xspace}
+\newcommand{\Term}{\ensuremath{\mc X}\xspace}
+\newcommand{\kMST}{$k$-hop MST\xspace} %{\mbox{$k$-MST}\xspace}
+\newcommand{\kST}{$k$-hop M\smash{\v S}T\xspace} %{\mbox{$k$-MST}\xspace}
+\newcommand{\Pol}{\ensuremath{\textrm{P}}}
+\newcommand{\NP}{\ensuremath{\textrm{NP}}}
+\newcommand{\diameter}{d}
+\newcommand{\UFL}{UFL\xspace}
+\newcommand{\emptylabel}{\infty}
+\newcommand{\emptynode}{v_{\emptyset}} %{\emptyset_V}
+\newcommand{\topt}{\opt}
+\newcommand{\stree}{\ensuremath{\check{S}}\xspace} 
+\newcommand{\leftneighbor}{\overleftarrow{n}}
+\newcommand{\rightneighbor}{\overrightarrow{n}}
+\newcommand{\Nat}{\mathbb{N}}
+\newcommand{\optk}{\ensuremath{\mathit{OPT_k}}\xspace}
+
+
+\DeclareUnicodeCharacter{9001}{\langle}
+\DeclareUnicodeCharacter{9002}{\rangle}
+
+% expectation, probability, variance
+\newcommand{\Vsymb}{Var}
+
+% better vector definition and some variations
+\newcommand{\dir}[1]{{\bm{#1}}}
+
+
+\long\def\algobox#1{\smallskip
+  \noindent
+~~\hbox{\fbox{\parbox[c]{0.30\textwidth}{#1}}}
+%\smallskip
+}
+
+\begin{document}
+\begin{multicols}{3}
+
+  \title{Min-Cost k-hop Steiner and Spanning Trees}
+\author{M. Böhm, R. Hoeksma, N. Megow, L. Nölke and B. Simon}
+\presenter{Martin B\"ohm}
+\centerline{\textit{COG Seminar, Winter 2020/2021}}
+
+Given metric space $(V,\dis)$ with $n$ points and a distance function $\dis: V\times V \rightarrow \mathbb{Q}_+$, a root $r\in \Term$, and an integer~$k\geq 1$.
+
+\dfn[$k$-hop MST]{
+A \textit{k-hop spanning tree} is a tree $T$ rooted at $r$ that spans all points and has \emph{depth} at most~$k$
+-- that is, for $v\in V_{\stree}$, the number of edges in the $r$-$v$ path in~$T$ is at most~$k$.
+}
+
+\dfn[$k$-hop MŠT]{
+Given also a set of terminals $\Term$, a \textit{k-hop Steiner tree}
+is a tree $\stree=(V_{\stree},E_{\stree})$ rooted at $r$ that spans
+all points in~$\Term$ and has depth at most $k$.
+}
+
+\textbf{Remark:} The Czech letter Š is pronounced the same as the
+start of the German name Steiner and we use it as homage to the early
+work of Jarník and Kössler on Steiner trees.
+
+\section{Hardness and other previous results}
+
+\begin{itemize}
+\item $k$-hop MST/MŠT is NP-hard even for metrics.
+\item $2$-hop MST is MaxSNP-hard even with edges $1$ or $2$ $\Rightarrow$ no PTAS.
+\item A lower bound of $1.463$ from Uncapacitated Facility Location for $2$-hop MST.
+\item For non-metric spaces, even for 2-hop MST, no~$(1-\varepsilon)\log(n)$-approximation unless $\NP \subseteq \text{DTIME}[n^{O(\log\log n)}]$.
+\item Approximation algorithm for metrics known (Kantor, Peleg), but has approximation ratio $1.52\!\cdot\! 9^{k-2}$ -- actually for the \emph{hierarchical facility location problem}.
+\item A PTAS for Euclidean metrics.
+\end{itemize}
+
+\section{On a line}
+
+\thm[Line Polynomiality]{
+On path metrics, \kST can be solved exactly in time $O(kn^5)$.
+}
+
+\textbf{Key observation:} A vertex never attaches to the left of a subroot, as shown:
+
+\colorlet{stcolor}{green!40!black}
+\begin{figure}[H]%{r}{0.4\textwidth}
+		\centering
+		\begin{tikzpicture}[y=10pt, x=40pt]
+		\draw[thick] (.5,0) -- (3.5,0);
+		\draw[thick, dashed] (0,0) -- (4,0);
+		\foreach \i in {1,2,3}
+		\node[vertex, scale = .8] () at (\i, 0) {};
+		
+		
+		{\color{stcolor}
+			\node[vertex, fill=stcolor, label=left: $i$] (i) at (1, 2) {};
+			\node[vertex,fill=stcolor, label=right: $s$] (h) at (2, 2.5) {};
+			\node[vertex,fill=stcolor, label=right: $j$] (j) at (3, 1) {};
+			
+			\draw (h) -- (i);
+			\draw [dotted] (i) -- (j);
+		}
+		
+		\node[anchor=west] at (-1.5,0) {$G$};
+		
+		\node[anchor=west,stcolor] at (-1.5,2.2) {Steiner tree};
+\end{tikzpicture}
+\caption{The optimal \kST never attaches $j$ to $i$ if $s$ in the middle has a lower depth.}
+\label{fig:lineobservation}
+\end{figure}
+
+We define a recursive expression $A[p,s,a,b]$ for $p\in \Nat$ and
+$s,a,b \in [n]$. Intuitively,
+it yields the minimum cost $p$-hop spanning tree $\stree$ rooted
+at $v_s$ that contains all vertices $v_i$ with~$i\in[a,b]$ and satisfies $s \notin [a,b]$.	
+
+
+
+\begin{figure}[H]\centering
+		\colorlet{stcolor}{green!40!black}
+		\begin{tikzpicture}[yscale = .5, xscale = .6, decoration={brace, amplitude=5pt}, pt/.style={minimum size = 25pt}]
+		\def\sc{.5}
+		\def\h{.35}
+		\draw[thick, black!40] (1,0) -- (11,0);
+		% \foreach \i in {1,2,3,4,6,8,9}
+		% \draw (\i,0.1) -- + (0,-0.2);
+		
+		\node[vertex] (y) at (1, 0)  {}; % a
+		\node[pt] (y1) at (1,.7) {};
+		\node[pt] (y2) at (1,-.1) {};
+		\node[pt] (la) at (1,\h) { $a$};
+		
+		%                \draw (2, 0.1) -- + (0,-0.2); % first triangle (i)
+		
+		%                \draw (3, 0.1) -- + (0,-0.2); % second trinagle (j)
+		\node[vertex] () at  (5, 0) {}; % midpoint
+		\node[pt] (lc) at (5,\h) { $c$};
+		
+		\node[vertex] () at (8, 0.0)  {}; % s'
+		\node[pt] (lr1) at (8,\h+.05) { $s'$};
+		
+		\node[vertex] (b) at (10, 0) {}; % b
+		\node[pt] (lb) at (10,.38) { $b$};
+		
+		\node[vertex] () at (11, 0)  {}; % s
+		\node[pt] (lr) at (11,\h) { $s$};
+		
+		% Recursive expressions
+		\node[] (lrec1) at (2.7,-.8) {\scriptsize $A[p,s,a,c\!-\!1]$};
+		\node[] (lrec2) at (6.1,-1.2) {\scriptsize $A[p\!-\!1,s',c,s'\!-\!1]$};
+		\node[] (lrec3) at (9.3,-.8) {\scriptsize $A[p\!-\!1,s',s'\!+\!1, b]$};
+		
+		
+		\node[vertex, stcolor] (i) at (2, 1.5) {};
+		\node[vertex,scale = \sc] () at (i |- y) {};
+		%                \node[vertex,scale = \sc] (il) at (1.5, 0) {};
+		\node[vertex,scale = \sc] (ir) at (2.6, 0) {};
+		\node[vertex,scale = \sc]  at (1.3, 0) {};
+		\node[vertex,scale = \sc]  at (1.65, 0) {};
+		\node[vertex,scale = \sc]  at (2.3, 0) {};
+		\node[vertex, stcolor] (j) at (4, 1.5) {};
+		\node[vertex,scale = \sc] (jl) at (3.4, 0) {};
+		\node[vertex,scale = \sc] (jr) at (4.4, 0) {};
+		\node[vertex,scale = \sc] () at (j |- y) {};
+		\node[vertex, stcolor] (k) at (6.2, 1.1) {};
+		\node[vertex,scale = \sc]  at (5.4, 0) {};
+		\node[vertex,scale = \sc]  at (5.8, 0) {};
+		%                \node[vertex,scale = \sc] (kl) at (5.7, 0) {};
+		\node[vertex,scale = \sc] (kr) at (7.1, 0) {};
+		\node[vertex,scale = \sc] () at (k |- y) {};
+		\node[vertex, stcolor] (l) at (8.9, 1.1) {};
+		\node[vertex,scale = \sc] (ll) at (8.4, 0) {};
+		\node[vertex,scale = \sc]  at (9.5, 0) {};
+		\node[vertex,scale = \sc]  at (10.3, 0) {};
+		\node[vertex,scale = \sc]  at (10.6, 0) {};
+		%                \node[vertex,scale = \sc] (lr) at (9.4, 0) {};
+		\node[vertex,scale = \sc] () at (l |- y) {};
+		\node[vertex, stcolor] (r1) at (8,  1.5) {};
+		\node[vertex, stcolor] (s) at (11, 2.2) {};
+		
+		\begin{scope}[/pgf/decoration/raise=3pt]                
+		\draw [decorate,line width=1pt] (jr |- y2) -- (y |- y2);
+		\draw [decorate,line width=1pt] (kr |- y2) -- (lc |- y2);
+		\draw [decorate,line width=1pt] (b |- y2) -- (ll |- y2);
+		\end{scope}
+		
+		
+		\draw[thick] (y) -- (jr);
+		\draw[thick] (lc |- y) -- (kr);
+		\draw[thick] (b |- y) -- (ll |- y);
+		
+		{\color{stcolor}
+			
+			\begin{scope}
+			\draw[line width= .6 pt] (i) to [bend left=5] (s);
+			\draw[line width= .6 pt] (j) to [bend left=2] (s);
+			\draw[line width= .6 pt] (r1) to [bend right=5] (s);
+			\draw[line width= .6 pt] (r1) to [bend right=2] (k);
+			\draw[line width= .6 pt] (r1) -- (l);
+			
+			\draw[line width= .3 pt, fill = stcolor!20] (i) -- (y |- y1) -- (ir |- y1) -- (i);
+			\draw[line width= .3 pt, fill = stcolor!20] (j) -- (jl |- y1) -- (jr |- y1) -- (j);
+			\draw[line width= .3 pt, fill = stcolor!20] (k) -- (lc |- y1) -- (kr |- y1) -- (k);
+			\draw[line width= .3 pt, fill = stcolor!20] (l) -- (ll |- y1) -- (b |- y1) -- (l);
+			
+			\end{scope}
+		}
+		\node[vertex, stcolor] () at (8.9, 1.1) {};
+		\node[vertex, stcolor] () at (6.2, 1.1) {};
+		\node[vertex, stcolor] () at (2, 1.5) {};
+		\node[vertex, stcolor] () at (4, 1.5) {};
+		
+		\node[anchor=west] at (0,0) {$G$};
+		
+		\node[anchor=west,stcolor] at (0,2.2) {Steiner tree};
+		
+		
+		\end{tikzpicture}
+		%\caption{A visualization of the recursive computation of the expression $A[p,s,a,b]$. For one selection
+		%  of the right-most subroot $s'$ and the left-most point $c$ of the subtree rooted at $s'$, we make three recursive calls:
+		%  one for the left subtree of $s'$, one for the right subtree (if it exists) and one recursive call for
+		%  the shorter interval $[a,c-1]$.}
+		\caption{Computation of $A[p,s,a,b]$ with three recursive calls.} %:		one for the left and one for the (possibly empty) right subtree of $s'$, and one for $[a,c-1]$.}\vspace*{-12 pt}
+		\label{fig:linerecursion}
+	\end{figure}
+
+              
+\section{On HSTs}
+
+
+\lem{
+Imagine vertices numbered $1$ to $n$ from left to right. Fix a vertex
+$s$ of depth $l$ and its rightmost child $s'$ of depth $l+1$, and an
+interval $[i,j]$. There exists a minimum-cost $k$-hop spanning tree
+$T$ with these vertices and a border vertex $b \in [s,s'-1]$ such that
+$s'$ spans all vertices in $[b+1,j]$.
+}
+
+$\Rightarrow$ a similar DP as for the line. Combine with randomized HST embedding of any metric:
+
+\thm[Althaus et al.]{There is a randomized algorithm that computes a
+feasible $k$-hop spanning tree whose expected cost is $O(\log n) \cdot \optk$.
+The running time of this algorithm is $O(n^5 k)$.
+}
+
+\section{General trees}
+
+\thm[$k$-hop on trees]{
+In tree metrics, \kST can be solved exactly in time $n^{O(k)}$. 
+}
+
+\textbf{Big picture:} Compute a dynamic program for a sub-metric
+(sub-tree) rooted at $v$, denoted by $T[v]$. Some vertices from $T[v]$
+can be \textit{anchored} by a vertex of the Steiner tree of depth $l <
+k$ that is outside $T[v]$, and there might be up to $k$ vertices
+inside of $T[v]$ which are promised to have a specific depth.
+
+
+\tikzstyle{vertex} = [fill=black,circle,scale=0.5]
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[xscale = .6, yscale = .6]
+	%
+	\filldraw[utgreen!20, draw=utgreen, thick] (1.5,1) -- (7.5,1) -- (7,2) -- (5,3) -- (2.5,2) -- (1.5,1);
+	%
+	%Vertices
+	%
+	\foreach \a/\b/\n/\p in {6/5/r/r,
+		4.5/4/v11/r, 5.5/4/v12/r, 6.5/4/v13/r, 9/4/v14/r,
+		2/3/v21/v11, 5/3/v/v11,		8/3/v23/v13,		9.5/3/v24/v14, 11/3/v25/v14,
+		.5/2/v31/v21, 2/3/v32/v21,		2.5/2/v1/v, 4/2/v2/v, 7/2/v3/v,		10/2/v36/v25, 11/2/v37/v25, 12/2/v38/v25,
+		0/1/v41/v31,		1.5/1/v42/v1, 2.5/1/v43/v1, 3/1/v44/v1,		3.7/1/v45/v2, 4.4/1/v46/v2,		7.5/1/v47/v3,		11.5/1/v48/v38, 12.5/1/v49/v38%
+	}{
+		\node[vertex](\n) at (\a,\b) {};
+	}
+	%Edges
+	%
+	\foreach \a/\b/\n/\p in {6/5/r/r,
+		4.5/4/v11/r, 5.5/4/v12/r, 6.5/4/v13/r, 9/4/v14/r,
+		2/3/v21/v11, 5/3/v/v11,		8/3/v23/v13,		9.5/3/v24/v14, 11/3/v25/v14,
+		.5/2/v31/v21, 2/3/v32/v21,		3.5/2/v1/v, 5/2/v2/v, 7/2/v3/v,		10/2/v36/v25, 11/2/v37/v25, 12/2/v38/v25,
+		0/1/v41/v31,		2.5/1/v42/v1, 3.5/1/v43/v1, 4/1/v44/v1,		5/1/v45/v2, 5.5/1/v46/v2,		7.5/1/v47/v3,		11.5/1/v48/v38, 12.5/1/v49/v38%
+	}{	
+		\draw[black, thick](\n) -- (\p);
+	}
+	\node[anchor=west]() at (6.1,5.3) {$r\!=\!{\color{utred}\rho_0(v)}$};
+	%
+	\node[draw = black, fill= utgreen!20,  very thick]() at (4.9,3) {$v$};
+	\node[]() at (2.95,1.85) {$v_1$};
+	\node[]() at (4.5,1.85) {$v_2$};
+	%\node[]() at (6.7,1.85) {$v_3$};
+	%
+	\node[]() at (.95,.6) {\color{utgreen}$\phi_1(v)$};
+	%\node[]() at (7.65,2.15) {\color{utgreen}$\phi_2(v)$};
+	\node[]() at (8.3,1.85) {$v_3\!=\!\color{utgreen}\phi_2(v)$};
+	\node[]() at (8.05,.6) {\color{utgreen}$\phi_4(v)$};
+	\node[]() at (5.9,3.2) {\color{utgreen}$\phi_3(v)$};
+	%
+	\node[]() at (4.05,4.5) {\color{utred}$\rho_1(v)$};
+	%	\node[]() at (11.15,.6) {\color{utred}$\rho_4$};
+	\node[]() at (1.75,3.5) {\color{utred}$\rho_3(v)$};
+	\node[]() at (-.7,1) {\color{utred}$\rho_2(v)$};
+	%
+	\node[]() at (5.8,1.8) {\color{utgreen!50!black}$T[v]$};
+	\end{tikzpicture}
+	\caption{Possible anchoring guarantees $\rho(v)$, $\phi(v)$ for vertex $v$. The $\rho(v)$ are the external guarantees and $\phi(v)$ the internal ones (used potentially as $\rho(v)$ for other subtrees). Its subtree $T[v]$ with respect to the underlying metric (black) is highlighted in green. To satisfy the anchoring guarantees, in a Steiner tree, $v$ must be anchored to either $\phi_2(v)$ or $\rho_2(v)$. Note that $k=4$ and $\rho_4(v)$ is undefined. }
+	\label{fig:rhophi}
+\end{figure}
+
+\textbf{A detour on notation.} How to handle partially computed
+solutions for a MŠT/MST, when the optimal solution might not even be a
+tree on $T[v]$?
+
+\dfn[Anchoring]{
+Let~\stree be a Steiner tree on~$(V,\dis)$ with terminals $\Term\subseteq V$ and root~$r\in\Term$. Let $V_{\stree}\subseteq V$ with $\Term\subseteq V_{\stree}$ be the set of vertices in $\stree$.
+The tree $\stree$ can be viewed as a function mapping a vertex of~$V_{\stree} \setminus\{r\}$ to its immediate predecessor, i.e., its parent in~$\stree$. 
+More generally, for $U \subseteq V$, call a function $\anch : U\setminus\{r\} \longrightarrow V$ an \emph{anchoring on~$U$}.}
+
+% The \emph{anchor} $\anch(v)$ of vertex~$v$ represents its parent in \stree, and we set $\anch(w) = w$ if $w \notin V_{\stree}$.
+
+\dfn[Labeling]{
+Consider a function assigning to each vertex $v\in V_{\stree}$ its depth, i.e. the number of edges on the $r$-$v$ path in $\stree$. 
+A vertex $v\in V_{\stree} \setminus\{r\}$ of depth $x$ is anchored to the unique vertex of depth $x-1$ that is of minimum distance to $v$. Generalizing again to subsets $U \subseteq V$, we call a function $\lab : U \longrightarrow \{0,1,\ldots, k\}\cup\{\emptylabel\}$ a \emph{labeling on $U$}.
+% We call $\lab(w)$ the \emph{label of $w$} and set $\lab(w) = \infty$ if $w \notin V_{\stree}$.
+}
+
+\dfn[Labeling-anchoring pair]{
+A pair $(\lab,\anch)$ is called a \emph{labeling-anchoring pair (\lap) on $U$} if the labeling \lab and anchoring \anch are consistent,
+i.e. for every {$u\in U\setminus\{r\}$} for 
+which $\anch(u)\in U$ and $\lab(u)\neq \emptylabel$,
+we have $\lab(u) = \lab(\anch(u))+1$. Moreover, if $\lab(u)
+= \emptylabel$ then $u\notin\Term$ and
+$\alpha^{-1}(u)=\{u\}$.
+}
+
+\section{Bounded treewidth}
+
+\thm[Treewidth $k$-hop]{
+On metrics of treewidth $\omega$, \kST can be solved exactly in time $n^{O(\omega k)}$.
+}
+
+\textbf{Big picture:} Use the tree decomposition (say a nice tree
+decomposition) and store an internal and external anchor for every
+vertex in the bag node $S_b$.
+\begin{figure}[H]\centering
+		\begin{tikzpicture}[scale=0.6,vt/.style ={draw,  cross out, minimum size=3pt, inner sep=1pt}, 
+		every label/.style={fill=white, inner sep=1pt, label distance=3pt},
+		subset/.style={set,rounded corners, dashed, thick},
+		zig/.style={decorate, decoration={coil, aspect=0, segment length=15pt, amplitude=1pt}}]
+		\colorlet{set}{green!50!black}
+		\draw[subset] (-1, 0) rectangle (-5, 2);
+		\node[set,anchor=north west] at (-5,2) {$V\setminus (S_b \cup C_b)$};
+		\draw[subset] (0, 0) rectangle (2, 2); 
+		\node[set,anchor=north west] at (0,2) {$S_b$};
+		\draw[subset] (3, 0) rectangle (7, 2);
+		\node[set,anchor=north east] at (7,2) {$C_b$};
+		
+		\node[vt, label=below:{$u=\rho^u_2=\rho^w_2$}] at (0.5,0.3) (u) {};
+		\node[vt, label=above:{$w=\rho^w_3$}] at (1.5,1.4) (v) {};
+		
+		\node[vt, label=below:$\rho^u_3$] at (-1.4,0.3) (ru3) {};
+		\node[vt, label=above:$\rho^w_1$] at (-1.7,1.4) (rv1) {};
+		\node[vt, label=left:$\rho^u_1$] at (-3.7,1.3) (ru1) {};
+		\node[vt, label=below:{$\rho^u_0=\rho^w_0=r$}] at (-4,0.7) (r) {};
+		
+		\node[vt, label=below:$\phi^u_1$] at (3.4,0.3) (pu1) {};
+		\node[vt, label=right:{$\phi^u_2=\phi^w_2$}] at (5.5,0.6) (pu2) {};
+		\node[vt, label=above:$\phi^w_1$] at (3.7,1.4) (pv1) {};
+		
+		\draw[zig, black!40, densely dotted, thick] (u.center) -- (v.center) --(rv1.south) -- (ru1.west) -- ($(r.center) + (0,0.1)$) -- (ru3.center) -- (u.center) -- (pu1.center) -- ($(pu2.center) + (-0.23,-0.01)$) -- (pv1.center) -- (v.center);
+		
+		\end{tikzpicture}
+		\caption{Possible values of $\rho_i$ and $\phi_i$ for two vertices $u$ and $w$.}
+		\label{fig:twrhophi}
+	\end{figure}
+
+\section{Bounded highway dimension}
+
+\dfn[Ball]{ $B_{r}(v)\equiv\{u\in V~|~\dist{u,v}\leq r\}$}
+
+\dfn[Highway dimension]{Given a universal constant $c\ge 4$, the \emph{highway dimension} of a graph $G$ is the smallest integer $h$ such that for every $r\geq0$ and $v\in V$, there is a set of $h$ vertices in~$B_{cr}(v)$ that hits all shortest paths of length more than $r$ that lie entirely in~$B_{cr}(v)$.
+}
+
+\dfn[$\delta$-net]{
+A $\delta$-net of a graph $G$ is defined as a subset $U$ of $V$ such that for all
+$u\in V$, there exists $v\in U$ with $\dist{u,v}\leq \delta$ and for
+all $u,v\in U$, we have $\dist{u,v}>\delta$.
+}
+
+\thm[Feldman, Fung, Könemann, Post]{
+For a graph $G$ of constant highway dimension and a problem $\mc P$ satisfying the following conditions, a $(1+\varepsilon)$-approximation can be computed in quasi-polynomial time:
+
+\begin{enumerate}
+			\item Opt. solution of $\mc P$ can be computed in time $n^{O(\omega)}$ for a graph of treewidth $\omega$;
+			\item A constant-approximation of $\mc P$ on metric graphs can be computed in polynomial time;
+			\item The diameter of the graph can be assumed to be $O(n\cdot \opt_G)$, where $\opt_G$ is the cost of an optimal solution in $G$;
+			\item Opt. solution for $\mc P$ on a $\delta$-net $U$ has cost at most $\opt_G + O(n\delta)$;
+			\item The objective function of $\mc P$ is linear in the edge cost;
+			\item A solution for $\mc P$ on a $\delta$-net $U$ can be converted to a solution on $V$ for a cost of $O(n\delta)$.
+		\end{enumerate}
+}
+              
+\thm[Highway MŠT]{
+  For a metric induced by a graph of bounded highway dimension and a constant~$k$, let \optk be the cost of a \kST. A $(k+1)$-hop Steiner tree of cost at most $(1+\varepsilon)\optk$, for $\varepsilon >0$, can be computed in quasi-polynomial~time.
+}
+
+\section{Open problems}
+
+\begin{enumerate}
+\item Improve the approximation ratio for $k$-hop MST on general metrics to something lower than
+  $1.52\!\cdot\! 9^{k-2}$.
+\item Does there exist a constant approximation for $k$-hop MST for any $k$?
+\item \textit{Resource augmentation} -- can we find a cheap $(k+1)$-hop MST proportional to the
+  optimal cost of $k$-hop MST?
+\end{enumerate}
+  
+\end{multicols}
+\end{document}

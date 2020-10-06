@@ -137,14 +137,12 @@
 
 \dfn[Discrepancy]{We work in a universe $U = [n]$, and we are given a list of sets $\Scal$, where each $f ∈ \Scal$
 is a subset of $U$. Our goal is to color the universe by two colors so that all sets in $\Scal$ are as balanced
-as possible.
-
-Formally, given a coloring $x∈\{-1,1\}^n$, we have $\disc(\Scal,x) \defeq \max_{F ∈ \Scal} |∑_{i ∈ F} x_i|$ and
-our minimization goal $\disc(\Scal) = \min_{x ∈ \{-1,1\}^n} \disc(\Scal,x)$.
+as possible. Formally: given a coloring $x∈\{-1,1\}^n$, we have $\disc(\Scal,x) \defeq \max_{F ∈ \Scal} |∑_{i ∈ F} x_i|$ and
+our goal is $\disc(\Scal) = \min_{x ∈ \{-1,1\}^n} \disc(\Scal,x)$.
 }
 
 \dfn[Beck-Fiala setting]{ In the \emph{Beck-Fiala setting}, we have an additional constraint
-that the number of occurences of every element $i ∈ U$ is limited by $t$, i.e. $|\{F ∈ \Scal \bar i ∈ F\}| ≤ t$.
+that the number of occurences of every element $i ∈ U$ is limited by $t$, i.e. $|\{F ∈ \Scal \mid i ∈ F\}| ≤ t$.
 }
 
 \thm[Beck-Fiala]{For any family $\Scal$ in the Beck-Fiala setting, it holds that $\disc(\Scal) ≤ 2t-1$.
@@ -236,10 +234,10 @@ set them arbitrarily to $\pm 1$.
 
 \lem[Matrix lemma]{
 Given an $h\times n$ matrix $M$ with columns $z_1,z_2,\dots,z_n$. If $\|z_i\|_2\le 1$ for all $i\in[n]$, then there exists a subspace $W$ of $\mathbb{R}^n$ satisfying:
-\begin{enumerate}[i)]
+\begin{inparaenum}
 \item $dim(W)\ge \frac{n}{2} $, and
-\item $\forall y\in W$, $\|My\|_2^2 \le 2\|y\|_2^2$
-\end{enumerate}
+\item $\forall y\in W$, $\|My\|_2^2 \le 2\|y\|_2^2$.
+\end{inparaenum}
 }
 
 \thm[Applying the matrix lemma]{
@@ -250,17 +248,17 @@ where $e_i$ are the standard basis of $\mathbb{R}^n$.
 Then there exists a subspace $W$ of dimension at least $n/2$ such that  $\langle y,By \rangle \leq 0$ for every $y \in W$, or equivalently $y^TBy \leq 0$  for every $y \in W$.
 }
 
-\lem[Good subspace lemma]{
+\lem[$B$ to $B_k$]{
 Let
 
 \[ B_k=\sum_{S \in \mathcal{L}_k} \left(\beta_{S} (v_{S}v_{S}^T-2I_{S})+\beta_{S}^x(x_{S}x_{S}^T-2I_{S})\right).\]
 
-Then, there exists a subspace $W \subseteq \mathbb{R}^{|A_k|}$ of dimension at least $|A_k|/2$ such that for all $y\in W$, $y^TB_ky\le 0$.
+If there is a subspace $W$ of dimension at least $n/2$ where $B \preceq 0$, then on the same subspace for all $y\in W$, $y^TB_ky\le 0$.
 }
 
 \thm{At time step $k$, the dual program has value $≥ |A_k|/3$.}
 
-\prf[Sketch]{Let $W_1 ≡$ subspace orthogonal to $C = \text{span}\{v_S \bar S ∈ \B_k\}$.
+\prf[Sketch]{Let $W_1 ≡$ subspace orthogonal to $C = \text{span}\{v_S \mid S ∈ \B_k\}$.
 
 $W_0 ≡ $ the subspace promised by the good subspace lemma. $W ≡ W_1 ∩
 W_0$. Consider $P_W$ projection to $W$. The $\alpha$ term disappears
@@ -314,16 +312,17 @@ After $S$ becomes active, $D_S(k)$ behaves like a martingale with variance of in
 \[ \E_{k-1}[ (D_S(k)-D_S(k-1))^2]  \leq  2 \gamma^2 \sum_{i\in S\cap A_k} \|u_i^k \|_2^2 . \]
 }
 
-\dfn[Energy contribution]{ The energy change at time $k$ is a random variable given by
-\[ \Delta_kE_S = \gamma^2\sum_{i\in S} \langle r_k,u_i^k\rangle^2+2\gamma\langle r_k,\sum_{i\in S}x_{k-1}(i)u_i^k\rangle \]
+\dfn[Energy]{ Let \emph{energy} of $S$ at time $k$ be $E_S(k) ≡ ∑_{i ∈ S} x_k(i)^2$.
+}
 
+\obs[Energy contribution]{The energy change at time $k$ is a random variable given by
+\[ \Delta_kE_S = \gamma^2\sum_{i\in S} \langle r_k,u_i^k\rangle^2+2\gamma\langle r_k,\sum_{i\in S}x_{k-1}(i)u_i^k\rangle \]
+}
 The first term will be the \emph{quadratic energy change} and the
 second will be the \emph{linear energy change}, i.e., 
 
 \[\Delta_kQ_S ≡ \gamma^2\sum_{i\in S} \langle r_k,u_i^k\rangle^2\]
 \[ \Delta_kL_S ≡ 2\gamma\langle r_k,\sum_{i\in S}x_{k-1}(i)u_i^k\rangle\]
-
-}
 
 \end{multicols}
 \end{document}
