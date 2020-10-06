@@ -1,0 +1,455 @@
+\input macros/cheatmac
+
+\usepackage{bm} % bold math
+
+% left align
+\usepackage{environ}
+\makeatletter
+\NewEnviron{Lalign}{\tagsleft@true\begin{alignat*}{1}\BODY\end{alignat*}}
+\makeatother
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+% \usepackage{microtype}
+\usepackage{accents}
+\usepackage{varwidth}
+\usepackage{tikz}
+
+% small spacing in align
+% \abovedisplayskip=0pt plus 3pt
+% \abovedisplayshortskip=0pt plus 3pt
+% \belowdisplayskip=0pt plus 3pt 
+% \belowdisplayshortskip=0pt plus 3pt
+
+\newcommand{\netflow}[2]{\nabla #1_{#2}}
+
+\newcommand{\Qtwo}{\mathbb{Q}_2}
+\DeclareMathOperator{\bits}{bits}
+\newcommand{\encl}[1]{\| #1\|}
+\DeclareMathOperator{\binenc}{bin}
+\newcommand{\encb}[1]{\binenc(#1)}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{ℝ}
+\newcommand{\Vm}{V \setminus \{t\}}
+\newcommand{\VN}{V^-}
+\newcommand{\VP}{V^+}
+\newcommand{\VZ}{V^0}
+\newcommand{\globpot}{\Xi}
+\newcommand{\plenty}[1]{3n(d_{#1}+1)}
+
+%\newcommand{\Sc}{.}
+%\newcommand{\Ss}{.}
+\newcommand{\Sc}{S}
+\newcommand{\Ss}{\bar{S}}
+\newcommand{\Bars}{\bar{S}}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\newcommand{\instance}{\mathcal{I}}
+
+\newcommand{\kosher}{anchored}
+\newcommand{\solid}{solid}
+
+%\newcommand{\anchors}{anchors}
+%\newcommand{\anchor}{anchor}
+
+
+%\newcommand{\ole}{\overleftarrow}
+\newcommand{\ole}[1]{\accentset{\leftarrow}{#1}}
+%\newcommand{\obe}[1]{\overleftrightarrow{#1}}
+\newcommand{\obe}[1]{\accentset{\leftrightarrow}{#1}}
+
+
+
+\def\Bigpi{{\rm Par}}
+\def\intcone{{\rm intcone}}
+\def\cone{{\rm cone}}
+\def\conv{{\rm conv}}
+\def\vert{{\rm vert}}
+\def\Las{{\textsc{Las}}}
+\def\Oh{{\rm O}}
+\def\supp{{\rm supp}}
+\def\enc{{\rm enc}}
+
+\DeclareMathOperator{\Ex}{Ex}
+\DeclareMathOperator{\Deficit}{Def}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\low}{\mathrm{low}}
+\newcommand{\lb}{\mathrm{lb}}
+\newcommand{\defeq}{\coloneqq}
+
+\newcommand{\varX}{{\textcolor{OliveGreen}X}}
+\newcommand{\varF}{{\textcolor{RedOrange}F}}
+\newcommand{\varK}{{\textcolor{blue!70}K}}
+
+\DeclareUnicodeCharacter{9001}{\langle}
+\DeclareUnicodeCharacter{9002}{\rangle}
+
+% expectation, probability, variance
+\newcommand{\Vsymb}{Var}
+
+% better vector definition and some variations
+\newcommand{\dir}[1]{{\bm{#1}}}
+
+
+\long\def\algobox#1{\smallskip
+  \noindent
+~~\hbox{\fbox{\parbox[c]{0.30\textwidth}{#1}}}
+%\smallskip
+}
+
+\begin{document}
+\begin{multicols}{3}
+
+\title{A Simpler and Faster Strongly}
+\title{Polynomial Algorithm for Generalized}
+\title{Flow Maximization}
+\author{Neil Olver, Laszló A. Végh}
+\presenter{Martin B\"ohm}
+\centerline{\textit{Doctoral Seminar of Combinatorics, Prague, Fall 2017/2018}}
+
+\section{Generalized Flows}
+A directed graph $G$ with \emph{sink} $t$ and:
+\begin{itemize}
+\item \emph{Demands} on vertices $b_v ∈ ℝ$ (positive or negative)
+\item \emph{Gains} on edges $γ_{ij} ∈ ℝ^+$ -- if a unit flow leaves
+from $i$ through $ij$, $γ_{ij}$ flow arrives in $j$.
+\end{itemize}
+
+\textbf{Goal:} Maximization of incoming flow into $t$.
+
+\thm[Main Theorem]{There exists a strongly polynomial algorithm for
+\textsc{Generalized Flow Maximization} with running time $O((m+n\log n) mn \log(n^2/m))$.
+}
+
+\section{Basic notation}
+
+$δ^-(S) ≡ $ outedges, $δ^+(S) ≡$ inedges.
+
+Sources and leaks:
+	
+\[\VN := \{ i \in \Vm : b_i < 0\},\]
+\[\VZ := \{ i \in \Vm : b_i = 0\} \]
+\[\VP := \{ i \in \Vm : b_i > 0\}.\]
+
+\emph{Net flow:} what ``stays'' at a vertex, i.e.,
+\[ \netflow{f}{i} := \sum_{e\in \delta^-(i)} \gamma_e f_e - \sum_{e\in \delta^+(i)} f_e. \]
+
+\emph{Residual edge set:} $\obe{E} ≡$ $\{ij,ji | ij ∈ E\}$.
+\section{LP formulation}
+
+\textbf{LP formulation of generalized flows:}
+
+\begin{equation}\tag{P}\label{primal}
+\begin{aligned}
+ \max \quad & \netflow{f}{t} \\
+ \text{s.t.}\quad \netflow{f}{i}&\geq b_i\quad \forall i\in\Vm\\
+  f &\geq 0.
+\end{aligned}
+\end{equation}
+
+\textbf{Dual problem} (linear variables $y_e$ correspond to $\frac{μ_t}{μ_e}$):
+
+\begin{equation}\tag{D}\label{dual}
+\begin{aligned}
+\max\quad & \mu_t\sum_{j\in \Vm}\frac{b_j}{\mu_j}\\
+ \text{s.t.}\quad \mu_j&\ge \gamma_{ij} \mu_i \quad \forall  ij \in E\\
+  \mu_t&\in \R^+\\
+ \mu_i&\in\R^{+}_{∞}\quad \forall i\in\Vm.
+\end{aligned}
+\end{equation}
+
+\textbf{Interpretation:} Find minimum \emph{relabelling} such that $\frac{μ_j}{μ_i} ≥ γ_{ij}$.
+
+\section{Feasible labellings}
+
+If $μ$ is a feasible labelling for (D), we can rescale the instance to get
+
+\[ 
+    \gamma_{ij}^\mu := \gamma_{ij} \cdot \frac{\mu_i}{\mu_j}, 
+        \qquad \text{and} \qquad 
+    b_i^\mu:= \frac{b_i}{\mu_i},
+\]
+
+and if we have any flow $f$ for (P), we can rescale it to get
+
+\[
+    f^\mu_{ij} := \frac{f_{ij}}{\mu_i}
+    \qquad \text{and} \qquad 
+    \netflow{f^\mu}{i}:=\frac{\netflow{f}{i}}{\mu_i}. 
+\]
+
+On the equivalent instance, we have:
+
+\obs[Dual feasibility check]{If $γ_{ij}^μ ≤ 1$, then $μ$ is feasible for (D).
+}
+
+\dfn[Tight edge]{
+\begin{itemize}
+\item An edge is \emph{tight} if $γ_{e}^μ = 1$.
+\item All tight edges of $\mu$: $E^μ$.
+\end{itemize}
+}
+
+\dfn[Excess]{For a flow $f^μ$, we define \emph{excess} of a vertex $v$ to be
+$∇f_v^μ - b_v^μ$.
+}
+
+\obs[Primal feasibility check]{If all vertices have excess $≥ 0$, $f$ is feasible for (P).
+}
+
+\dfn[Non-negative excess and deficit]{
+\begin{align*}
+\Ex(f,\mu)&:=\sum_{i\in \Vm}\max\left\{\netflow{f^\mu}{i}-b_i^\mu,0\right\} \\
+\Deficit(f,\mu)&:=\sum_{i\in   \Vm}\max\left\{b_i^\mu -\netflow{f^\mu}{i},0\right\}.
+\end{align*}
+}
+
+Relaxed excess to use in the analysis:
+
+\begin{equation*}\globpot(f,\mu) := \sum_{i \in \Vm}
+\max\{\netflow{f^\mu}{i}-b^\mu_i, 2\}.
+\end{equation*}
+
+\section{Fitting pairs}
+
+\textbf{Complementary slackness:} For any optimal primal and dual solutions $(f^*,μ^*)$, it holds:
+$f_e > 0 ⇒ γ_e^μ =1$ and $γ_e^μ < 1 ⇒ f_e = 0$.
+
+\dfn[Fitting pair]{A pair of vectors $(f, μ)$ is a \emph{fitting pair} $≡$ $μ$ is feasible for (D)
+and $∀e: f_e > 0 ⇒ γ_{e}^μ =1$.
+}
+
+\textbf{Imporant notes:}
+\begin{itemize}
+\item $f$ does not need to be feasible for (P),
+\item \dots or even any sort of a flow (by definition).
+\item Though for any fitting pair, $f^μ$ \emph{is} a (regular) flow.
+\end{itemize}
+
+\obs{Let $(f,μ)$ be a fitting pair such that $∇f_i = b_i$ for all $i ∈
+V ∖ \{t\}$. Then $(f,μ)$ is a pair of primal and dual optimal
+solutions.}
+
+\dfn[Safe $μ$]{A relabelling $μ$ is \emph{safe} $≡ ∃f, f$ primal feasible,
+and $(f,μ)$ is a fitting pair.}
+
+\lem{$μ$ is safe $⇔$ for every $X ⊆ V ∖ \{t\}$ with $δ^-(X) ∩ E^μ = ∅$
+it holds that $b_i^μ(X) ≤ 0$.
+}
+
+\section{Algorithm overview}
+
+\textbf{Assumptions of the algorithm:}
+
+\begin{enumerate}
+\item An initial fitting pair $(\bar f,\bar \mu)$ is given, where $\bar f\in \R_{+}^E$ is feasible to
+\eqref{primal} and $\bar\mu\in (\R^+_0)^V$ is feasible to \eqref{dual}.
+\item There is a directed path in $E$ from $i$ to $t$ for every $i\in V$.
+\end{enumerate}
+
+\textbf{Simplex trick:} To find an initial fitting pair feasible to
+both, create a helper instance (with a trivial feasible initial pair),
+run algorithm on it, with the optimum being an initial fitting pair
+feasible to both.
+
+\medskip\hrule
+Algorithm \textsc{Maximum Generalized Flow}:
+\smallskip\hrule\smallskip
+\begin{algorithmic}[1]
+        \State $\Delta \gets \max_{i \in \Vm} \netflow{\bar
+          f^{\bar\mu}}{i}-b_i^{\bar{\mu}}$; $\mu \gets \bar{\mu}\Delta$.\label{alg:delta}
+        \State $f \gets $\Call{Round}{$\bar{f}, \mu$}.
+        \While{$\VN\cup \VP\neq\emptyset$}
+            \State $(f,\mu)\gets $\Call{Produce-Plentiful-Node}{$f,\mu$}.
+            \State $(\instance, f,\mu)\gets $\Call{Contract}{$\instance, f,\mu$}. 
+              \EndWhile
+        \State $\mu\gets$\Call{Expand-to-Original}{$\mu$}
+        \State $f\gets$ \Call{Compute-Primal}{$\mu$}
+        \State \Return $(f,\mu)$.
+\end{algorithmic}
+
+\textbf{Key ideas:}
+
+\begin{enumerate}
+\item Maintain a feasible pair $(f,μ)$ at all times such that $f^μ$ is integral (but possibly not feasible).
+\item Initial rounding ensures that $b_i^μ -1 ≤ ∇f_i^μ ≤ b_i^μ + 2$ and we maintain this.
+\item Find edges that are \emph{contractible} -- tight in all optimal dual solutions.  
+\item Compute the optimum only after all contractible edges are found and dual optimal
+solution is found. Use alg for regular flows.
+\end{enumerate}
+
+\section{Plentiful nodes}
+
+\dfn[Plentiful]{A vertex/node $v$ is \emph{plentiful} with respect to $(f,μ)$ if $|b_v^μ| ≥ 3n(\deg(v) + 1)$.
+}
+
+\thm[Plentiful vertex means a contractible edge]{Let $f\in (\R^+_0)^E$ and $\mu\in (\R^{+})^V$, such that $(f,\mu)$ is a
+fitting pair with $f^\mu \in \Z_+^E$, $\mu$ is safe, and $\globpot(f,\mu)<2n$. Assume further that
+there exists a plentiful node $i$.
+Then there exists a contractible arc $e$ incident to $i$, and it can be found in strongly polynomial time.
+}
+
+\lem{
+Let $(g,\mu)$ be a fitting pair with $\mu$ being safe.
+%, and let $\Deficit(g,\mu)=\sum_{i\in
+ % \Vm}\max\{b_i^\mu -\netflow{g^\mu}{i},0\}$ denote the total
+%violation of node demands.
+If $g^\mu_e > \Ex(g, \mu) + \Deficit(g, \mu)$ for an arc $e\in E$,
+%then $e$ is tight for every optimal solution $\mu^*$ to \eqref{dual}.
+then $e$ is contractible.
+}
+
+
+
+\section{Core of the algorithm}
+
+\medskip\hrule
+Algorithm \textsc{Produce-Plentiful-Node} \textrm{(big picture)}
+\smallskip\hrule\smallskip
+
+    \begin{algorithmic}[1]
+        \State Maintain that $f^μ$ is integral and $∇f_i^μ$ close to $b_i^μ$.
+        \While{there is a node $i$ with $∇f_i^μ ≥ b_i^μ +1$}
+            \State Send flow from $i$ through tight edges of $μ$ to a deficient vertex.
+            \EndWhile
+        \State Update the dual labelling $μ$.
+    \end{algorithmic}
+% \end{algorithm}
+
+And the actual algorithm for plentiful nodes:
+
+\goodbreak
+\medskip\hrule
+Algorithm \textsc{Produce-Plentiful-Node}:
+\smallskip\hrule\smallskip
+\begin{algorithmic}[1]
+        \While{there are no plentiful nodes}	
+            \State \emph{Augmentation part of the iteration}
+            %\State $Q \gets \{ t \} \cup \{ j \in \Vm : \netflow{f^\mu}{i}<b_i^\mu, \text{ and there is an undirected path from $j$ to $t$ in $E^\mu$}\}$. \label{alg:Qdef}
+            \State $Q \gets \{ t \} \cup \{ j \in \Vm : \netflow{f^\mu}{i}<b_i^\mu \}$. \label{alg:Qdef}
+            \State $\Ss \gets \{ i \in V: \exists \text{ a tight $i$-$Q$-path in } E_f \}$.			
+            \While{there exists a node $i \in \Ss \cap \VN$ with $ \netflow{f^\mu}{i} \geq b_i^\mu+1$}
+		\State Augment $f^\mu$ by sending $1$ unit from $i$ to
+                a vertex in $Q$ along tight arcs. \label{alg:aug} 
+		\State Update $Q$ and $\Ss$.
+            \EndWhile \vspace{.3cm}
+            \State \emph{Label update part of the iteration}\label{alg:rescale}
+            \State $\Sc \gets$ the connected component of $\Ss$ w.r.t.\ $\obe{E^\mu}$ containing $t$. \label{alg:Scomp}
+            \State $\alpha_0 \gets \min_{e \in \delta^-(\Sc)} 1/\gamma_e^\mu$. \label{alg:alpha0}
+    %        \State \emph{(The following will ensure that $e^\mu_i(f) < 2$ for all $i \in S \cap \VN$ after the scaling step)}
+	    \State For each $i \in \Sc \cap \VN$, choose
+                $\alpha_i \in \left[ \frac{1 - \nabla f_i^\mu}{-b^\mu_i}, 
+                    \frac{2 - \nabla f_i^\mu}{-b^\mu_i}\right)$. \label{alg:bigexcess}
+                %\Comment{To maintain $\netflow{f^\mu}{i} < b^\mu_i + 2$ for all $i \in S \cap \VN$.}
+%            \State For each $i \in S \cap \VN$, choose $\alpha_i$ so that $e^{\mu/\alpha_i}_i(f/\alpha_i) \in [1, 2)$ %; let $\alpha_i = \infty$ if no such choice exists
+            \State For each $i \in \Sc \cap \VP$, choose $\alpha_i \in
+                \left[\frac{\plenty{i}}{b^\mu_i},
+                \frac{\plenty{i}+1}{b^\mu_i} \right)$. \label{alg:newplentiful}
+                %\Comment{Stop when a node in $\VP$ becomes plentiful.}
+            \State $\alpha \gets \min\{\alpha_0, \min_{i
+                         \in \Sc \cap (\VN \cup \VP)}\alpha_i\}$. 
+            
+            
+	    \State $f_e \gets f_e / \alpha$ for all $e \in E[\Sc]$. \label{alg:frescale}
+	    \State $\mu_i \gets \mu_i / \alpha$ for all $i \in \Sc$. \label{alg:muupdate}
+%\Else \  \Call{Special-Terminate}{$\mu,S$}.
+%\EndIf
+	\EndWhile
+	\State \Return{$(f, \mu)$.}
+    \end{algorithmic}
+
+\section{Correctness}
+
+\textbf{Basic notes:}
+\begin{itemize}
+\item The goal is to ensure that $f^μ$ is integral and unchanged when rescaling.
+\item $Q ≡$ vertices which can accept one unit of flow.
+\item $\Bars ≡$ vertices which can move flow to $Q$.
+\item No edge coming into $S$ is tight: $α_0 > 1$.
+\end{itemize}
+
+\lem[Basic properties]{
+The following properties hold in every label update step:
+\begin{enumerate}[(i)]
+        \setlength{\itemsep}{1pt}
+\item\label{item:funchanged}
+$f^\mu$ remains unchanged.
+%Neil: strengthened statement
+
+\item $\alpha>1$ and finite. %\nnote{if needed can add: and, unless $\delta^-(S) = \emptyset$ and $S \cap (\VP \cup \VN) = \emptyset$, it is finite.}
+\item $(f, \mu)$ remains a fitting pair. 
+\item
+If $i\in (V\setminus \Sc)\cup \VZ$, then $b_i^\mu$ does not change.
+\item \label{item:bdec}
+If $i\in \Sc \cap \VN$, then $b_i^\mu$ decreases. After the label update,
+$\netflow{f^\mu}{i}\le b_i^\mu+2$. 
+\item \label{item:binc}
+If $i\in \Sc \cap \VP$, then $b_i^\mu$ increases. If $\alpha=\alpha_i$ for
+such an $i$, then $\plenty{i}\le b_i^\mu\le \plenty{i}+1$ after the label update.
+%\nnote{Changed strictness of plentiful definition, so the non-strictness here should now be fine.}
+%\lnote{Added upper and lower bounds.}
+\end{enumerate}
+}
+
+\lem[Safeness]{
+The labelling $\mu$ remains safe throughout the algorithm.
+}
+
+\lem[Potential bound]{
+$\globpot(f,\mu)< 2n-1$ holds throughout the algorithm \textsc{Contract} and \textsc{Produce-Plentiful-Node}. Consequently,
+$\Ex(f,\mu)< 2n-1$ holds throughout.
+}
+
+\section{Work per augmentation}
+
+\lem[Between two augmentations]{In algorithm \textsc{Produce-Plentiful-Node}, the algorithm performs $O(n^2)$ operations
+between two successive augmentations of the flow.}
+
+\lem[Lower bound on net flow]{
+For any $i\in\VN$, 
+$b_i^\mu-1< \netflow{f^\mu}{i}$ holds at any point of the algorithm.
+Once $b_i^\mu\le \netflow{f^\mu}{i}$ holds in
+\textsc{Produce-Plentiful-Node}, this property is maintained until the
+end of the subroutine.
+}
+
+\dfn[Potentials]{
+
+\emph{Demand potential}: 
+\[
+%    \Psi(\mu) := \sum_{i\in\VN} (3nd_i+3n+3+b^\mu_i).
+    \Psi(\mu) := -\sum_{i\in\VN} b^\mu_i.
+\]
+\emph{Excess potential}:
+\[
+	\Phi(f,\mu) := \sum_{i \in \VN} \netflow{f^\mu}{i}-b^\mu_i.
+ \]
+
+}
+
+\lem[Demand potential is increasing]{
+During \textsc{Produce-Plentiful-Node},
+the potential $\Psi(\mu)$ is increasing. 
+If $r$ augmentations
+are performed, then $\Psi(\mu)$ increases by at least $\min\{r-4n,0\}$.
+}
+
+\lem[Bound on demand potential]{
+$\Psi(\mu) = O(mn)$ throughout the algorithm.
+}
+
+\textbf{Consequence:} $O(mn^2)$ augmentation in one run of \textsc{Produce-Plentiful-Node}.
+\vspace{42em}
+~ 
+\vspace{\textheight}
+~
+ 
+\end{multicols}
+\end{document}

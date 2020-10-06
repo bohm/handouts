@@ -1,0 +1,341 @@
+\input macros/cheatmac
+
+\usepackage{bm} % bold math
+
+% left align
+\usepackage{environ}
+\makeatletter
+\NewEnviron{Lalign}{\tagsleft@true\begin{alignat*}{1}\BODY\end{alignat*}}
+\makeatother
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+% \usepackage{microtype}
+\usepackage{accents}
+\usepackage{varwidth}
+\usepackage{tikz}
+
+% small spacing in align
+% \abovedisplayskip=0pt plus 3pt
+% \abovedisplayshortskip=0pt plus 3pt
+% \belowdisplayskip=0pt plus 3pt 
+% \belowdisplayshortskip=0pt plus 3pt
+
+\newcommand{\netflow}[2]{\nabla #1_{#2}}
+
+\newcommand{\Qtwo}{\mathbb{Q}_2}
+\DeclareMathOperator{\bits}{bits}
+\newcommand{\encl}[1]{\| #1\|}
+\DeclareMathOperator{\binenc}{bin}
+\newcommand{\encb}[1]{\binenc(#1)}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{ℝ}
+\newcommand{\Vm}{V \setminus \{t\}}
+\newcommand{\VN}{V^-}
+\newcommand{\VP}{V^+}
+\newcommand{\VZ}{V^0}
+\newcommand{\globpot}{\Xi}
+\newcommand{\plenty}[1]{3n(d_{#1}+1)}
+
+%\newcommand{\Sc}{.}
+%\newcommand{\Ss}{.}
+\newcommand{\Sc}{S}
+\newcommand{\Ss}{\bar{S}}
+\newcommand{\Bars}{\bar{S}}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\newcommand{\instance}{\mathcal{I}}
+
+\newcommand{\kosher}{anchored}
+\newcommand{\solid}{solid}
+
+%\newcommand{\anchors}{anchors}
+%\newcommand{\anchor}{anchor}
+
+
+%\newcommand{\ole}{\overleftarrow}
+\newcommand{\ole}[1]{\accentset{\leftarrow}{#1}}
+%\newcommand{\obe}[1]{\overleftrightarrow{#1}}
+\newcommand{\obe}[1]{\accentset{\leftrightarrow}{#1}}
+
+\def\Nscr{\mathcal{N}}
+\def\Bscr{\mathcal{B}}
+\def\Cscr{\mathcal{C}}
+\def\Pscr{\mathcal{P}}
+\def\Lscr{\mathcal{L}}
+\def\Qscr{\mathcal{Q}}
+\def\Fscr{\mathcal{F}}
+\def\Uscr{\mathcal{U}}
+\def\Wscr{\mathcal{W}}
+\def\lscr{\ell}
+
+\def\calB{\mathcal{B}}
+\def\calL{\mathcal{L}}
+
+\def\cupp{\stackrel{.}{\cup}}
+\newcommand{\sfrac}[2]{{\textstyle\frac{#1}{#2}}}
+
+\def\Bigpi{{\rm Par}}
+\def\intcone{{\rm intcone}}
+\def\cone{{\rm cone}}
+\def\conv{{\rm conv}}
+\def\vert{{\rm vert}}
+\def\Las{{\textsc{Las}}}
+\def\Oh{{\rm O}}
+\def\supp{{\rm supp}}
+\def\enc{{\rm enc}}
+
+\DeclareMathOperator{\Ex}{Ex}
+\DeclareMathOperator{\Deficit}{Def}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\low}{\mathrm{low}}
+\newcommand{\lb}{\mathrm{lb}}
+\newcommand{\defeq}{\coloneqq}
+
+\newcommand{\varX}{{\textcolor{OliveGreen}X}}
+\newcommand{\varF}{{\textcolor{RedOrange}F}}
+\newcommand{\varK}{{\textcolor{blue!70}K}}
+
+\DeclareUnicodeCharacter{9001}{\langle}
+\DeclareUnicodeCharacter{9002}{\rangle}
+
+% expectation, probability, variance
+\newcommand{\Vsymb}{Var}
+
+% better vector definition and some variations
+\newcommand{\dir}[1]{{\bm{#1}}}
+
+
+\long\def\algobox#1{\smallskip
+  \noindent
+~~\hbox{\fbox{\parbox[c]{0.30\textwidth}{#1}}}
+%\smallskip
+}
+
+\begin{document}
+\begin{multicols}{3}
+
+\title{Approaching $\frac{3}{2}$ for the $s,t$-path TSP}
+\author{Vera Traub, Jens Vygen}
+\presenter{Martin B\"ohm}
+\centerline{\textit{Approx. and Online Algorithms Seminar, Summer 2017/2018}}
+
+\dfn[$s,t$-path TSP]{
+Given $s$ and $t$, find a TSP tour starting in $s$ and ending in $t$.}
+
+Christofides: $3/2$ for general TSP, but the same analysis gives only
+$2$-approximation for $s,t$-path TSP.
+
+Better analysis (Hoogeveen):
+
+\dfn{For a spanning tree $S$,
+\[T(S) \defeq \{ v ∈ V : |S ∩ δ(v)| \text{ odd} \} \text{ XOR } \{s\} \text{ XOR } \{t\}. \]
+}
+
+\dfn[$T$-join polyhedron]{
+   \[ \{ x \in \mathbb{R}^E_{\ge 0} \mid x(\delta(U)) \ge 1 
+   \text { for } |U\cap T|\text{ odd, }\emptyset \not = U \subset V\}.\]
+}
+
+\textit{Problem of Christofides:} You need to relate the optimum of
+the $T$-join polyhedron to the Held-Karp solution, but if you divide
+Held-Karp by $2$, you will not get a feasible solution for the
+$T$-join polyhedron.
+
+\obs{For an $s,t$-cut $U$ which satisfies $|δ(U) ∩ S| = 1$, $|T(S) ∩ U|$ is even.}
+
+\textit{Application:} Take $1/3$ of the Held-Karp solution and $1/3$
+of the spanning tree solution  $⇒$ feasible for the $T$-join
+polyhedron $⇒$ $5/3$-approximation.
+
+\thm[Main result]{
+Let $0 ≤ ε ≤ \frac{1}{2}$. Denote by $p(n,k)$ an upper bound on the time needed to solve a 
+Held-Karp LP for $s,t$-path-TSP with at most $kn$ additional constraints. Then there exists
+a $(\frac{3}{2} + ε)$ approximation algorithm with runtime $O(n^{6 ⌈ \log (1/ε)⌉} · p(n, \log (1/ε))$.
+}
+
+\section{Core ideas}
+
+\dfn[Narrow cut]{For a solution $x$ of Held-Karp, a \emph{narrow cut} is a cut $C$ with $x(δ(C)) < 2$.
+}
+
+\lem{
+Let $x\in\mathbb{R}_{\ge 0}^E$ be a feasible solution to Held-Karp.
+Then there are $m\ge 0$ sets $X_1,\ldots,X_m$ with 
+$\{s\}\subseteq X_1\subset X_2\subset \cdots \subset X_m \subseteq V\setminus\{t\}$ such that 
+$$\{\delta(X_i) : i\in[m]\} = \{ \delta(U) : \emptyset\not=U\subset V,\, x(\delta(U))<2 \}.$$
+Moreover, all of these sets can be computed by $n^2$ minimum cut computations in the graph $(V,E)$ and 
+thus in polynomial time.
+}
+
+\textit{Main idea of the algorithm:} Imagine we knew which of the narrow cuts
+are \emph{lonely} ($OPT(δ(C)) = 1$) and which are \emph{busy}
+($OPT(δ(C)) ≥ 3$). Then we could guess the right edge to get $|δ(L) ∩
+S| = 1$ on the lonely cuts and add constraints to the LP of type
+$x(δ(B)) ≥ 3$ for the busy ones.
+
+We do not know which narrow cuts are lonely, but we can guess every
+pair $(C,e)$, where $C$ is a narrow cut and $e$ is exactly one edge
+crossing this cut -- and for two subsequent cuts (and new LP and new
+narrow cuts), compute the best solution that connects the endpoints of
+the edges.
+
+\section{Algorithm description}
+
+\textbf{Input:}
+
+\begin{itemize}
+  \item $W_s,W_t \subseteq V$ with $W_s \cap W_t = \emptyset$;
+  \item $s',t'\in W:=V\setminus (W_s \cup W_t)$; (posisbly $s'=t'$);
+  \item a collection $\Bscr$ of (busy) $(W_s \cup \{s'\})$-$(W_t\cup \{t'\})$-cuts; and
+  \item a level $l\in[k]$.
+  \end{itemize}
+  
+\textbf{Output:}
+  \begin{itemize}
+   \item a tree $(W,S)$;
+   \item a vector $y\in \mathbb{R}^E_{\ge 0}$ to combine for the $T$-join polyhedron.
+   \item a chain $\Lscr$ of $(W_s \cup \{s'\})$-$(W_t\cup \{t'\})$-cuts with $|S\cap C|=1$ for all $C\in \Lscr$.
+  \end{itemize}
+
+\textbf{Algorithm:}
+\begin{enumerate}
+
+\item Set scaling factors $λ_1, …, λ_k$: $Λ \defeq 2^{k+1} - 3$, $λ_i \defeq \frac{2^{k-l+1} - 1}{Λ}$.
+\item Compute optimum $x^*$ for Held-Karp with constraints for $\calB$:
+
+   \begin{equation*}
+   \begin{aligned}
+   & \min c(x) \hspace{-2mm} \\
+   & s.t. & x(\delta(U)) &\geq 2  & & \text{for }\emptyset \not =U\subseteq W\setminus\{s',t'\} \\
+   & & x(\delta(U)) &\geq 1  & & \text{for } \{s'\}\subseteq U \subseteq W\setminus\{t'\} \\
+   & &  x(C) &\ge 3 \ \ & & \text{for }  C\in \Bscr \\
+   & &  x(e) &\geq 0 & & \text{for } e\in E[W] \\
+   & &  x(e) &= 0  & & \text{for } e\in E\setminus E[W]. 
+   \end{aligned}\hspace{-6mm}
+   \end{equation*}
+
+\item If at final level $l = k$, return the spanning tree, $x^*$ and $\calL \defeq ∅$.
+
+\item Otherwise, create a weighted directed graph with triples
+$(U,v,w)$ as vertices, where $U$ is a narrow cut and $v,w$ an edge
+going through it. $(U,v,w)$ connected to subsequent narrow cuts in the
+chain.
+
+\item Compute weights of edges $(U_1,v_1,w_1)$ $(U_2,v_2,w_2)$ recursively, calling the algorithm with input
+$W_s = U_1, W_t = V ∖ U_2$, $s' = w_1, t' = v_2$, level $l+1$ and $\calB$ set to
+
+  \[ \calB' := \left\{\phantom{\bigm.}\delta(U)\in \Nscr \cup \Bscr \mid U_1\cup\{w_1\} 
+  \subseteq U \subseteq U_2\setminus\{v_2\} \phantom{\bigm.}\right\}.\] 
+
+\item The total weight of edge $a$ is 
+\[d(a) \defeq c\left(S^a\right) + \lambda_{l+1} \cdot c\left(y^a\right) +\left(1+\lambda_{l+1} \right)\cdot c(v_2,w_2).\]
+
+If $w_2$ does not exist (if $v_2$ is equal to $t'$), the
+relevant term is not used.
+
+\item Compute the shortest path from $(W_s, ∅, s')$ to $(W_t, t', ∅)$ in the weighted directed graph.
+
+\item Define $S$ to be:
+  \begin{align*}
+   S \defeq &\left\{ e\in S^a \mid a\in E(P) \right\}   \cup \left\{ \{v,w\} \mid (U,v,w) ∈ V(P)\right\}.
+  \end{align*}
+
+\item Compute a fractional vector 
+
+\begin{align*}
+y' \defeq &∑_{y \text{ from } a ∈ E(P)} y \quad+\quad\\
+&∑_{ \{v,w\} \text{ in any triple } (U,v,w) \text{ on } P} χ^{\{v,w\}}.
+\end{align*}
+
+and a convex combination of $x^*$ and $y'$:
+
+\[ y \defeq \frac{\lambda_l - \lambda_{l+1}}{\lambda_l} \cdot x^* + \frac{\lambda_{l+1}}{\lambda_l} \cdot y'. \]
+
+\item Set
+
+\[ \Lscr \defeq \{ C \mid C \in \Lscr^a \text{ for some }a\in E(P) \} \cup \{\delta(V_j) \mid j\in[m]\} \]
+
+\item Return $S,y,\calL$.
+
+\end{enumerate}
+
+\section{Easy lemmata}
+
+\lem{
+$\Lscr$ is a chain of $(W_s \cup \{s'\})$-$(W_t \cup \{t'\})$-cuts.
+}
+
+\lem{
+For $l<k$, an edge $f_j$ with $j\in [m]$ is not contained in any cut $C\in \Lscr^a$ for $a\in E(P)$.
+}
+
+\lem{The graph $(W,S)$ is a tree.
+For every cut $C\in \Lscr$ we have $|S\cap C| = 1$.
+}
+
+\lem{ 
+   If $l<k$, the support of the vector $y'$ is a subset of $E[W]$ and we have
+   $y'(\delta(V_j)) =1$  for every cut $\delta(V_j)$ with $j\in [m]$.
+}
+
+
+\section{Technical lemmata}
+
+
+\dfn[Consistency]{
+Fix an optimum $s$-$t$-tour $H$. Input  $W_s, W_t, s', t', \Bscr$ to the dynamic program is \emph{consistent} with the tour $H$
+  if $H$ contains an $s'$-$t'$-path containing exactly the vertices in $V\setminus(W_s\cup W_t)$
+  and $|H\cap C| \not = 1$ for every cut $C\in \Bscr$.
+}
+
+\lem[Bound on cost]{
+   If the input to the dynamic program is consistent with the tour $H$, we have 
+   \[ c(S) + \lambda_l \cdot c(y) \le (1+\lambda_l) \cdot c\left(H_{[s',t']}\right). \]
+}
+
+\lem[All small cuts are listed]{
+   If $y(C) < 2 - \frac{1}{\Lambda\cdot \lambda_l}$ for some $(W_s\cup\{s'\})$-$(W_t\cup\{t'\})$-cut, 
+   then $C \in \Lscr$.
+}
+
+\lem[$λ_1 y^*$ is in polyhedron] {
+   For \[T=\{ v\in V \mid |\delta(v)\cap S^*| \text{ odd}\} \triangle \{s\}\triangle\{t\}\] the vector 
+   $\lambda_1 \cdot y^*$ is contained in the $T$-join polyhedron 
+   \[ \{ x \in \mathbb{R}^E_{\ge 0} \mid x(\delta(U)) \ge 1 
+   \text { for } |U\cap T|\text{ odd, }\emptyset \not = U \subset V\}.\]
+}
+
+\lem[$y$ is feasible]{
+   The vector $y'$ (for $l<k$) and the vector $y$ are feasible solutions to the following linear program:
+  \begin{equation}\label{eq:lp_from_lemma_dp}
+   \begin{aligned}
+   & \min c(x) \hspace{-2mm} \\
+   & s.t. & x(\delta(U)) &\geq 2  & & \text{for }\emptyset \not =U\subseteq W\setminus\{s',t'\} \\
+   & & x(\delta(U)) &\geq 1  & & \text{for } \{s'\}\subseteq U \subseteq W\setminus\{t'\} \\
+   & & x(e) &\geq 0 & & \text{for } e\in E[W] \\
+   & & x(e) &= 0  & & \text{for } e\in E\setminus E[W].
+   \end{aligned}\hspace{-4mm}
+   \end{equation}
+}
+
+\lem[$y$ intersects busy cuts]{
+   For every cut $C\in \Bscr$ we have
+   \begin{align}\label{eq:busycuts}
+    y(C) &\ge 3.
+   \end{align}
+   For every $U$ with $W_s \subset U \subset V\setminus W_t$ with $s'\notin U$ or $t'\in U$ we have
+       \begin{align}\label{eq:othercuts}
+    y(\delta(U)) + |\{s'\}\setminus U| + |\{t'\}\cap U| &\ge 3.
+   \end{align}
+}
+
+\end{multicols}
+\end{document}
